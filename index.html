@@ -1,214 +1,66 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إهداء خاص لـ AYA 💖</title>
+    <title>كارت معايدة لأية - AYA</title>
     <style>
-        :root { --accent: #ff2e63; --bg: #fff5f7; } 
-        
-        body { 
-            background-color: var(--bg); 
-            color: #444; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; padding: 0; 
-            min-height: 100vh; 
-            overflow-x: hidden; 
-            display: flex; flex-direction: column; align-items: center; 
-        }
-        
-        /* القلوب المتساقطة */
-        .heart { position: fixed; color: var(--accent); pointer-events: none; animation: fall linear forwards; z-index: 1; }
-        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
-
-        /* شاشة البداية مع الخلفية المطلوبة */
-        #welcome-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images.jpg');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 2000; text-align: center; padding: 20px; transition: 1s ease-in-out;
-        }
-        .welcome-btn { 
-            background: var(--accent); color: white; border: none; padding: 15px 45px; 
-            border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; 
-            box-shadow: 0 0 20px var(--accent); transition: 0.3s;
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0c001c; /* لون الخلفية الغامق من الصورة */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            font-family: 'Courier New', Courier, monospace; /* خط ديجيتال */
+            overflow: hidden;
         }
 
-        .container { display: none; flex-direction: column; align-items: center; width: 100%; z-index: 10; padding-bottom: 80px; }
-        
-        /* تأثير الظهور التدريجي */
-        .reveal { opacity: 0; transform: translateY(30px); transition: 1s all ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        .main-card { 
-            width: 90%; max-width: 400px; 
-            background: rgba(255, 255, 255, 0.8); 
-            border-radius: 35px; padding: 25px; 
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            text-align: center; margin: 20px 0; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        /* حاوية الكارت */
+        .card-container {
+            position: relative;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: fadeInCard 1s ease-out forwards;
         }
 
-        /* العداد */
-        .timer-container { display: flex; justify-content: space-around; margin: 20px 0; }
-        .timer-box { background: white; padding: 10px; border-radius: 20px; width: 70px; border: 2px solid #ffccd5; }
-        .timer-box span { display: block; font-size: 22px; font-weight: bold; color: var(--accent); }
-
-        #music-control {
-            position: fixed; bottom: 20px; right: 20px;
-            width: 55px; height: 55px;
-            background: var(--accent); border-radius: 50%;
-            display: none; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 4000; color: white; font-size: 24px;
-            box-shadow: 0 5px 20px rgba(255, 46, 99, 0.5); animation: pulse 2s infinite;
+        /* الصورة الأساسية للقلب */
+        .heart-image {
+            max-width: 90%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.5); /* وهج وردي حول الكارت */
         }
 
-        /* تنسيق الـ 8 صور */
-        .photo-card { 
-            background: white; border-radius: 25px; padding: 15px; 
-            width: 90%; max-width: 380px; margin-bottom: 25px;
-            box-shadow: 0 10px 25px rgba(255, 46, 99, 0.1);
+        /* عنوان الموقع الوهمي فوق الكارت */
+        .url-bar {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
         }
-        .photo-card img { width: 100%; border-radius: 20px; display: block; margin-bottom: 10px; }
-        .photo-card p { color: var(--accent); font-weight: bold; margin: 5px 0; }
 
-        input { width: 85%; padding: 15px; border-radius: 20px; border: 2px solid #eee; margin-bottom: 20px; text-align: center; }
-        .final-btn { background: var(--accent); color: white; border: none; padding: 18px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+        /* أنيميشن لظهور الكارت */
+        @keyframes fadeInCard {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 <body>
 
-<audio id="music" loop><source src="el_hob_w_bas.mp3" type="audio/mpeg"></audio>
-
-<div id="music-control" onclick="toggleMusic()">🎵</div>
-
-<div id="welcome-screen">
-    <h1 style="color: white; text-shadow: 2px 4px 15px rgba(0,0,0,0.6); font-size: 2rem;">كل ثانية وانتي في قلبي.. آية ❤️</h1>
-    <button class="welcome-btn" onclick="showLogin()">ادخلي يا روحي ✨</button>
-</div>
-
-<div class="container" id="main-container">
-    <div class="main-card" id="login-card">
-        <h2 style="color: var(--accent);">اكتبي الباسورد الخاص بينا ❤️</h2>
-        <input type="password" id="pass" placeholder="••••••••">
-        <button class="welcome-btn" onclick="start()">فتح المفاجأة ✨</button>
+    <div class="card-container">
+        <div class="url-bar">madeforaya.vercel.app</div>
+        
+        <img src="aya-heart.png" alt="كارت معايدة لأية" class="heart-image">
     </div>
 
-    <div class="main-card reveal" id="dashboard" style="display:none;">
-        <h3 style="color: var(--accent);">بداية حكايتنا ❤️</h3>
-        <div class="timer-container">
-            <div class="timer-box"><span id="d">0</span><small>يوم</small></div>
-            <div class="timer-box"><span id="h">0</span><small>ساعة</small></div>
-            <div class="timer-box"><span id="m">0</span><small>دقيقة</small></div>
-            <div class="timer-box"><span id="s">0</span><small>ثانية</small></div>
-        </div>
-
-        <div style="margin: 30px 0; font-weight: bold; color: var(--accent);">"من 1/7/2025 وانتي الدنيا كلها"</div>
-
-        <div class="photo-card reveal"><img src="1.jpg"><p>ضحكتك بتنور دنيتي ❤️</p></div>
-        <div class="photo-card reveal"><img src="2.jpg"><p>يا أغلى من روحي يا آية ✨</p></div>
-        <div class="photo-card reveal"><img src="3.jpg"><p>كل يوم معاكي هو عيد ليا 🎁</p></div>
-        <div class="photo-card reveal"><img src="4.jpg"><p>انتي الملكة اللي في قلبي 👑</p></div>
-        <div class="photo-card reveal"><img src="5.jpg"><p>عيني مش شايفة غيرك في الدنيا 😍</p></div>
-        <div class="photo-card reveal"><img src="6.jpg"><p>وعد عليا هفضل جنبك للأبد 💍</p></div>
-        <div class="photo-card reveal"><img src="7.jpg"><p>انتي أجمل صدفة في عمري 💖</p></div>
-        <div class="photo-card reveal"><img src="8.jpg"><p>بحبك لآخر نفس ❤️💋</p></div>
-
-        <button class="final-btn" onclick="openModal()">رسالة لقلبك هنا.. 💌</button>
-    </div>
-</div>
-
-<div class="modal" id="msgModal">
-    <div class="main-card" style="background: white;">
-        <h2 style="color: var(--accent);">آية.. 💌</h2>
-        <p id="typing-text" style="line-height: 2; font-size: 18px; color: #333;"></p>
-        <button class="final-btn" onclick="closeModal()" style="margin-top: 20px; background: #777;">إغلاق</button>
-    </div>
-</div>
-
-<script>
-    const P = "1420041712004";
-    const longMessageText = "يا آية، انتي مش بس حبيبتي، انتي الدنيا كلها في عيني.. الحب وبس هو اللي بوصف حالي معاكي. من يوم ما عرفتك وحياتي نورت، هفضل أحبك لآخر نفس في عمري. ربنا يخليكي ليا يا أجمل ملكة. ❤️👑";
-    const audio = document.getElementById('music');
-
-    document.getElementById('pass').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') start();
-    });
-
-    function showLogin() { 
-        document.getElementById('welcome-screen').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('welcome-screen').style.display = 'none';
-            document.getElementById('main-container').style.display = 'flex';
-            spawnHearts();
-        }, 1000);
-    }
-
-    function start() {
-        if(document.getElementById('pass').value === P) {
-            audio.play();
-            document.getElementById('music-control').style.display = 'flex';
-            document.getElementById('login-card').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('dashboard').classList.add('active');
-            setInterval(updateTimer, 1000);
-            window.addEventListener('scroll', revealElements);
-        } else { alert("الباسورد غلط يا روحي! 😉"); }
-    }
-
-    function updateTimer() {
-        // التاريخ: 1 يوليو 2025
-        const startDate = new Date(2025, 6, 1); 
-        const diff = new Date() - startDate;
-        document.getElementById('d').innerText = Math.floor(diff / 86400000);
-        document.getElementById('h').innerText = Math.floor((diff / 3600000) % 24);
-        document.getElementById('m').innerText = Math.floor((diff / 60000) % 60);
-        document.getElementById('s').innerText = Math.floor((diff / 1000) % 60);
-    }
-
-    function revealElements() {
-        var reveals = document.querySelectorAll(".reveal");
-        for (var i = 0; i < reveals.length; i++) {
-            var windowHeight = window.innerHeight;
-            var elementTop = reveals[i].getBoundingClientRect().top;
-            if (elementTop < windowHeight - 100) { reveals[i].classList.add("active"); }
-        }
-    }
-
-    function spawnHearts() {
-        setInterval(() => {
-            const h = document.createElement('div');
-            h.className = 'heart'; h.innerHTML = '❤️';
-            h.style.left = Math.random() * 100 + 'vw';
-            h.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            document.body.appendChild(h);
-            setTimeout(() => h.remove(), 5000);
-        }, 400);
-    }
-
-    let charIdx = 0;
-    function typeWriter() {
-        if (charIdx < longMessageText.length) {
-            document.getElementById("typing-text").innerHTML += longMessageText.charAt(charIdx);
-            charIdx++; setTimeout(typeWriter, 60);
-        }
-    }
-
-    function openModal() { 
-        document.getElementById('msgModal').style.display = 'flex';
-        document.getElementById("typing-text").innerHTML = ""; 
-        charIdx = 0; typeWriter();
-    }
-    
-    function closeModal() { document.getElementById('msgModal').style.display = 'none'; }
-
-    function toggleMusic() {
-        if (audio.paused) { audio.play(); document.getElementById('music-control').innerHTML = '🎵'; }
-        else { audio.pause(); document.getElementById('music-control').innerHTML = '🔇'; }
-    }
-</script>
 </body>
 </html>
