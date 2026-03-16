@@ -1,66 +1,180 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>كارت معايدة لأية - AYA</title>
+    <title>موقعي المتكامل 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        body {
+        /* إعدادات المتصفح الافتراضية */
+        * {
             margin: 0;
             padding: 0;
-            background-color: #0c001c; /* لون الخلفية الغامق من الصورة */
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* شريط التنقل (Navbar) */
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #3498db;
+        }
+
+        /* قسم البطولة (Hero Section) */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), 
+                        url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             color: white;
-            font-family: 'Courier New', Courier, monospace; /* خط ديجيتال */
-            overflow: hidden;
-        }
-
-        /* حاوية الكارت */
-        .card-container {
-            position: relative;
             text-align: center;
-            opacity: 0;
-            transform: scale(0.8);
-            animation: fadeInCard 1s ease-out forwards;
+            padding: 20px;
         }
 
-        /* الصورة الأساسية للقلب */
-        .heart-image {
-            max-width: 90%;
-            height: auto;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.5); /* وهج وردي حول الكارت */
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
         }
 
-        /* عنوان الموقع الوهمي فوق الكارت */
-        .url-bar {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: 0.3s;
         }
 
-        /* أنيميشن لظهور الكارت */
-        @keyframes fadeInCard {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+        }
+
+        /* قسم الخدمات (Features) */
+        .services {
+            padding: 50px 10%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card i {
+            font-size: 40px;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+
+        /* التذييل (Footer) */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        /* التجاوب مع الجوال */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            nav ul { display: none; } /* لإبقاء الكود بسيطاً، أخفينا القائمة في الجوال */
         }
     </style>
 </head>
 <body>
 
-    <div class="card-container">
-        <div class="url-bar">madeforaya.vercel.app</div>
-        
-        <img src="aya-heart.png" alt="كارت معايدة لأية" class="heart-image">
-    </div>
+    <header>
+        <div class="logo">إبداع تك</div>
+        <nav>
+            <ul>
+                <li><a href="#">الرئيسية</a></li>
+                <li><a href="#services">خدماتنا</a></li>
+                <li><a href="#">أعمالنا</a></li>
+                <li><a href="#">اتصل بنا</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>اصنع بصمتك الرقمية</h1>
+        <p>نحن نحول الأفكار إلى واقع ملموس باستخدام أحدث تقنيات الويب.</p>
+        <br>
+        <a href="#services" class="btn">اكتشف المزيد</a>
+    </section>
+
+    <section class="services" id="services">
+        <div class="card">
+            <h3>تصميم واجهات</h3>
+            <p>تصميمات عصرية تركز على تجربة المستخدم وسهولة التصفح.</p>
+        </div>
+        <div class="card">
+            <h3>برمجة خاصة</h3>
+            <p>أكواد نظيفة وسريعة متوافقة مع جميع محركات البحث.</p>
+        </div>
+        <div class="card">
+            <h3>تطبيقات جوال</h3>
+            <p>تحويل موقعك إلى تطبيق يعمل على أندرويد و iOS بكفاءة.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 - تم البرمجة بواسطة Gemini</p>
+    </footer>
 
 </body>
 </html>
