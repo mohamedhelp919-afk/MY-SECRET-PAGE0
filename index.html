@@ -1,124 +1,87 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>i love you قلب جزيئات -  </title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000; /* خلفية سوداء مثل الفيديو */
-        }
-
-        canvas {
-            display: block;
-        }
-
-        .text-container {
-            position: absolute;
-            top: 20%;
-            width: 100%;
-            text-align: center;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
-            font-size: 3rem;
-            text-shadow: 0 0 20px #ff3366;
-            pointer-events: none;
-            z-index: 1;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POWER GYM</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <div class="text-container">بحبك كتير</div>
-    <canvas id="heartCanvas"></canvas>
+    <!-- Navigation Bar -->
+    <nav>
+        <h2>POWER <span>GYM</span></h2>
 
-    <script>
-        const canvas = document.getElementById('heartCanvas');
-        const ctx = canvas.getContext('2d');
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="classes.html">Classes</a></li>
+        </ul>
+    </nav>
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>BUILD YOUR <span>BODY</span></h1>
 
-        const particles = [];
-        const particleCount = 1500; // عدد النقاط
+            <p>
+                Train hard, stay strong and become the best version of yourself.
+            </p>
 
-        // إحداثيات رسم القلب
-        function getHeartPoint(t) {
-            let x = 16 * Math.pow(Math.sin(t), 3);
-            let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-            return { x: x * 15, y: y * 15 };
-        }
+            <a href="classes.html" class="btn">JOIN NOW</a>
+        </div>
+    </section>
 
-        class Particle {
-            constructor() {
-                this.reset();
-            }
+    <!-- About Section -->
+    <section class="about">
+        <h2>ABOUT <span>US</span></h2>
 
-            reset() {
-                this.t = Math.random() * Math.PI * 2;
-                const target = getHeartPoint(this.t);
-                this.targetX = target.x + canvas.width / 2;
-                this.targetY = target.y + canvas.height / 2 + 50;
-                
-                // نقطة البداية (عشوائية)
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                
-                this.size = Math.random() * 2 + 1;
-                this.speed = Math.random() * 0.05 + 0.02;
-                this.color = `rgba(173, 216, 230, ${Math.random()})`; // لون أزرق فاتح مثل الفيديو
-            }
+        <p>
+            POWER GYM is a modern fitness center that helps you reach
+            your fitness goals with professional trainers and modern equipment.
+        </p>
+    </section>
 
-            update() {
-                // حركة الجزيئات باتجاه شكل القلب
-                this.x += (this.targetX - this.x) * this.speed;
-                this.y += (this.targetY - this.y) * this.speed;
+    <!-- Services -->
+    <section class="services">
 
-                // إضافة حركة "نبض" خفيفة
-                this.x += Math.sin(Date.now() * 0.002 + this.t) * 0.5;
-                this.y += Math.cos(Date.now() * 0.002 + this.t) * 0.5;
-            }
+        <h2>OUR <span>SERVICES</span></h2>
 
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+        <div class="service-container">
 
-        function init() {
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
+            <div class="card">
+                <h3>💪 Strength Training</h3>
+                <p>
+                    Build your muscles and increase your strength
+                    with professional exercises.
+                </p>
+            </div>
 
-        function animate() {
-            // مسح الشاشة مع ترك أثر بسيط (توهج)
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            <div class="card">
+                <h3>🏃 Cardio</h3>
+                <p>
+                    Improve your fitness and burn calories with
+                    our cardio programs.
+                </p>
+            </div>
 
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            <div class="card">
+                <h3>🥊 Boxing</h3>
+                <p>
+                    Learn boxing techniques and improve your
+                    fitness with our trainers.
+                </p>
+            </div>
 
-            requestAnimationFrame(animate);
-        }
+        </div>
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles.length = 0;
-            init();
-        });
+    </section>
 
-        init();
-        animate();
-    </script>
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 POWER GYM | All Rights Reserved</p>
+    </footer>
+
 </body>
+
 </html>
