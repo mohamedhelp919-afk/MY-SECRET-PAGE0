@@ -1,0 +1,274 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #111;
+    color: white;
+}
+
+/* Navigation */
+
+nav {
+    height: 70px;
+    background-color: #000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 8%;
+}
+
+nav h2 {
+    font-size: 25px;
+}
+
+nav h2 span {
+    color: #f5c400;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    color: #f5c400;
+}
+
+/* Hero */
+
+.hero {
+    height: 600px;
+
+    background-image:
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+        url("images/gym.jpg");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 60px;
+}
+
+.hero-content h1 span {
+    color: #f5c400;
+}
+
+.hero-content p {
+    font-size: 20px;
+    margin: 20px 0;
+}
+
+.btn {
+    display: inline-block;
+
+    background-color: #f5c400;
+    color: black;
+
+    padding: 13px 30px;
+
+    text-decoration: none;
+    font-weight: bold;
+
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: white;
+}
+
+/* About */
+
+.about {
+    text-align: center;
+    padding: 70px 15%;
+}
+
+.about h2,
+.services h2 {
+    font-size: 35px;
+    margin-bottom: 20px;
+}
+
+.about h2 span,
+.services h2 span,
+.page-header h1 span {
+    color: #f5c400;
+}
+
+.about p {
+    line-height: 1.8;
+    color: #ccc;
+}
+
+/* Services */
+
+.services {
+    padding: 60px 8%;
+    text-align: center;
+}
+
+.service-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+
+    margin-top: 30px;
+}
+
+.card {
+    background-color: #1d1d1d;
+    padding: 30px;
+
+    border-radius: 10px;
+}
+
+.card h3 {
+    color: #f5c400;
+    margin-bottom: 15px;
+}
+
+.card p {
+    color: #ccc;
+    line-height: 1.6;
+}
+
+/* Classes Page */
+
+.page-header {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: #181818;
+}
+
+.page-header h1 {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+.page-header p {
+    color: #ccc;
+}
+
+/* Class Cards */
+
+.classes {
+    padding: 60px 8%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 30px;
+}
+
+.class-card {
+    background-color: #1d1d1d;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    padding-bottom: 25px;
+}
+
+.class-card img {
+    width: 100%;
+    height: 220px;
+
+    object-fit: cover;
+}
+
+.class-card h2 {
+    margin: 20px 0 10px;
+}
+
+.class-card p {
+    color: #ccc;
+    padding: 0 20px;
+
+    line-height: 1.6;
+}
+
+.class-card h3 {
+    color: #f5c400;
+    margin: 20px;
+}
+
+.class-card button {
+    border: none;
+
+    background-color: #f5c400;
+
+    padding: 12px 25px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    border-radius: 5px;
+}
+
+.class-card button:hover {
+    background-color: white;
+}
+
+/* Footer */
+
+footer {
+    background-color: #000;
+
+    text-align: center;
+
+    padding: 20px;
+
+    color: #aaa;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .service-container,
+    .classes {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content h1 {
+        font-size: 40px;
+    }
+
+    nav {
+        padding: 0 5%;
+    }
+
+    nav ul {
+        gap: 15px;
+    }
+}
