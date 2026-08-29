@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة الثعبان بالأزرار</title>
+    <title>لعبة الصاروخ الفضائي</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --panel-bg: #1e293b;
-            --snake-color: #22c55e;
-            --snake-head: #4ade80;
-            --food-color: #ef4444;
-            --btn-bg: #334155;
-            --btn-active: #475569;
+            --bg: #090d16;
+            --panel: #161f33;
+            --accent: #00f2fe;
+            --danger: #ff0844;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: #f8fafc;
+            background-color: var(--bg);
+            color: #fff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
@@ -34,11 +31,11 @@
             justify-content: space-between;
             width: 360px;
             max-width: 90vw;
-            margin-bottom: 10px;
-            background: var(--panel-bg);
+            margin-bottom: 12px;
+            background: var(--panel);
             padding: 10px 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-sizing: border-box;
         }
 
@@ -48,69 +45,55 @@
         }
 
         .score-box span {
-            color: var(--snake-head);
+            color: var(--accent);
         }
 
         .canvas-container {
             position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
             border-radius: 12px;
             overflow: hidden;
-            border: 2px solid #334155;
+            border: 2px solid var(--accent);
         }
 
         canvas {
-            background-color: #020617;
+            background-color: #03060d;
             display: block;
         }
 
-        .controls-container {
+        .controls {
             margin-top: 15px;
-            display: grid;
-            grid-template-columns: repeat(3, 65px);
-            grid-template-rows: repeat(2, 55px);
-            gap: 10px;
+            display: flex;
+            gap: 20px;
         }
 
         .btn {
-            background-color: var(--btn-bg);
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
             color: white;
-            font-size: 22px;
+            font-size: 24px;
             border: none;
+            width: 80px;
+            height: 50px;
             border-radius: 10px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 0 #1e293b;
-            transition: all 0.1s ease;
+            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
+            transition: transform 0.1s;
         }
 
         .btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #1e293b;
-            background-color: var(--btn-active);
+            transform: scale(0.95);
         }
-
-        .btn-up { grid-column: 2; grid-row: 1; }
-        .btn-left { grid-column: 1; grid-row: 2; }
-        .btn-down { grid-column: 2; grid-row: 2; }
-        .btn-right { grid-column: 3; grid-row: 2; }
 
         .restart-btn {
             margin-top: 15px;
             padding: 10px 25px;
             font-size: 15px;
             font-weight: bold;
-            background: #38bdf8;
-            color: #0f172a;
+            background: linear-gradient(135deg, #ff0844, #ffb199);
+            color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-        }
-
-        .restart-btn:hover {
-            background: #7dd3fc;
         }
     </style>
 </head>
@@ -122,14 +105,12 @@
     </div>
 
     <div class="canvas-container">
-        <canvas id="gameCanvas" width="360" height="360"></canvas>
+        <canvas id="gameCanvas" width="360" height="480"></canvas>
     </div>
 
-    <div class="controls-container">
-        <button class="btn btn-up" onclick="changeDir('UP')">▲</button>
-        <button class="btn btn-left" onclick="changeDir('LEFT')">◄</button>
-        <button class="btn btn-down" onclick="changeDir('DOWN')">▼</button>
-        <button class="btn btn-right" onclick="changeDir('RIGHT')">►</button>
+    <div class="controls">
+        <button class="btn" onclick="moveLeft()">◄</button>
+        <button class="btn" onclick="moveRight()">►</button>
     </div>
 
     <button class="restart-btn" onclick="resetGame()">إعادة اللعب</button>
@@ -138,179 +119,179 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        const GRID_SIZE = 18;
-        const TILE_COUNT = canvas.width / GRID_SIZE;
-
-        let snake = [{ x: 10, y: 10 }];
-        let food = { x: 5, y: 5 };
-        let dx = 0;
-        let dy = 0;
+        let player = { x: 165, y: 410, width: 30, height: 45, speed: 25 };
+        let meteors = [];
+        let stars = [];
         let score = 0;
-        let highScore = localStorage.getItem("snake_high") || 0;
+        let highScore = localStorage.getItem("space_high") || 0;
+        let gameOver = false;
         let gameInterval;
-        let gameStarted = false;
+        let meteorInterval;
 
         document.getElementById("highScore").textContent = highScore;
 
+        // تهيئة النجوم في الخلفية
+        for (let i = 0; i < 50; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 1.5 + 0.5
+            });
+        }
+
         document.addEventListener("keydown", (e) => {
-            if (e.key === "ArrowUp") changeDir('UP');
-            if (e.key === "ArrowDown") changeDir('DOWN');
-            if (e.key === "ArrowLeft") changeDir('LEFT');
-            if (e.key === "ArrowRight") changeDir('RIGHT');
+            if (e.key === "ArrowLeft") moveLeft();
+            if (e.key === "ArrowRight") moveRight();
         });
 
-        function changeDir(direction) {
-            const goingUp = dy === -1;
-            const goingDown = dy === 1;
-            const goingRight = dx === 1;
-            const goingLeft = dx === -1;
+        function moveLeft() {
+            if (player.x > 10 && !gameOver) player.x -= player.speed;
+        }
 
-            if (direction === 'LEFT' && !goingRight) { dx = -1; dy = 0; gameStarted = true; }
-            if (direction === 'UP' && !goingDown) { dx = 0; dy = -1; gameStarted = true; }
-            if (direction === 'RIGHT' && !goingLeft) { dx = 1; dy = 0; gameStarted = true; }
-            if (direction === 'DOWN' && !goingUp) { dx = 0; dy = 1; gameStarted = true; }
+        function moveRight() {
+            if (player.x < canvas.width - player.width - 10 && !gameOver) player.x += player.speed;
+        }
+
+        function createMeteor() {
+            if (gameOver) return;
+            const size = Math.random() * 20 + 20;
+            meteors.push({
+                x: Math.random() * (canvas.width - size),
+                y: -size,
+                size: size,
+                speed: Math.random() * 3 + 2 + score / 50
+            });
+        }
+
+        function update() {
+            if (gameOver) return;
+
+            // تحريك النجوم
+            stars.forEach(star => {
+                star.y += star.speed;
+                if (star.y > canvas.height) star.y = 0;
+            });
+
+            // تحريك النيازك والتحقق من الاصطدام
+            for (let i = 0; i < meteors.length; i++) {
+                let m = meteors[i];
+                m.y += m.speed;
+
+                // فحص الاصطدام بالصاروخ
+                if (
+                    player.x < m.x + m.size &&
+                    player.x + player.width > m.x &&
+                    player.y < m.y + m.size &&
+                    player.y + player.height > m.y
+                ) {
+                    endGame();
+                }
+
+                // حساب النقاط عند تجاوز النيزك
+                if (m.y > canvas.height) {
+                    meteors.splice(i, 1);
+                    score += 5;
+                    document.getElementById("score").textContent = score;
+                    if (score > highScore) {
+                        highScore = score;
+                        localStorage.setItem("space_high", highScore);
+                        document.getElementById("highScore").textContent = highScore;
+                    }
+                    i--;
+                }
+            }
+        }
+
+        function draw() {
+            // مسح الشاشة
+            ctx.fillStyle = "#03060d";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // رسم النجوم
+            ctx.fillStyle = "#ffffff";
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // رسم الصاروخ (اللاعب)
+            ctx.save();
+            ctx.shadowColor = "#00f2fe";
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = "#00f2fe";
+            // جسم الصاروخ المثلث
+            ctx.beginPath();
+            ctx.moveTo(player.x + player.width / 2, player.y);
+            ctx.lineTo(player.x, player.y + player.height);
+            ctx.lineTo(player.x + player.width, player.y + player.height);
+            ctx.closePath();
+            ctx.fill();
+
+            // نار المحرك
+            ctx.fillStyle = "#ff0844";
+            ctx.beginPath();
+            ctx.moveTo(player.x + 10, player.y + player.height);
+            ctx.lineTo(player.x + player.width / 2, player.y + player.height + 12);
+            ctx.lineTo(player.x + player.width - 10, player.y + player.height);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+
+            // رسم النيازك
+            meteors.forEach(m => {
+                ctx.save();
+                ctx.shadowColor = "#ff0844";
+                ctx.shadowBlur = 8;
+                ctx.fillStyle = "#ff4e50";
+                ctx.beginPath();
+                ctx.arc(m.x + m.size/2, m.y + m.size/2, m.size/2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // شاشة النهاية
+            if (gameOver) {
+                ctx.fillStyle = "rgba(3, 6, 13, 0.85)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = "#ff0844";
+                ctx.font = "bold 26px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText("تحطم الصاروخ!", canvas.width / 2, canvas.height / 2 - 10);
+
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "16px Arial";
+                ctx.fillText(`مجموع نقاطك: ${score}`, canvas.width / 2, canvas.height / 2 + 25);
+            }
         }
 
         function gameLoop() {
-            if (hasGameEnded()) {
-                drawGameOver();
-                clearInterval(gameInterval);
-                return;
-            }
-
-            clearCanvas();
-            drawGrid();
-            drawFood();
-            moveSnake();
-            drawSnake();
+            update();
+            draw();
         }
 
-        function clearCanvas() {
-            ctx.fillStyle = "#020617";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-
-        function drawGrid() {
-            ctx.strokeStyle = "#0f172a";
-            ctx.lineWidth = 1;
-            for (let i = 0; i < canvas.width; i += GRID_SIZE) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
-            }
-        }
-
-        function drawFood() {
-            ctx.fillStyle = "#ef4444";
-            ctx.shadowColor = "#ef4444";
-            ctx.shadowBlur = 8;
-            ctx.beginPath();
-            ctx.arc(
-                food.x * GRID_SIZE + GRID_SIZE / 2,
-                food.y * GRID_SIZE + GRID_SIZE / 2,
-                GRID_SIZE / 2 - 2, 0, Math.PI * 2
-            );
-            ctx.fill();
-            ctx.shadowBlur = 0;
-        }
-
-        function drawSnake() {
-            snake.forEach((part, index) => {
-                const isHead = index === 0;
-                ctx.fillStyle = isHead ? "#4ade80" : "#22c55e";
-                
-                if (isHead) {
-                    ctx.shadowColor = "#4ade80";
-                    ctx.shadowBlur = 6;
-                }
-
-                ctx.beginPath();
-                ctx.roundRect(
-                    part.x * GRID_SIZE + 1,
-                    part.y * GRID_SIZE + 1,
-                    GRID_SIZE - 2,
-                    GRID_SIZE - 2,
-                    isHead ? 5 : 3
-                );
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            });
-        }
-
-        function moveSnake() {
-            if (!gameStarted) return;
-
-            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-            snake.unshift(head);
-
-            if (head.x === food.x && head.y === food.y) {
-                score += 10;
-                document.getElementById("score").textContent = score;
-                if (score > highScore) {
-                    highScore = score;
-                    localStorage.setItem("snake_high", highScore);
-                    document.getElementById("highScore").textContent = highScore;
-                }
-                generateFood();
-            } else {
-                snake.pop();
-            }
-        }
-
-        function generateFood() {
-            food.x = Math.floor(Math.random() * TILE_COUNT);
-            food.y = Math.floor(Math.random() * TILE_COUNT);
-            snake.forEach(part => {
-                if (part.x === food.x && part.y === food.y) generateFood();
-            });
-        }
-
-        function hasGameEnded() {
-            if (!gameStarted) return false;
-
-            const hitLeft = snake[0].x < 0;
-            const hitRight = snake[0].x >= TILE_COUNT;
-            const hitTop = snake[0].y < 0;
-            const hitBottom = snake[0].y >= TILE_COUNT;
-
-            if (hitLeft || hitRight || hitTop || hitBottom) return true;
-
-            for (let i = 1; i < snake.length; i++) {
-                if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
-            }
-
-            return false;
-        }
-
-        function drawGameOver() {
-            ctx.fillStyle = "rgba(2, 6, 23, 0.85)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = "#ef4444";
-            ctx.font = "bold 24px Arial";
-            ctx.textAlign = "center";
-            ctx.fillText("انتهت اللعبة!", canvas.width / 2, canvas.height / 2 - 10);
-
-            ctx.fillStyle = "#f8fafc";
-            ctx.font = "14px Arial";
-            ctx.fillText(`النقاط: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
+        function endGame() {
+            gameOver = true;
+            clearInterval(gameInterval);
+            clearInterval(meteorInterval);
+            draw();
         }
 
         function resetGame() {
             clearInterval(gameInterval);
-            snake = [{ x: 10, y: 10 }];
-            dx = 0;
-            dy = 0;
+            clearInterval(meteorInterval);
+            player.x = 165;
+            meteors = [];
             score = 0;
-            gameStarted = false;
+            gameOver = false;
             document.getElementById("score").textContent = score;
-            generateFood();
-            gameInterval = setInterval(gameLoop, 100);
+            gameInterval = setInterval(gameLoop, 1000 / 60);
+            meteorInterval = setInterval(createMeteor, 700);
         }
 
         resetGame();
     </script>
 </body>
 </html>
-
