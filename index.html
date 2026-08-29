@@ -3,316 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة الثعبان بالأزرار</title>
+    <title>آلة الزمن التكنولوجية - كيرلس المود</title>
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --panel-bg: #1e293b;
-            --snake-color: #22c55e;
-            --snake-head: #4ade80;
-            --food-color: #ef4444;
-            --btn-bg: #334155;
-            --btn-active: #475569;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: #f8fafc;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #050508;
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Canvas خلفية 3D */
+        #webgl-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* واجهة التفاعل العلوي */
+        .ui-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            user-select: none;
-            touch-action: manipulation;
-        }
-
-        .header {
-            display: flex;
             justify-content: space-between;
-            width: 360px;
-            max-width: 90vw;
+            padding: 30px;
+            pointer-events: none;
+        }
+
+        header {
+            text-align: center;
+            pointer-events: auto;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+            background: linear-gradient(90deg, #00ffcc, #7928ca);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1rem;
+            color: #a0a0b0;
+            margin-top: 5px;
+        }
+
+        /* كارت عرض الحقبة التكنولوجية */
+        .era-card {
+            background: rgba(15, 15, 25, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 450px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            pointer-events: auto;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .era-card h2 {
+            font-size: 2rem;
+            color: #00ffcc;
             margin-bottom: 10px;
-            background: var(--panel-bg);
-            padding: 10px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            box-sizing: border-box;
+            transition: color 0.5s ease;
         }
 
-        .score-box {
-            font-size: 16px;
-            font-weight: bold;
+        .era-card p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #d1d1e0;
         }
 
-        .score-box span {
-            color: var(--snake-head);
-        }
-
-        .canvas-container {
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid #334155;
-        }
-
-        canvas {
-            background-color: #020617;
-            display: block;
-        }
-
-        /* تصميم أزرار التحكم */
-        .controls-container {
-            margin-top: 15px;
-            display: grid;
-            grid-template-columns: repeat(3, 65px);
-            grid-template-rows: repeat(2, 55px);
-            gap: 10px;
-        }
-
-        .btn {
-            background-color: var(--btn-bg);
-            color: white;
-            font-size: 22px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
+        /* الشريط الزمني للتنقل */
+        .timeline {
             display: flex;
-            align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 0 #1e293b;
-            transition: all 0.1s ease;
+            align-items: center;
+            gap: 20px;
+            pointer-events: auto;
+            background: rgba(10, 10, 18, 0.8);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: fit-content;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
         }
 
-        .btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #1e293b;
-            background-color: var(--btn-active);
-        }
-
-        .btn-up { grid-column: 2; grid-row: 1; }
-        .btn-left { grid-column: 1; grid-row: 2; }
-        .btn-down { grid-column: 2; grid-row: 2; }
-        .btn-right { grid-column: 3; grid-row: 2; }
-
-        .restart-btn {
-            margin-top: 15px;
-            padding: 10px 25px;
-            font-size: 15px;
+        .time-btn {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 22px;
+            font-size: 1rem;
             font-weight: bold;
-            background: #38bdf8;
-            color: #0f172a;
-            border: none;
-            border-radius: 8px;
+            border-radius: 25px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .restart-btn:hover {
-            background: #7dd3fc;
+        .time-btn:hover {
+            border-color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .time-btn.active {
+            background: #00ffcc;
+            color: #050508;
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.8);
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="score-box">النقاط: <span id="score">0</span></div>
-        <div class="score-box">أعلى نتيجة: <span id="highScore">0</span></div>
+    <canvas id="webgl-canvas"></canvas>
+
+    <div class="ui-container">
+        <header>
+            <h1>محاكي آلة الزمن التكنولوجية</h1>
+            <p>إعداد الطالب: كيرلس المود</p>
+        </header>
+
+        <div class="era-card" id="eraCard">
+            <h2 id="eraTitle">عام 1940: بداية الكمبيوتر الأول</h2>
+            <p id="eraDesc">ظهور أجهزة الصمامات المفرغة والمحركات الميكانيكية الضخمة، حيث كانت أجهزة الكمبيوتر تشغل غرفاً كاملة وتزن أطنانًا.</p>
+        </div>
+
+        <div class="timeline">
+            <button class="time-btn active" onclick="switchEra(0)">1940</button>
+            <button class="time-btn" onclick="switchEra(1)">1970</button>
+            <button class="time-btn" onclick="switchEra(2)">2000</button>
+            <button class="time-btn" onclick="switchEra(3)">2026</button>
+        </div>
     </div>
 
-    <div class="canvas-container">
-        <canvas id="gameCanvas" width="360" height="360"></canvas>
-    </div>
-
-    <div class="controls-container">
-        <button class="btn btn-up" onclick="changeDir('UP')">▲</button>
-        <button class="btn btn-left" onclick="changeDir('LEFT')">◄</button>
-        <button class="btn btn-down" onclick="changeDir('DOWN')">▼</button>
-        <button class="btn btn-right" onclick="changeDir('RIGHT')">►</button>
-    </div>
-
-    <button class="restart-btn" onclick="resetGame()">إعادة اللعب</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+        // بيانات الحقبات الزمنية
+        const eras = [
+            {
+                year: "1940: بداية الكمبيوتر الأول",
+                desc: "عصر الصمامات المفرغة وحاسوب ENIAC. تميزت الأجهزة بالضخامة والبطء مع الاعتماد الكامل على البطاقات المثقوبة.",
+                color: 0xffa500,
+                geometryType: 'box'
+            },
+            {
+                year: "1970: ثورة المعالجات الدقيقة",
+                desc: "ظهور أول شرائح الميكروبروسيسور والدوائر المتكاملة، وتأسيس بدايات الكمبيوتر الشخصي واللغات البرمجية الحديثة.",
+                color: 0x00ff88,
+                geometryType: 'octahedron'
+            },
+            {
+                year: "2000: انفجار الإنترنت وشبكات الويب",
+                desc: "انتشار شبكة الإنترنت العالمية (World Wide Web)، ظهور الهواتف الذكية الأولى، وتطوير الرسوميات ثلاثية الأبعاد.",
+                color: 0x0099ff,
+                geometryType: 'torus'
+            },
+            {
+                year: "2026: عصر الذكاء الاصطناعي والحوسبة الفائقة",
+                desc: "هيمنة النماذج التوليدية الذكية، الحوسبة الكمومية، والواجهات التفاعلية ثلاثية الأبعاد فائقة السرعة.",
+                color: 0x7928ca,
+                geometryType: 'knot'
+            }
+        ];
 
-        const GRID_SIZE = 18;
-        const TILE_COUNT = canvas.width / GRID_SIZE;
+        // إعداد مشهد Three.js
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 
-        let snake = [{ x: 10, y: 10 }];
-        let food = { x: 5, y: 5 };
-        let dx = 0;
-        let dy = 0;
-        let score = 0;
-        let highScore = localStorage.getItem("snake_high") || 0;
-        let gameInterval;
-        let gameStarted = false;
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        document.getElementById("highScore").textContent = highScore;
+        // إضافة الإضاءة
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
 
-        // التحكم عن طريق أسهم لوحة المفاتيح
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "ArrowUp") changeDir('UP');
-            if (e.key === "ArrowDown") changeDir('DOWN');
-            if (e.key === "ArrowLeft") changeDir('LEFT');
-            if (e.key === "ArrowRight") changeDir('RIGHT');
+        const pointLight = new THREE.PointLight(0xffffff, 1.5);
+        pointLight.position.set(20, 20, 20);
+        scene.add(pointLight);
+
+        // إنشاء جزيئات خلفية (Stars/Particles)
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1200;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 80;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.08,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.8
+        });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // إنشاء الكائن 3D الرئيسي المتغير
+        let currentMesh;
+
+        function create3DObject(eraIndex) {
+            if (currentMesh) scene.remove(currentMesh);
+
+            let geometry;
+            const era = eras[eraIndex];
+
+            switch(era.geometryType) {
+                case 'box':
+                    geometry = new THREE.BoxGeometry(10, 10, 10);
+                    break;
+                case 'octahedron':
+                    geometry = new THREE.OctahedronGeometry(8);
+                    break;
+                case 'torus':
+                    geometry = new THREE.TorusGeometry(8, 2.5, 16, 100);
+                    break;
+                case 'knot':
+                    geometry = new THREE.TorusKnotGeometry(6, 2, 100, 16);
+                    break;
+            }
+
+            const material = new THREE.MeshStandardMaterial({
+                color: era.color,
+                wireframe: true,
+                roughness: 0.3,
+                metalness: 0.8
+            });
+
+            currentMesh = new THREE.Mesh(geometry, material);
+            scene.add(currentMesh);
+        }
+
+        camera.position.z = 25;
+
+        // التفاعل مع حركة الماوس
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.0005;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.0005;
         });
 
-        // دالة تغيير الاتجاه (تُستخدم للأزرار والأسهم)
-        function changeDir(direction) {
-            const goingUp = dy === -1;
-            const goingDown = dy === 1;
-            const goingRight = dx === 1;
-            const goingLeft = dx === -1;
+        // تحريك المشهد
+        function animate() {
+            requestAnimationFrame(animate);
 
-            if (direction === 'LEFT' && !goingRight) { dx = -1; dy = 0; gameStarted = true; }
-            if (direction === 'UP' && !goingDown) { dx = 0; dy = -1; gameStarted = true; }
-            if (direction === 'RIGHT' && !goingLeft) { dx = 1; dy = 0; gameStarted = true; }
-            if (direction === 'DOWN' && !goingUp) { dx = 0; dy = 1; gameStarted = true; }
-        }
-
-        function gameLoop() {
-            if (hasGameEnded()) {
-                drawGameOver();
-                clearInterval(gameInterval);
-                return;
+            if (currentMesh) {
+                currentMesh.rotation.x += 0.005 + mouseY;
+                currentMesh.rotation.y += 0.01 + mouseX;
             }
 
-            clearCanvas();
-            drawGrid();
-            drawFood();
-            moveSnake();
-            drawSnake();
+            particlesMesh.rotation.y -= 0.0008;
+
+            renderer.render(scene, camera);
         }
 
-        function clearCanvas() {
-            ctx.fillStyle = "#020617";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // التبديل بين الحقبات
+        function switchEra(index) {
+            const buttons = document.querySelectorAll('.time-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttons[index].classList.add('active');
+
+            const era = eras[index];
+            document.getElementById('eraTitle').innerText = era.year;
+            document.getElementById('eraDesc').innerText = era.desc;
+            document.getElementById('eraTitle').style.color = '#' + era.color.toString(16);
+
+            create3DObject(index);
         }
 
-        function drawGrid() {
-            ctx.strokeStyle = "#0f172a";
-            ctx.lineWidth = 1;
-            for (let i = 0; i < canvas.width; i += GRID_SIZE) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
-            }
-        }
+        // إعداد البداية
+        create3DObject(0);
+        animate();
 
-        function drawFood() {
-            ctx.fillStyle = "#ef4444";
-            ctx.shadowColor = "#ef4444";
-            ctx.shadowBlur = 8;
-            ctx.beginPath();
-            ctx.arc(
-                food.x * GRID_SIZE + GRID_SIZE / 2,
-                food.y * GRID_SIZE + GRID_SIZE / 2,
-                GRID_SIZE / 2 - 2, 0, Math.PI * 2
-            );
-            ctx.fill();
-            ctx.shadowBlur = 0;
-        }
-
-        function drawSnake() {
-            snake.forEach((part, index) => {
-                const isHead = index === 0;
-                ctx.fillStyle = isHead ? "#4ade80" : "#22c55e";
-                
-                if (isHead) {
-                    ctx.shadowColor = "#4ade80";
-                    ctx.shadowBlur = 6;
-                }
-
-                ctx.beginPath();
-                ctx.roundRect(
-                    part.x * GRID_SIZE + 1,
-                    part.y * GRID_SIZE + 1,
-                    GRID_SIZE - 2,
-                    GRID_SIZE - 2,
-                    isHead ? 5 : 3
-                );
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            });
-        }
-
-        function moveSnake() {
-            if (!gameStarted) return;
-
-            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-            snake.unshift(head);
-
-            if (head.x === food.x && head.y === food.y) {
-                score += 10;
-                document.getElementById("score").textContent = score;
-                if (score > highScore) {
-                    highScore = score;
-                    localStorage.setItem("snake_high", highScore);
-                    document.getElementById("highScore").textContent = highScore;
-                }
-                generateFood();
-            } else {
-                snake.pop();
-            }
-        }
-
-        function generateFood() {
-            food.x = Math.floor(Math.random() * TILE_COUNT);
-            food.y = Math.floor(Math.random() * TILE_COUNT);
-            snake.forEach(part => {
-                if (part.x === food.x && part.y === food.y) generateFood();
-            });
-        }
-
-        function hasGameEnded() {
-            if (!gameStarted) return false;
-
-            const hitLeft = snake[0].x < 0;
-            const hitRight = snake[0].x >= TILE_COUNT;
-            const hitTop = snake[0].y < 0;
-            const hitBottom = snake[0].y >= TILE_COUNT;
-
-            if (hitLeft || hitRight || hitTop || hitBottom) return true;
-
-            for (let i = 1; i < snake.length; i++) {
-                if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
-            }
-
-            return false;
-        }
-
-        function drawGameOver() {
-            ctx.fillStyle = "rgba(2, 6, 23, 0.85)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = "#ef4444";
-            ctx.font = "bold 24px Arial";
-            ctx.textAlign = "center";
-            ctx.fillText("انتهت اللعبة!", canvas.width / 2, canvas.height / 2 - 10);
-
-            ctx.fillStyle = "#f8fafc";
-            ctx.font = "14px Arial";
-            ctx.fillText(`النقاط: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
-        }
-
-        function resetGame() {
-            clearInterval(gameInterval);
-            snake = [{ x: 10, y: 10 }];
-            dx = 0;
-            dy = 0;
-            score = 0;
-            gameStarted = false;
-            document.getElementById("score").textContent = score;
-            generateFood();
-            gameInterval = setInterval(gameLoop, 100);
-        }
-
-        resetGame();
+        // تجاوب الشاشة عند التكبير/التصغير
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
     </script>
 </body>
 </html>
