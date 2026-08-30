@@ -1,248 +1,113 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حامي الكوكب - Planet Defender</title>
-    <style>
-        :root { --bg: #05070f; --accent: #00ffcc; --danger: #ff0055; --gold: #ffcc00; }
-        body {
-            background: var(--bg); color: #fff; font-family: system-ui, sans-serif;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 100vh; margin: 0; user-select: none; touch-action: manipulation;
-        }
-        .header {
-            display: flex; justify-content: space-between; width: 360px; max-width: 90vw;
-            margin-bottom: 10px; font-weight: bold; font-size: 16px;
-        }
-        .score-box span { color: var(--accent); }
-        .canvas-container {
-            position: relative; border-radius: 50%; border: 2px solid rgba(0, 255, 204, 0.3);
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.15); overflow: hidden;
-        }
-        canvas { background: #020307; display: block; }
-        .controls {
-            display: flex; gap: 12px; margin-top: 15px; width: 360px; max-width: 90vw; justify-content: center;
-        }
-        .btn {
-            background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid var(--accent);
-            font-size: 18px; font-weight: bold; height: 50px; border-radius: 10px; cursor: pointer;
-            flex: 1; transition: 0.1s; display: flex; align-items: center; justify-content: center;
-        }
-        .btn:active { background: var(--accent); color: #000; transform: scale(0.95); }
-        .btn-fire { border-color: var(--danger); background: rgba(255, 0, 85, 0.1); color: var(--danger); flex: 1.5; }
-        .btn-fire:active { background: var(--danger); color: #fff; }
-        .restart-btn {
-            margin-top: 10px; padding: 8px 20px; font-size: 14px; background: none;
-            color: #888; border: 1px solid #444; border-radius: 6px; cursor: pointer;
-        }
-        .restart-btn:hover { color: #fff; border-color: #888; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سارق الجواهر</title>
+<style>
+:root{--b:#0a0e17;--p:#161f30;--a:#00ffcc;--e:#ff0055;--g:#ffcc00}
+body{background:var(--b);color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;user-select:none;touch-action:manipulation}
+.hdr{display:flex;justify-content:space-between;width:340px;max-width:90vw;margin-bottom:8px;font-weight:700}
+.hdr span{color:var(--a)}
+.cvs-cnt{border-radius:12px;border:2px solid var(--a);box-shadow:0 0 20px rgba(0,255,204,.2);overflow:hidden}
+canvas{background:#04060c;display:block}
+.ctrls{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:180px;margin-top:12px}
+.btn{background:var(--p);color:#fff;border:1px solid var(--a);font-size:18px;height:45px;border-radius:8px;cursor:pointer}
+.btn:active{background:var(--a);color:#000}
+.rst{margin-top:10px;padding:6px 16px;background:none;color:#888;border:1px solid #444;border-radius:6px;cursor:pointer}
+</style>
 </head>
 <body>
+<div class="hdr"><div>النقاط: <span id="s">0</span></div><div>الأعلى: <span id="h">0</span></div></div>
+<div class="cvs-cnt"><canvas id="c" width="340" height="340"></canvas></div>
+<div class="ctrls">
+<div></div><button class="btn" onclick="m(0,-1)">▲</button><div></div>
+<button class="btn" onclick="m(-1,0)">◄</button><button class="btn" onclick="m(0,1)">▼</button><button class="btn" onclick="m(1,0)">►</button>
+</div>
+<button class="rst" onclick="i()">إعادة اللعب</button>
 
-    <div class="header">
-        <div class="score-box">النقاط: <span id="score">0</span></div>
-        <div class="score-box">أعلى نتيجة: <span id="high">0</span></div>
-    </div>
+<script>
+const cvs=document.getElementById("c"),ctx=cvs.getContext("2d"),S=id=>document.getElementById(id);
+let p={x:170,y:170,r:10,sp:18},gems=[],eList=[],score=0,hs=localStorage.getItem("thief_h")||0,over=0,tmr=0;
+S("h").textContent=hs;
 
-    <div class="canvas-container">
-        <canvas id="c" width="360" height="360"></canvas>
-    </div>
+document.addEventListener("keydown",e=>{
+if(e.key==="ArrowUp")m(0,-1);if(e.key==="ArrowDown")m(0,1);
+if(e.key==="ArrowLeft")m(-1,0);if(e.key==="ArrowRight")m(1,0);
+});
 
-    <div class="controls">
-        <button class="btn" onclick="move(-0.15)">↺</button>
-        <button class="btn btn-fire" onclick="fire()">إطلاق 🔥</button>
-        <button class="btn" onclick="move(0.15)">↻</button>
-    </div>
+function m(dx,dy){
+if(over)return;
+p.x=Math.max(15,Math.min(325,p.x+dx*p.sp));
+p.y=Math.max(15,Math.min(325,p.y+dy*p.sp));
+}
 
-    <button class="restart-btn" onclick="init()">إعادة التشغيل</button>
+function addG(){
+gems.push({x:Math.random()*290+25,y:Math.random()*290+25,r:7});
+}
 
-    <script>
-        const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
-        const S = id => document.getElementById(id);
-        const CX = 180, CY = 180, ORBIT = 110, PLANET_R = 35;
+function addE(){
+let x=Math.random()>0.5?15:325,y=Math.random()*310+15;
+eList.push({x:x,y:y,r:9,sp:Math.random()*0.8+0.8+(score/50)});
+}
 
-        let angle = 0, bullets = [], enemies = [], particles = [], score = 0;
-        let high = localStorage.getItem("pd_high") || 0, gameOver = false, spawnTimer = 0;
+function update(){
+if(over)return;
+tmr++;
+if(gems.length<3)addG();
+if(eList.length<2+Math.floor(score/30) && tmr%120===0)addE();
 
-        S("high").textContent = high;
+// جمع الجواهر
+for(let k=gems.length-1;k>=0;k--){
+let g=gems[k];
+if(Math.hypot(p.x-g.x,p.y-g.y)<p.r+g.r){
+gems.splice(k,1);score+=10;S("s").textContent=score;
+if(score>hs){hs=score;localStorage.setItem("thief_h",hs);S("h").textContent=hs}
+}
+}
 
-        // دعم لوحة التحكم
-        document.addEventListener("keydown", e => {
-            if (e.key === "ArrowLeft") move(-0.12);
-            if (e.key === "ArrowRight") move(0.12);
-            if (e.key === " " || e.key === "ArrowUp") fire();
-        });
+// تحريك الأعداء ومطاردة اللاعب
+eList.forEach(e=>{
+let a=Math.atan2(p.y-e.y,p.x-e.x);
+e.x+=Math.cos(a)*e.sp;e.y+=Math.sin(a)*e.sp;
+if(Math.hypot(p.x-e.x,p.y-e.y)<p.r+e.r){over=1;draw();}
+});
+}
 
-        function move(dir) { if (!gameOver) angle += dir; }
+function draw(){
+ctx.clearRect(0,0,340,340);
 
-        function fire() {
-            if (gameOver) return;
-            let sx = CX + Math.cos(angle) * ORBIT;
-            let sy = CY + Math.sin(angle) * ORBIT;
-            // الإطلاق إلى الخارج عكس اتجاه الكوكب
-            let dx = Math.cos(angle) * 7;
-            let dy = Math.sin(angle) * 7;
-            bullets.push({ x: sx, y: sy, dx: dx, dy: dy });
-        }
+// رسم الجواهر
+ctx.fillStyle="#ffcc00";ctx.shadowColor="#ffcc00";ctx.shadowBlur=8;
+gems.forEach(g=>{ctx.beginPath();ctx.arc(g.x,g.y,g.r,0,7);ctx.fill()});
 
-        function createEnemy() {
-            let a = Math.random() * Math.PI * 2;
-            let dist = 220; // يبدأ من خارج الشاشة
-            enemies.push({
-                x: CX + Math.cos(a) * dist,
-                y: CY + Math.sin(a) * dist,
-                speed: Math.random() * 0.8 + 0.6 + (score / 100),
-                r: Math.random() * 6 + 10
-            });
-        }
+// رسم اللاعب
+ctx.fillStyle="#00ffcc";ctx.shadowColor="#00ffcc";ctx.shadowBlur=12;
+ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();
 
-        function addExplosion(x, y, color) {
-            for (let i = 0; i < 8; i++) {
-                let a = Math.random() * Math.PI * 2;
-                let spd = Math.random() * 3 + 1;
-                particles.push({
-                    x: x, y: y, dx: Math.cos(a) * spd, dy: Math.sin(a) * spd,
-                    life: 1, color: color
-                });
-            }
-        }
+// رسم الأعداء
+ctx.fillStyle="#ff0055";ctx.shadowColor="#ff0055";ctx.shadowBlur=10;
+eList.forEach(e=>{ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,7);ctx.fill()});
+ctx.shadowBlur=0;
 
-        function update() {
-            if (gameOver) return;
+if(over){
+ctx.fillStyle="rgba(4,6,12,0.85)";ctx.fillRect(0,0,340,340);
+ctx.fillStyle="#ff0055";ctx.font="bold 22px sans-serif";ctx.textAlign="center";
+ctx.fillText("تم القبض عليك!",170,150);
+ctx.fillStyle="#fff";ctx.font="15px sans-serif";
+ctx.fillText(`مجموع الجواهر: ${score}`,170,185);
+}
+}
 
-            // توليد الأعداء
-            spawnTimer++;
-            if (spawnTimer > Math.max(20, 60 - Math.floor(score / 10))) {
-                createEnemy();
-                spawnTimer = 0;
-            }
+function loop(){
+update();draw();
+if(!over)requestAnimationFrame(loop);
+}
 
-            // تحريك الطلقات
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                let b = bullets[i];
-                b.x += b.dx; b.y += b.dy;
-                if (Math.hypot(b.x - CX, b.y - CY) > 230) bullets.splice(i, 1);
-            }
-
-            // تحريك الذرات (الانفجارات)
-            for (let i = particles.length - 1; i >= 0; i--) {
-                let p = particles[i];
-                p.x += p.dx; p.y += p.dy; p.life -= 0.04;
-                if (p.life <= 0) particles.splice(i, 1);
-            }
-
-            // تحريك الأعداء وفحص الاصطدامات
-            for (let i = enemies.length - 1; i >= 0; i--) {
-                let e = enemies[i];
-                let a = Math.atan2(CY - e.y, CX - e.x);
-                e.x += Math.cos(a) * e.speed;
-                e.y += Math.sin(a) * e.speed;
-
-                // الاصطدام بالكوكب (خسارة)
-                if (Math.hypot(e.x - CX, e.y - CY) < PLANET_R + e.r) {
-                    addExplosion(CX, CY, "#00ffcc");
-                    addExplosion(e.x, e.y, "#ff0055");
-                    endGame();
-                    return;
-                }
-
-                // الاصطدام بالطلقات
-                for (let j = bullets.length - 1; j >= 0; j--) {
-                    let b = bullets[j];
-                    if (Math.hypot(e.x - b.x, e.y - b.y) < e.r + 4) {
-                        addExplosion(e.x, e.y, "#ffcc00");
-                        enemies.splice(i, 1);
-                        bullets.splice(j, 1);
-                        score += 10;
-                        S("score").textContent = score;
-                        if (score > high) {
-                            high = score;
-                            localStorage.setItem("pd_high", high);
-                            S("high").textContent = high;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, 360, 360);
-
-            // رسم الكوكب في المنتصف
-            ctx.save();
-            ctx.shadowColor = "#00ffcc"; ctx.shadowBlur = 15;
-            ctx.fillStyle = "#00ffcc";
-            ctx.beginPath(); ctx.arc(CX, CY, PLANET_R, 0, Math.PI * 2); ctx.fill();
-            ctx.restore();
-
-            // رسم المدار
-            ctx.strokeStyle = "rgba(0, 255, 204, 0.15)";
-            ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.arc(CX, CY, ORBIT, 0, Math.PI * 2); ctx.stroke();
-
-            // رسم السفينة
-            let sx = CX + Math.cos(angle) * ORBIT;
-            let sy = CY + Math.sin(angle) * ORBIT;
-            ctx.save();
-            ctx.translate(sx, sy);
-            ctx.rotate(angle + Math.PI / 2);
-            ctx.fillStyle = "#ffffff";
-            ctx.shadowColor = "#ffffff"; ctx.shadowBlur = 8;
-            ctx.beginPath();
-            ctx.moveTo(0, -10); ctx.lineTo(-7, 8); ctx.lineTo(7, 8);
-            ctx.closePath(); ctx.fill();
-            ctx.restore();
-
-            // رسم الطلقات
-            ctx.fillStyle = "#ffcc00";
-            bullets.forEach(b => {
-                ctx.beginPath(); ctx.arc(b.x, b.y, 3, 0, Math.PI * 2); ctx.fill();
-            });
-
-            // رسم الأعداء (الكويكبات)
-            ctx.fillStyle = "#ff0055";
-            enemies.forEach(e => {
-                ctx.save(); ctx.shadowColor = "#ff0055"; ctx.shadowBlur = 6;
-                ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2); ctx.fill();
-                ctx.restore();
-            });
-
-            // رسم الانفجارات
-            particles.forEach(p => {
-                ctx.fillStyle = p.color;
-                ctx.globalAlpha = p.life;
-                ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2); ctx.fill();
-                ctx.globalAlpha = 1;
-            });
-
-            // شاشة النهاية
-            if (gameOver) {
-                ctx.fillStyle = "rgba(2, 3, 7, 0.85)";
-                ctx.fillRect(0, 0, 360, 360);
-                ctx.fillStyle = "#ff0055"; ctx.font = "bold 24px system-ui"; ctx.textAlign = "center";
-                ctx.fillText("تدمر الكوكب!", CX, CY - 10);
-                ctx.fillStyle = "#fff"; ctx.font = "16px system-ui";
-                ctx.fillText(`النتيجة النهائـية: ${score}`, CX, CY + 25);
-            }
-        }
-
-        function loop() {
-            update(); draw();
-            if (!gameOver) requestAnimationFrame(loop);
-        }
-
-        function endGame() { gameOver = true; draw(); }
-
-        function init() {
-            bullets = []; enemies = []; particles = []; score = 0;
-            angle = 0; gameOver = false; S("score").textContent = 0;
-            loop();
-        }
-
-        init();
-    </script>
+function i(){
+p.x=170;p.y=170;gems=[];eList=[];score=0;over=0;tmr=0;
+S("s").textContent=0;addG();addE();loop();
+}
+i();
+</script>
 </body>
 </html>
