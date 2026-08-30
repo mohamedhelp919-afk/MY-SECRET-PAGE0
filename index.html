@@ -1,297 +1,93 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة الصاروخ الفضائي</title>
-    <style>
-        :root {
-            --bg: #090d16;
-            --panel: #161f33;
-            --accent: #00f2fe;
-            --danger: #ff0844;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            user-select: none;
-            touch-action: manipulation;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            width: 360px;
-            max-width: 90vw;
-            margin-bottom: 12px;
-            background: var(--panel);
-            padding: 10px 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-sizing: border-box;
-        }
-
-        .score-box {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .score-box span {
-            color: var(--accent);
-        }
-
-        .canvas-container {
-            position: relative;
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid var(--accent);
-        }
-
-        canvas {
-            background-color: #03060d;
-            display: block;
-        }
-
-        .controls {
-            margin-top: 15px;
-            display: flex;
-            gap: 20px;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            color: white;
-            font-size: 24px;
-            border: none;
-            width: 80px;
-            height: 50px;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
-            transition: transform 0.1s;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        .restart-btn {
-            margin-top: 15px;
-            padding: 10px 25px;
-            font-size: 15px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #ff0844, #ffb199);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لعبة الصاروخ الفضائي</title>
+<style>
+:root{--b:#090d16;--p:#161f33;--a:#00f2fe;--d:#ff0844}
+body{background:var(--b);color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;user-select:none;touch-action:manipulation}
+.header{display:flex;justify-content:space-between;width:360px;max-width:90vw;margin-bottom:12px;background:var(--p);padding:10px 20px;border-radius:12px;border:1px solid rgba(255,255,255,.1);box-sizing:border-box;font-weight:700}
+.header span{color:var(--a)}
+.canvas-container{position:relative;box-shadow:0 0 30px rgba(0,242,254,.2);border-radius:12px;overflow:hidden;border:2px solid var(--a)}
+canvas{background:#03060d;display:block}
+.controls{margin-top:15px;display:flex;gap:20px}
+.btn{background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;font-size:24px;border:none;width:80px;height:50px;border-radius:10px;cursor:pointer;box-shadow:0 4px 15px rgba(0,114,255,.4)}
+.btn:active{transform:scale(.95)}
+.restart-btn{margin-top:15px;padding:10px 25px;font-size:15px;font-weight:700;background:linear-gradient(135deg,#ff0844,#ffb199);color:#fff;border:none;border-radius:8px;cursor:pointer}
+</style>
 </head>
 <body>
+<div class="header">
+<div>النقاط: <span id="s">0</span></div><div>أعلى نتيجة: <span id="h">0</span></div>
+</div>
+<div class="canvas-container"><canvas id="c" width="360" height="480"></canvas></div>
+<div class="controls">
+<button class="btn" onclick="m(-25)">◄</button>
+<button class="btn" onclick="m(25)">►</button>
+</div>
+<button class="restart-btn" onclick="r()">إعادة اللعب</button>
 
-    <div class="header">
-        <div class="score-box">النقاط: <span id="score">0</span></div>
-        <div class="score-box">أعلى نتيجة: <span id="highScore">0</span></div>
-    </div>
+<script>
+const cvs=document.getElementById("c"),ctx=cvs.getContext("2d"),S=id=>document.getElementById(id);
+let p={x:165,y:410,w:30,h:45},mList=[],stars=[],score=0,hs=localStorage.getItem("space_high")||0,over=0,gInt,mInt;
+S("h").textContent=hs;
 
-    <div class="canvas-container">
-        <canvas id="gameCanvas" width="360" height="480"></canvas>
-    </div>
+for(let i=0;i<50;i++)stars.push({x:Math.random()*360,y:Math.random()*480,z:Math.random()*2,s:Math.random()*1.5+.5});
 
-    <div class="controls">
-        <button class="btn" onclick="moveLeft()">◄</button>
-        <button class="btn" onclick="moveRight()">►</button>
-    </div>
+document.addEventListener("keydown",e=>{if(e.key==="ArrowLeft")m(-25);if(e.key==="ArrowRight")m(25)});
 
-    <button class="restart-btn" onclick="resetGame()">إعادة اللعب</button>
+function m(dir){if(!over){p.x=Math.max(10,Math.min(cvs.width-p.w-10,p.x+dir))}}
 
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+function cM(){
+if(over)return;
+let sz=Math.random()*20+20;
+mList.push({x:Math.random()*(360-sz),y:-sz,s:sz,sp:Math.random()*3+2+score/50});
+}
 
-        let player = { x: 165, y: 410, width: 30, height: 45, speed: 25 };
-        let meteors = [];
-        let stars = [];
-        let score = 0;
-        let highScore = localStorage.getItem("space_high") || 0;
-        let gameOver = false;
-        let gameInterval;
-        let meteorInterval;
+function update(){
+if(over)return;
+stars.forEach(s=>{s.y+=s.s;if(s.y>480)s.y=0});
+for(let i=mList.length-1;i>=0;i--){
+let m=mList[i];m.y+=m.sp;
+if(p.x<m.x+m.s && p.x+p.w>m.x && p.y<m.y+m.s && p.y+p.h>m.y){over=1;clearInterval(gInt);clearInterval(mInt);draw();return}
+if(m.y>480){
+mList.splice(i,1);score+=5;S("s").textContent=score;
+if(score>hs){hs=score;localStorage.setItem("space_high",hs);S("h").textContent=hs}
+}
+}
+}
 
-        document.getElementById("highScore").textContent = highScore;
+function draw(){
+ctx.fillStyle="#03060d";ctx.fillRect(0,0,360,480);
+ctx.fillStyle="#fff";
+stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.z,0,7);ctx.fill()});
 
-        // تهيئة النجوم في الخلفية
-        for (let i = 0; i < 50; i++) {
-            stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 2,
-                speed: Math.random() * 1.5 + 0.5
-            });
-        }
+ctx.save();ctx.shadowColor="#00f2fe";ctx.shadowBlur=10;ctx.fillStyle="#00f2fe";
+ctx.beginPath();ctx.moveTo(p.x+p.w/2,p.y);ctx.lineTo(p.x,p.y+p.h);ctx.lineTo(p.x+p.w,p.y+p.h);ctx.fill();
+ctx.fillStyle="#ff0844";ctx.beginPath();ctx.moveTo(p.x+10,p.y+p.h);ctx.lineTo(p.x+p.w/2,p.y+p.h+12);ctx.lineTo(p.x+p.w-10,p.y+p.h);ctx.fill();
+ctx.restore();
 
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "ArrowLeft") moveLeft();
-            if (e.key === "ArrowRight") moveRight();
-        });
+mList.forEach(m=>{
+ctx.save();ctx.shadowColor="#ff0844";ctx.shadowBlur=8;ctx.fillStyle="#ff4e50";
+ctx.beginPath();ctx.arc(m.x+m.s/2,m.y+m.s/2,m.s/2,0,7);ctx.fill();ctx.restore();
+});
 
-        function moveLeft() {
-            if (player.x > 10 && !gameOver) player.x -= player.speed;
-        }
+if(over){
+ctx.fillStyle="rgba(3,6,13,.85)";ctx.fillRect(0,0,360,480);
+ctx.fillStyle="#ff0844";ctx.font="bold 26px Arial";ctx.textAlign="center";
+ctx.fillText("تحطم الصاروخ!",180,230);
+ctx.fillStyle="#fff";ctx.font="16px Arial";
+ctx.fillText(`مجموع نقاطك: ${score}`,180,265);
+}
+}
 
-        function moveRight() {
-            if (player.x < canvas.width - player.width - 10 && !gameOver) player.x += player.speed;
-        }
-
-        function createMeteor() {
-            if (gameOver) return;
-            const size = Math.random() * 20 + 20;
-            meteors.push({
-                x: Math.random() * (canvas.width - size),
-                y: -size,
-                size: size,
-                speed: Math.random() * 3 + 2 + score / 50
-            });
-        }
-
-        function update() {
-            if (gameOver) return;
-
-            // تحريك النجوم
-            stars.forEach(star => {
-                star.y += star.speed;
-                if (star.y > canvas.height) star.y = 0;
-            });
-
-            // تحريك النيازك والتحقق من الاصطدام
-            for (let i = 0; i < meteors.length; i++) {
-                let m = meteors[i];
-                m.y += m.speed;
-
-                // فحص الاصطدام بالصاروخ
-                if (
-                    player.x < m.x + m.size &&
-                    player.x + player.width > m.x &&
-                    player.y < m.y + m.size &&
-                    player.y + player.height > m.y
-                ) {
-                    endGame();
-                }
-
-                // حساب النقاط عند تجاوز النيزك
-                if (m.y > canvas.height) {
-                    meteors.splice(i, 1);
-                    score += 5;
-                    document.getElementById("score").textContent = score;
-                    if (score > highScore) {
-                        highScore = score;
-                        localStorage.setItem("space_high", highScore);
-                        document.getElementById("highScore").textContent = highScore;
-                    }
-                    i--;
-                }
-            }
-        }
-
-        function draw() {
-            // مسح الشاشة
-            ctx.fillStyle = "#03060d";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // رسم النجوم
-            ctx.fillStyle = "#ffffff";
-            stars.forEach(star => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-            });
-
-            // رسم الصاروخ (اللاعب)
-            ctx.save();
-            ctx.shadowColor = "#00f2fe";
-            ctx.shadowBlur = 10;
-            ctx.fillStyle = "#00f2fe";
-            // جسم الصاروخ المثلث
-            ctx.beginPath();
-            ctx.moveTo(player.x + player.width / 2, player.y);
-            ctx.lineTo(player.x, player.y + player.height);
-            ctx.lineTo(player.x + player.width, player.y + player.height);
-            ctx.closePath();
-            ctx.fill();
-
-            // نار المحرك
-            ctx.fillStyle = "#ff0844";
-            ctx.beginPath();
-            ctx.moveTo(player.x + 10, player.y + player.height);
-            ctx.lineTo(player.x + player.width / 2, player.y + player.height + 12);
-            ctx.lineTo(player.x + player.width - 10, player.y + player.height);
-            ctx.closePath();
-            ctx.fill();
-            ctx.restore();
-
-            // رسم النيازك
-            meteors.forEach(m => {
-                ctx.save();
-                ctx.shadowColor = "#ff0844";
-                ctx.shadowBlur = 8;
-                ctx.fillStyle = "#ff4e50";
-                ctx.beginPath();
-                ctx.arc(m.x + m.size/2, m.y + m.size/2, m.size/2, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            });
-
-            // شاشة النهاية
-            if (gameOver) {
-                ctx.fillStyle = "rgba(3, 6, 13, 0.85)";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                ctx.fillStyle = "#ff0844";
-                ctx.font = "bold 26px Arial";
-                ctx.textAlign = "center";
-                ctx.fillText("تحطم الصاروخ!", canvas.width / 2, canvas.height / 2 - 10);
-
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "16px Arial";
-                ctx.fillText(`مجموع نقاطك: ${score}`, canvas.width / 2, canvas.height / 2 + 25);
-            }
-        }
-
-        function gameLoop() {
-            update();
-            draw();
-        }
-
-        function endGame() {
-            gameOver = true;
-            clearInterval(gameInterval);
-            clearInterval(meteorInterval);
-            draw();
-        }
-
-        function resetGame() {
-            clearInterval(gameInterval);
-            clearInterval(meteorInterval);
-            player.x = 165;
-            meteors = [];
-            score = 0;
-            gameOver = false;
-            document.getElementById("score").textContent = score;
-            gameInterval = setInterval(gameLoop, 1000 / 60);
-            meteorInterval = setInterval(createMeteor, 700);
-        }
-
-        resetGame();
-    </script>
+function r(){
+clearInterval(gInt);clearInterval(mInt);
+p.x=165;mList=[];score=0;over=0;S("s").textContent=0;
+gInt=setInterval(()=>{update();draw()},16);
+mInt=setInterval(cM,700);
+}
+r();
+</script>
 </body>
 </html>
