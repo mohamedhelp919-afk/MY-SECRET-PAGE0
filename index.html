@@ -2,464 +2,290 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neon Cyberpunk 3D Engine - Mega Code Edition</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الدفع الخاصة</title>
     <style>
-        * { box-sizing: border-box; user-select: none; -webkit-user-select: none; margin: 0; padding: 0; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; touch-action: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .payment-wrapper {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: #f8f9fa;
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .order-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #e8f4fd;
+            margin: 20px;
+            border-radius: 8px;
+            border: 1px dashed #3498db;
+        }
+
+        .order-summary span {
+            color: #2980b9;
+            font-weight: 600;
+        }
+
+        .order-summary .amount {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .payment-form {
+            padding: 0 20px 25px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            background: #fdfdfd;
+            direction: ltr;
+            text-align: right;
+        }
+
+        .input-group input:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            background: #ffffff;
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .row .input-group {
+            flex: 1;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .secure-badge {
+            text-align: center;
+            margin-top: 15px;
+            color: #95a5a6;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .card-icons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
         
-        #rotate-notice {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #020208; color: #00f3ff; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 9999; font-size: 20px; text-align: center;
-        }
-        @media (orientation: landscape) { #rotate-notice { display: none; } }
-
-        /* شاشة HUD الرئيسية */
-        #hud {
-            position: absolute; top: 12px; left: 12px; z-index: 10; color: #fff;
-            background: rgba(5, 10, 20, 0.85); padding: 14px 20px; border-radius: 12px;
-            border: 1px solid #00f3ff; box-shadow: 0 0 20px rgba(0,243,255,0.25); pointer-events: none; min-width: 240px;
-        }
-        .bar-box { width: 100%; height: 12px; background: #111; border-radius: 6px; margin-top: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-        .bar-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #ff0055, #ff5500); transition: width 0.15s; }
-        .bar-arm { background: linear-gradient(90deg, #00f3ff, #0055ff); }
-        .stars { color: #ffcc00; font-size: 18px; margin-top: 6px; text-shadow: 0 0 5px #ffcc00; }
-
-        #crosshair {
-            position: absolute; top: 50%; left: 50%; width: 12px; height: 12px;
-            border: 2px solid #00f3ff; border-radius: 50%; transform: translate(-50%, -50%);
-            pointer-events: none; z-index: 10; box-shadow: 0 0 8px #00f3ff;
+        .card-icons div {
+            background: #f1f2f6;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #57606f;
         }
 
-        #night-vision-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 255, 80, 0.12); pointer-events: none; z-index: 5;
-            display: none; border: 25px solid rgba(0,40,0,0.6); box-shadow: inset 0 0 100px rgba(0,255,0,0.3);
+        /* رسالة النجاح */
+        .toast {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2ecc71;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+            transition: top 0.4s cubic-bezier(0.68, -0.55, 0.26, 1.55);
+            z-index: 10;
         }
-
-        /* تحكم الموبايل واللمس */
-        .touch-ui {
-            position: absolute; bottom: 20px; width: 100%; padding: 0 25px;
-            display: flex; justify-content: space-between; align-items: flex-end;
-            z-index: 20; pointer-events: none;
+        .toast.show {
+            top: 20px;
         }
-        #joystick-zone {
-            width: 130px; height: 130px; background: rgba(255, 255, 255, 0.03);
-            border: 2px solid rgba(0, 243, 255, 0.5); border-radius: 50%; position: relative; pointer-events: auto;
-            backdrop-filter: blur(4px);
-        }
-        #joystick-knob {
-            width: 50px; height: 50px; background: #00f3ff; border-radius: 50%;
-            position: absolute; top: 40px; left: 40px; box-shadow: 0 0 20px #00f3ff;
-        }
-        .btn-group { display: flex; gap: 10px; pointer-events: auto; flex-wrap: wrap; max-width: 320px; justify-content: flex-end; }
-        .act-btn {
-            width: 60px; height: 60px; border-radius: 50%; background: rgba(0, 0, 0, 0.75);
-            border: 2px solid #00f3ff; color: #fff; font-size: 12px; font-weight: bold;
-            display: flex; justify-content: center; align-items: center; text-align: center;
-            box-shadow: 0 0 10px rgba(0,243,255,0.2); backdrop-filter: blur(4px);
-        }
-        .act-btn:active { background: #00f3ff; color: #000; transform: scale(0.95); }
-
-        #weapon-bar { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; z-index: 10; }
-        .w-btn { background: rgba(0,0,0,0.85); border: 1px solid #00f3ff; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: 0.2s; }
-        .w-btn.active { background: #00f3ff; color: #000; font-weight: bold; box-shadow: 0 0 10px #00f3ff; }
-
-        /* الخريطة المصغرة Mini-map */
-        #minimap-container {
-            position: absolute; bottom: 20px; left: 170px; width: 110px; height: 110px;
-            border: 2px solid #00f3ff; border-radius: 50%; background: rgba(0,0,10,0.8);
-            z-index: 10; overflow: hidden; pointer-events: none; display: flex; justify-content: center; align-items: center;
-        }
-        #minimap-player { width: 6px; height: 6px; background: #ff0055; border-radius: 50%; box-shadow: 0 0 6px #ff0055; }
     </style>
 </head>
 <body>
 
-    <div id="rotate-notice">🔄 يرجى تدوير الهاتف للوضع الأفقي لتشغيل المحرك!</div>
-    <div id="night-vision-overlay"></div>
-
-    <div id="hud">
-        <div id="state-text" style="color:#00f3ff; font-weight:bold; font-size:14px;">الوضع: مشاة 🚶</div>
-        <div style="font-size:11px; margin-top:6px; color:#aaa;">الصحة</div>
-        <div class="bar-box"><div class="bar-fill" id="hp-bar"></div></div>
-        <div style="font-size:11px; margin-top:4px; color:#aaa;">الدرع</div>
-        <div class="bar-box"><div class="bar-fill bar-arm" id="arm-bar"></div></div>
-        <div class="stars" id="star-rank">المطاردة: ☆☆☆☆☆</div>
-    </div>
-
-    <div id="weapon-bar">
-        <button class="w-btn active" onclick="setWep(1)">1: رشاش</button>
-        <button class="w-btn" onclick="setWep(2)">2: شوتجن</button>
-        <button class="w-btn" onclick="setWep(3)">3: RPG 🚀</button>
-        <button class="w-btn" onclick="toggleNVG()" style="border-color:#00ff55; color:#00ff55;">ليلي 👁️</button>
-    </div>
-
-    <div id="crosshair"></div>
-
-    <div id="minimap-container">
-        <div id="minimap-player"></div>
-    </div>
-
-    <div class="touch-ui">
-        <div id="joystick-zone"><div id="joystick-knob"></div></div>
-        <div class="btn-group">
-            <div class="act-btn" id="btn-up" style="border-color:#00ff55; display:none;">صعود ⬆️</div>
-            <div class="act-btn" id="btn-down" style="border-color:#00ff55; display:none;">هبوط ⬇️</div>
-            <div class="act-btn" id="btn-enter" style="border-color:#ffcc00; color:#ffcc00;">ركوب [F]</div>
-            <div class="act-btn" id="btn-shoot" style="border-color:#ff0055; color:#ff0055;">إطلاق 🔥</div>
-            <div class="act-btn" id="btn-jump">قفز ⬆️</div>
+    <div class="payment-wrapper">
+        <div class="toast" id="toastMessage">تم بدء معالجة الدفع بنجاح!</div>
+        
+        <div class="header">
+            <h2>بوابة الدفع الإلكتروني</h2>
+            <p>أكمل بياناتك بأمان لإتمام طلبك</p>
         </div>
+
+        <div class="order-summary">
+            <span>إجمالي المطلوب دفعه:</span>
+            <div class="amount">1,500 ج.م</div>
+        </div>
+
+        <form class="payment-form" id="customPaymentForm">
+            
+            <div class="card-icons">
+                <div>💳 Visa</div>
+                <div>💳 MasterCard</div>
+                <div>💳 Meeza</div>
+            </div>
+
+            <div class="input-group">
+                <label for="cardName">الاسم على البطاقة</label>
+                <input type="text" id="cardName" placeholder="الاسم ثلاثي كما هو بالبطاقة" required dir="rtl">
+            </div>
+
+            <div class="input-group">
+                <label for="cardNumber">رقم البطاقة</label>
+                <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required autocomplete="off">
+            </div>
+
+            <div class="row">
+                <div class="input-group">
+                    <label for="expDate">تاريخ الانتهاء</label>
+                    <input type="text" id="expDate" placeholder="MM/YY" maxlength="5" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="cvv">رمز CVC</label>
+                    <input type="password" id="cvv" placeholder="123" maxlength="3" required autocomplete="off">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">تأكيد الدفع</button>
+            
+            <div class="secure-badge">
+                🔒 يتم تشفير بياناتك بالكامل (تصميم خاص)
+            </div>
+        </form>
     </div>
 
     <script>
-        // --- 1. مصفوفات بيانات المحرك الممتدة (Data Engine Matrix) ---
-        const ENGINE_CONFIG = {
-            WORLD_SIZE: 4000,
-            BUILDING_COUNT: 650,
-            TRAFFIC_DENSITY: 25,
-            DAY_NIGHT_SPEED: 0.0001,
-            GRAVITY: 0.015
-        };
-
-        // توليد مصفوفة بيانات افتراضية ضخمة للذكاء الاصطناعي والفيزياء
-        const AI_NODES = [];
-        for (let i = 0; i < 1000; i++) {
-            AI_NODES.push({
-                id: i,
-                x: (Math.random() - 0.5) * ENGINE_CONFIG.WORLD_SIZE,
-                z: (Math.random() - 0.5) * ENGINE_CONFIG.WORLD_SIZE,
-                type: Math.floor(Math.random() * 4),
-                weight: Math.random().toFixed(4)
-            });
-        }
-
-        // --- 2. محرك الصوت الرقمي Synthesizer ---
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSfx(type) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-
-            if (type === 'gun') {
-                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(320, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 0.08);
-                gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.08);
-            } else if (type === 'rpg') {
-                osc.type = 'square'; osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.6);
-                gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.6);
+        // تنسيق رقم البطاقة (إضافة مسافة كل 4 أرقام)
+        document.getElementById('cardNumber').addEventListener('input', function (e) {
+            let target = e.target;
+            let value = target.value.replace(/\D/g, ''); // إزالة أي شيء غير رقم
+            let formatted = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) formatted += ' ';
+                formatted += value[i];
             }
-        }
-
-        // --- 3. إعداد البيئة الثلاثية الأبعاد THREE.JS ---
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x020208);
-        scene.fog = new THREE.FogExp2(0x020208, 0.0025);
-
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 3000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        document.body.appendChild(renderer.domElement);
-
-        const ambLight = new THREE.AmbientLight(0xffffff, 0.35);
-        scene.add(ambLight);
-
-        const dirLight = new THREE.DirectionalLight(0x00f3ff, 0.9);
-        dirLight.position.set(300, 500, 300);
-        dirLight.castShadow = true;
-        dirLight.shadow.mapSize.width = 2048;
-        dirLight.shadow.mapSize.height = 2048;
-        scene.add(dirLight);
-
-        // --- 4. توليد المدينة والمطار والبيئة ---
-        const floor = new THREE.Mesh(
-            new THREE.PlaneGeometry(ENGINE_CONFIG.WORLD_SIZE, ENGINE_CONFIG.WORLD_SIZE),
-            new THREE.MeshStandardMaterial({ color: 0x04040a, roughness: 0.85 })
-        );
-        floor.rotation.x = -Math.PI / 2;
-        floor.receiveShadow = true;
-        scene.add(floor);
-
-        const grid = new THREE.GridHelper(ENGINE_CONFIG.WORLD_SIZE, 400, 0x00f3ff, 0x111125);
-        grid.position.y = 0.1;
-        scene.add(grid);
-
-        // توليد ناطحات السحاب
-        const buildings = [];
-        for (let i = 0; i < ENGINE_CONFIG.BUILDING_COUNT; i++) {
-            const h = Math.random() * 110 + 35;
-            const w = Math.random() * 40 + 20;
-            const d = Math.random() * 40 + 20;
-            const bld = new THREE.Mesh(
-                new THREE.BoxGeometry(w, h, d),
-                new THREE.MeshStandardMaterial({ color: 0x080814, metalness: 0.7, roughness: 0.2 })
-            );
-            let x = (Math.random() - 0.5) * (ENGINE_CONFIG.WORLD_SIZE - 300);
-            let z = (Math.random() - 0.5) * (ENGINE_CONFIG.WORLD_SIZE - 300);
-            
-            if (Math.abs(x) < 200 && Math.abs(z) < 500) x += 400; // مساحة المدرج
-
-            bld.position.set(x, h/2, z);
-            bld.castShadow = true; bld.receiveShadow = true;
-            scene.add(bld);
-            buildings.push(bld);
-
-            const wire = new THREE.LineSegments(
-                new THREE.EdgesGeometry(bld.geometry),
-                new THREE.LineBasicMaterial({ color: i % 3 === 0 ? 0x00f3ff : (i % 3 === 1 ? 0xff0055 : 0x9d00ff) })
-            );
-            wire.position.copy(bld.position);
-            scene.add(wire);
-        }
-
-        // مدرج المطار
-        const runway = new THREE.Mesh(
-            new THREE.PlaneGeometry(100, 1000),
-            new THREE.MeshStandardMaterial({ color: 0x0a0a15, roughness: 0.5 })
-        );
-        runway.rotation.x = -Math.PI / 2;
-        runway.position.set(0, 0.2, 0);
-        scene.add(runway);
-
-        // --- 5. الكائنات والمركبات ---
-        const playerGroup = new THREE.Group();
-        const pBody = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 2.2), new THREE.MeshStandardMaterial({ color: 0x00f3ff }));
-        pBody.position.y = 1.1;
-        playerGroup.add(pBody);
-        scene.add(playerGroup);
-
-        let hp = 100, armor = 100, selectedWep = 1;
-        const vehicles = [];
-
-        function createCar(x, z, color) {
-            const car = new THREE.Group();
-            const body = new THREE.Mesh(new THREE.BoxGeometry(3, 1.3, 5.5), new THREE.MeshStandardMaterial({ color: color, metalness: 0.8 }));
-            body.position.y = 0.8;
-            car.add(body);
-            car.position.set(x, 0, z);
-            car.userData = { type: 'car', speed: 0 };
-            scene.add(car);
-            vehicles.push(car);
-            return car;
-        }
-
-        function createHeli(x, z) {
-            const heli = new THREE.Group();
-            const body = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.2, 6.5), new THREE.MeshStandardMaterial({ color: 0x00ff55, metalness: 0.5 }));
-            body.position.y = 1.6;
-            heli.add(body);
-
-            const rotor = new THREE.Mesh(new THREE.BoxGeometry(10, 0.1, 0.7), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-            rotor.position.set(0, 3, 0);
-            heli.add(rotor);
-
-            heli.position.set(x, 0, z);
-            heli.userData = { type: 'heli', speed: 0, altitude: 0, rotor: rotor };
-            scene.add(heli);
-            vehicles.push(heli);
-        }
-
-        function createJet(x, z) {
-            const jet = new THREE.Group();
-            const body = new THREE.Mesh(new THREE.ConeGeometry(2.2, 11, 4), new THREE.MeshStandardMaterial({ color: 0xffcc00, metalness: 0.9 }));
-            body.rotation.x = Math.PI / 2;
-            body.position.y = 1.6;
-            jet.add(body);
-
-            jet.position.set(x, 0, z);
-            jet.userData = { type: 'jet', speed: 0, altitude: 0 };
-            scene.add(jet);
-            vehicles.push(jet);
-        }
-
-        // إنشاء أسطول المركبات
-        createCar(25, 25, 0xff0055);
-        createCar(-45, 45, 0x9d00ff);
-        createCar(60, -30, 0x00f3ff);
-        createHeli(0, 120);
-        createJet(0, -120);
-
-        // --- 6. آليات التحكم المدعومة بالموبايل والحاسوب ---
-        let currentVehicle = null;
-        let cameraAngle = { yaw: 0, pitch: 0 };
-        let moveInput = { x: 0, y: 0 };
-        let flyInput = 0;
-        const keys = {};
-
-        window.addEventListener('keydown', e => {
-            keys[e.code] = true;
-            if (e.code === 'KeyF') toggleVehicle();
-            if (e.code === 'Space') jump();
-            if (e.code === 'KeyE') flyInput = 0.45;
-            if (e.code === 'KeyQ') flyInput = -0.45;
-        });
-        window.addEventListener('keyup', e => {
-            keys[e.code] = false;
-            if (e.code === 'KeyE' || e.code === 'KeyQ') flyInput = 0;
+            target.value = formatted;
         });
 
-        document.addEventListener('mousemove', e => {
-            if (document.pointerLockElement === document.body) {
-                cameraAngle.yaw -= e.movementX * 0.003;
-                cameraAngle.pitch -= e.movementY * 0.003;
-                cameraAngle.pitch = Math.max(-Math.PI/4, Math.min(Math.PI/4, cameraAngle.pitch));
-            }
-        });
-        document.body.addEventListener('click', () => { if (window.innerWidth > 768) document.body.requestPointerLock(); });
-
-        const jZone = document.getElementById('joystick-zone');
-        const jKnob = document.getElementById('joystick-knob');
-        let jStartX = 0, jStartY = 0;
-
-        jZone.addEventListener('touchstart', e => {
-            const r = jZone.getBoundingClientRect(); jStartX = r.left + r.width/2; jStartY = r.top + r.height/2;
-        });
-        jZone.addEventListener('touchmove', e => {
-            e.preventDefault();
-            const t = e.touches[0];
-            let dx = t.clientX - jStartX, dy = t.clientY - jStartY;
-            let d = Math.min(Math.hypot(dx, dy), 42);
-            let angle = Math.atan2(dy, dx);
-            let kX = Math.cos(angle)*d, kY = Math.sin(angle)*d;
-            jKnob.style.transform = `translate(${kX}px, ${kY}px)`;
-            moveInput.x = kX / 42; moveInput.y = kY / 42;
-        });
-        jZone.addEventListener('touchend', () => { jKnob.style.transform = 'translate(0,0)'; moveInput = { x: 0, y: 0 }; });
-
-        document.getElementById('btn-enter').addEventListener('click', toggleVehicle);
-        document.getElementById('btn-jump').addEventListener('click', jump);
-        document.getElementById('btn-shoot').addEventListener('click', shoot);
-
-        function toggleNVG() {
-            const nvg = document.getElementById('night-vision-overlay');
-            nvg.style.display = nvg.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function setWep(n) {
-            selectedWep = n;
-            document.querySelectorAll('.w-btn').forEach((b, i) => { if(i < 3) b.classList.toggle('active', i+1 === n); });
-        }
-
-        function toggleVehicle() {
-            if (currentVehicle) {
-                playerGroup.position.copy(currentVehicle.position).add(new THREE.Vector3(4, 0, 0));
-                playerGroup.visible = true;
-                currentVehicle = null;
-                document.getElementById('state-text').textContent = "الوضع: مشاة 🚶";
-                document.getElementById('btn-up').style.display = 'none';
-                document.getElementById('btn-down').style.display = 'none';
+        // تنسيق تاريخ الانتهاء (MM/YY)
+        document.getElementById('expDate').addEventListener('input', function (e) {
+            let target = e.target;
+            let value = target.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                target.value = value.substring(0, 2) + '/' + value.substring(2, 4);
             } else {
-                vehicles.forEach(v => {
-                    if (playerGroup.position.distanceTo(v.position) < 8) {
-                        currentVehicle = v;
-                        playerGroup.visible = false;
-                        if (v.userData.type === 'heli' || v.userData.type === 'jet') {
-                            document.getElementById('state-text').textContent = "الوضع: طيران ✈️";
-                            document.getElementById('btn-up').style.display = 'flex';
-                            document.getElementById('btn-down').style.display = 'flex';
-                        } else {
-                            document.getElementById('state-text').textContent = "الوضع: قيادة سيارة 🚘";
-                        }
-                    }
-                });
+                target.value = value;
             }
-        }
-
-        let pVelY = 0;
-        function jump() { if (!currentVehicle && playerGroup.position.y <= 0.1) pVelY = 0.24; }
-
-        const bullets = [];
-        function shoot() {
-            playSfx(selectedWep === 3 ? 'rpg' : 'gun');
-            const dir = new THREE.Vector3(0, 0, -1).applyAxisAngle(new THREE.Vector3(0, 1, 0), cameraAngle.yaw);
-            const b = new THREE.Mesh(new THREE.SphereGeometry(0.28), new THREE.MeshBasicMaterial({ color: 0xff0055 }));
-            const pos = currentVehicle ? currentVehicle.position.clone().add(new THREE.Vector3(0,1.8,0)) : playerGroup.position.clone().add(new THREE.Vector3(0,1.3,0));
-            b.position.copy(pos);
-            b.userData = { vel: dir.multiplyScalar(3.2) };
-            scene.add(b);
-            bullets.push(b);
-        }
-
-        // --- 7. حلقة التحديث الكبرى (Ultimate Main Loop) ---
-        function animate() {
-            requestAnimationFrame(animate);
-
-            let inX = moveInput.x || (keys['KeyD'] ? 1 : 0) - (keys['KeyA'] ? 1 : 0);
-            let inZ = moveInput.y || (keys['KeyS'] ? 1 : 0) - (keys['KeyW'] ? 1 : 0);
-
-            if (!currentVehicle) {
-                const moveDir = new THREE.Vector3(inX, 0, inZ).normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), cameraAngle.yaw);
-                playerGroup.position.x += moveDir.x * 0.32;
-                playerGroup.position.z += moveDir.z * 0.32;
-
-                playerGroup.position.y += pVelY;
-                if (playerGroup.position.y > 0) pVelY -= ENGINE_CONFIG.GRAVITY;
-                else { playerGroup.position.y = 0; pVelY = 0; }
-
-                if (moveDir.length() > 0) playerGroup.rotation.y = Math.atan2(moveDir.x, moveDir.z);
-
-                const cOff = new THREE.Vector3(0, 2.8, 5.5).applyAxisAngle(new THREE.Vector3(1,0,0), cameraAngle.pitch).applyAxisAngle(new THREE.Vector3(0,1,0), cameraAngle.yaw);
-                camera.position.copy(playerGroup.position).add(cOff);
-                camera.lookAt(playerGroup.position.clone().add(new THREE.Vector3(0, 1.3, 0)));
-
-            } else if (currentVehicle.userData.type === 'car') {
-                let spd = currentVehicle.userData.speed;
-                if (inZ < 0) spd = Math.min(spd + 0.045, 1.6);
-                else if (inZ > 0) spd = Math.max(spd - 0.025, -0.45);
-                else spd *= 0.96;
-                currentVehicle.userData.speed = spd;
-
-                if (Math.abs(spd) > 0.05) {
-                    currentVehicle.rotation.y += ((inX < 0 ? 1 : 0) - (inX > 0 ? 1 : 0)) * 0.038 * (spd > 0 ? 1 : -1);
-                }
-                currentVehicle.translateZ(-spd);
-
-                const cOff = new THREE.Vector3(0, 5, 11).applyAxisAngle(new THREE.Vector3(0,1,0), currentVehicle.rotation.y);
-                camera.position.copy(currentVehicle.position).add(cOff);
-                camera.lookAt(currentVehicle.position.clone().add(new THREE.Vector3(0, 1.6, 0)));
-
-            } else if (currentVehicle.userData.type === 'heli' || currentVehicle.userData.type === 'jet') {
-                if(currentVehicle.userData.rotor) currentVehicle.userData.rotor.rotation.y += 0.55;
-                currentVehicle.position.y = Math.max(0, currentVehicle.position.y + flyInput);
-
-                const moveDir = new THREE.Vector3(inX, 0, inZ).normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), cameraAngle.yaw);
-                currentVehicle.position.x += moveDir.x * 0.65;
-                currentVehicle.position.z += moveDir.z * 0.65;
-
-                const cOff = new THREE.Vector3(0, 6.5, 16).applyAxisAngle(new THREE.Vector3(0,1,0), cameraAngle.yaw);
-                camera.position.copy(currentVehicle.position).add(cOff);
-                camera.lookAt(currentVehicle.position);
-            }
-
-            // تحديث المقذوفات
-            bullets.forEach((b, i) => {
-                b.position.add(b.userData.vel);
-                if (b.position.length() > 1200) { scene.remove(b); bullets.splice(i, 1); }
-            });
-
-            document.getElementById('hp-bar').style.width = `${hp}%`;
-            document.getElementById('arm-bar').style.width = `${armor}%`;
-
-            renderer.render(scene, camera);
-        }
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        animate();
+        // منع إدخال أي حروف في رمز الـ CVC
+        document.getElementById('cvv').addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        // معالجة عند الضغط على زر الدفع
+        document.getElementById('customPaymentForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // إيقاف إعادة تحميل الصفحة
+            
+            // إظهار رسالة النجاح المنبثقة
+            const toast = document.getElementById('toastMessage');
+            toast.classList.add('show');
+            
+            // إخفاء الرسالة بعد 3 ثواني
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+
+            // يمكنك هنا إضافة كود الـ API الخاص بك لربط الواجهة ببوابة الدفع الحقيقية
+        });
     </script>
+
 </body>
 </html>
