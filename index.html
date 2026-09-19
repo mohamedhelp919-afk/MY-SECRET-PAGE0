@@ -45,42 +45,7 @@
             padding-bottom: 30px;
         }
 
-        /* Toast Notification System */
-        #toast-container {
-            position: fixed;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            width: 90%;
-            max-width: 400px;
-            pointer-events: none;
-        }
-
-        .toast {
-            background: rgba(16, 185, 129, 0.9);
-            backdrop-filter: blur(8px);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 14px;
-            font-size: 14px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            margin-bottom: 10px;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Navbar */
+        /* Navbar الفاخر */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -88,6 +53,7 @@
             margin-bottom: 30px;
             background: var(--card-bg);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--card-border);
             padding: 12px 18px;
             border-radius: 24px;
@@ -117,6 +83,7 @@
         .brand-name {
             font-size: 18px;
             font-weight: 900;
+            letter-spacing: 1px;
             background: linear-gradient(135deg, #fff 30%, var(--accent-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -142,6 +109,7 @@
         .btn-nav:hover, .btn-nav:active {
             background: var(--accent-purple);
             border-color: var(--accent-purple);
+            box-shadow: 0 0 12px var(--accent-purple-glow);
         }
 
         /* Hero */
@@ -180,9 +148,10 @@
         .hero-subtitle {
             color: var(--text-muted);
             font-size: 14px;
+            font-weight: 500;
         }
 
-        /* Grid Packages */
+        /* Grid Packages الفاخرة */
         .packages-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -198,7 +167,23 @@
             padding: 18px 16px;
             text-align: right;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pkg-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .pkg-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(139, 92, 246, 0.4);
         }
 
         .pkg-card.selected {
@@ -207,10 +192,12 @@
             box-shadow: 0 10px 25px var(--accent-purple-glow);
         }
 
+        .pkg-card.selected::before { opacity: 1; }
+
         .pkg-size { font-size: 15px; font-weight: 800; color: #fff; }
         .pkg-price { font-size: 28px; font-weight: 900; margin: 6px 0; color: var(--accent-gold); }
         .pkg-price span { font-size: 14px; font-weight: 500; color: var(--text-muted); }
-        .pkg-meta { font-size: 12px; color: var(--text-muted); }
+        .pkg-meta { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
         /* Buttons & Forms */
         .btn-submit {
@@ -226,6 +213,13 @@
             transition: all 0.3s ease;
             box-shadow: 0 8px 20px var(--accent-purple-glow);
         }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-submit:active { transform: translateY(0); }
 
         .glass-card {
             background: var(--card-bg);
@@ -261,6 +255,12 @@
             font-size: 16px;
             font-weight: 700;
             color: #fff;
+            transition: 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 12px var(--accent-purple-glow);
         }
 
         .copy-box {
@@ -275,7 +275,7 @@
 
         .copy-box span {
             font-family: monospace;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 900;
             color: var(--accent-gold);
             letter-spacing: 1px;
@@ -290,50 +290,12 @@
             font-size: 12px;
             color: white;
             font-weight: 800;
+            transition: 0.2s;
         }
 
-        /* Live Counter Box */
-        .counter-card {
-            text-align: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            border: 1px solid var(--card-border);
-            margin-top: 15px;
-        }
+        .btn-copy:hover { background: #7c3aed; }
 
-        .timer-display {
-            font-size: 42px;
-            font-weight: 900;
-            color: var(--accent-gold);
-            margin: 10px 0;
-            font-family: monospace;
-        }
-
-        /* Delivered Card Box */
-        .delivered-card-box {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(24, 24, 27, 0.9));
-            border: 2px solid var(--success-color);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .card-code-display {
-            font-family: monospace;
-            font-size: 26px;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 2px;
-            margin: 15px 0;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px dashed var(--success-color);
-        }
-
-        /* Stats & History */
+        /* Stats & Cards History */
         .stats-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -371,6 +333,7 @@
             background: rgba(245, 158, 11, 0.1);
             padding: 6px 12px;
             border-radius: 10px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
         /* Admin Table */
@@ -385,6 +348,11 @@
             border: 1px solid var(--card-border);
             padding: 10px 6px;
             text-align: center;
+        }
+
+        .admin-table th {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
         }
 
         .btn-approve {
@@ -413,6 +381,7 @@
             padding: 4px 8px;
             border-radius: 8px;
             font-size: 11px;
+            font-weight: 800;
         }
 
         .badge-approved {
@@ -421,6 +390,7 @@
             padding: 4px 8px;
             border-radius: 8px;
             font-size: 11px;
+            font-weight: 800;
         }
 
         .hidden { display: none; }
@@ -428,11 +398,8 @@
 </head>
 <body>
 
-    <!-- Smooth Toast Container -->
-    <div id="toast-container"></div>
-
     <div class="app-container">
-        <!-- Navbar -->
+        <!-- Navbar العلوي -->
         <div class="navbar">
             <div class="brand" onclick="showPage('store')">
                 <span class="brand-icon">📶</span>
@@ -445,7 +412,7 @@
             </div>
         </div>
 
-        <!-- 1. Store Page -->
+        <!-- 1. صفحة المتجر رئيسية -->
         <div id="store-page">
             <div class="hero-section">
                 <span class="badge-tag">⚡ التوصيل آلي ومضمون 100%</span>
@@ -457,7 +424,7 @@
             <button class="btn-submit" onclick="goToCheckout()">متابعة الشراء الآن ❯</button>
         </div>
 
-        <!-- 2. Checkout Page -->
+        <!-- 2. صفحة الدفع -->
         <div id="checkout-page" class="hidden">
             <button class="btn-nav" onclick="showPage('store')" style="margin-bottom: 15px;">← العودة للمتجر</button>
             
@@ -467,35 +434,26 @@
                 <div class="form-group">
                     <label>رقم المحفظة التي قمت بالتحويل منها</label>
                     <input type="text" id="user-phone" class="form-input" placeholder="01xxxxxxxxx">
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px; text-align: center;">يتم التحقق من تحويلك تلقائياً قبل إصدار الكرت</p>
                 </div>
 
                 <div class="form-group">
-                    <label>كود التحويل المباشر (اضغط للنسخ)</label>
+                    <label>رقم تحويل الكاش المعتمد</label>
                     <div class="copy-box">
-                        <span id="transfer-code-display">*9*7*01067991520*20#</span>
-                        <button class="btn-copy" onclick="copyText(document.getElementById('transfer-code-display').innerText, 'تم نسخ كود التحويل المباشر! 📋')">نسخ الكود 📋</button>
+                        <span id="cash-number-display">01067991520</span>
+                        <button class="btn-copy" onclick="copyCashNumber()">نسخ الرقم 📋</button>
                     </div>
                 </div>
 
-                <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">بدء التحقق التلقائي ⚡</button>
-
-                <!-- Live Auto-Checking Counter Box -->
-                <div id="verification-status" class="counter-card hidden">
-                    <p style="font-size: 13px; font-weight: 700; color: var(--accent-gold);">بانتظار اعتماد التحويل تلقائياً...</p>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">تتحدث الحالة تلقائياً عند وصول التأكيد</p>
-                    <div class="timer-display" id="timer-count">10</div>
+                <div id="verification-status" class="hidden" style="text-align: center; padding: 15px; margin-bottom: 15px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 14px;">
+                    <p id="status-text" style="font-size: 13px; font-weight: 700; color: var(--accent-gold); line-height: 1.5;"></p>
                 </div>
 
-                <!-- Delivered Card View -->
-                <div id="delivered-card-container" class="delivered-card-box hidden">
-                    <p style="color: var(--success-color); font-weight: 800; font-size: 16px;">تم اعتماد الدفع وتسليم الكرت ✅</p>
-                    <div class="card-code-display" id="delivered-code">---</div>
-                    <button class="btn-submit" onclick="copyText(document.getElementById('delivered-code').innerText, 'تم نسخ كود الكرت بنجاح! 🎉')">نسخ الكرت 📋</button>
-                </div>
+                <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">تأكيد التحويل وإرسال الطلب ⚡</button>
             </div>
         </div>
 
-        <!-- 3. Saved Cards Page -->
+        <!-- 3. صفحة كروتي المحفوظة -->
         <div id="my-cards-page" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">كروتي<br><span>المحفوظة.</span></h1>
@@ -516,23 +474,24 @@
             <div class="glass-card" id="cards-history-list"></div>
         </div>
 
-        <!-- 4. Admin Login -->
+        <!-- 4. صفحة دخول ملك المجال -->
         <div id="admin-login-page" class="hidden">
             <div class="glass-card">
                 <div style="text-align: center; margin-bottom: 25px;">
                     <div style="font-size: 45px; margin-bottom: 8px;">👑</div>
                     <h3 style="font-size: 22px; font-weight: 900;">لوحة ملك المجال</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">تسجيل الدخول للتحكم بالسيستم</p>
                 </div>
 
-                <form id="admin-form" onsubmit="event.preventDefault(); loginAdmin();">
+                <form id="admin-form" autocomplete="off" onsubmit="event.preventDefault(); loginAdmin();">
                     <div class="form-group">
                         <label>اسم المستخدم</label>
-                        <input type="text" id="admin-user" class="form-input">
+                        <input type="text" id="admin-user" class="form-input" placeholder="Username" autocomplete="off">
                     </div>
 
                     <div class="form-group">
                         <label>كلمة المرور</label>
-                        <input type="password" id="admin-pass" class="form-input">
+                        <input type="password" id="admin-pass" class="form-input" placeholder="Password" autocomplete="new-password">
                     </div>
 
                     <button type="submit" class="btn-submit">دخول ملك المجال 🛡️</button>
@@ -540,13 +499,14 @@
             </div>
         </div>
 
-        <!-- 5. Admin Dashboard -->
+        <!-- 5. لوحة التحكم والإعدادات (الملكية) -->
         <div id="admin-dashboard" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">لوحة ملك المجال 👑</h1>
                 <p class="hero-subtitle">إدارة الطلبات، الباقات، وأرقام التحويل</p>
             </div>
 
+            <!-- جدول الطلبات المعلقة -->
             <div class="glass-card" style="margin-bottom: 15px;">
                 <h4 style="margin-bottom: 12px; font-size: 16px;">طلبات التحويل المعلقة 💸</h4>
                 <div style="overflow-x: auto;">
@@ -565,6 +525,7 @@
                 </div>
             </div>
 
+            <!-- تعديل رقم الكاش -->
             <div class="glass-card" style="margin-bottom: 15px;">
                 <h4 style="font-size: 16px;">تعديل رقم تحويل الكاش</h4>
                 <div class="form-group" style="margin-top: 12px;">
@@ -573,6 +534,22 @@
                 <button class="btn-submit" onclick="updateCashNumber()">حفظ الرقم الجديد</button>
             </div>
 
+            <!-- إضافة باقة جديدة -->
+            <div class="glass-card" style="margin-bottom: 15px;">
+                <h4 style="font-size: 16px;">إضافة باقة جديدة للمتجر</h4>
+                <div class="form-group" style="margin-top: 12px;">
+                    <input type="text" id="new-pkg-name" class="form-input" placeholder="اسم الباقة (مثلاً: 4 جيجا)">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="new-pkg-price" class="form-input" placeholder="السعر (مثلاً: 20)">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="new-pkg-count" class="form-input" placeholder="المتاح بالمخزن (مثلاً: 50)">
+                </div>
+                <button class="btn-submit" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="addNewPackage()">إضافة الباقة فوراً ➕</button>
+            </div>
+
+            <!-- التحكم بالباقات الحالية -->
             <div class="glass-card">
                 <h4 style="margin-bottom: 12px; font-size: 16px;">الباقات الحالية بالمتجر</h4>
                 <div style="overflow-x: auto;">
@@ -606,39 +583,26 @@
         ];
         let selectedPkg = packages[0];
         let orders = [];
-        let currentOrder = null;
-        let countdownTimer = null;
 
-        // Smooth Toast Function
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<span>✔ ${message}</span>`;
-            
-            container.appendChild(toast);
-
-            setTimeout(() => toast.classList.add('show'), 50);
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 400);
-            }, 3000);
+        function clearAdminInputs() {
+            const userInput = document.getElementById('admin-user');
+            const passInput = document.getElementById('admin-pass');
+            if (userInput) userInput.value = '';
+            if (passInput) passInput.value = '';
         }
 
-        // Copy Text Helper
-        function copyText(text, successMessage) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast(successMessage);
-            });
-        }
+        window.addEventListener('pageshow', clearAdminInputs);
+        window.addEventListener('pagehide', clearAdminInputs);
+        window.addEventListener('beforeunload', clearAdminInputs);
+        document.addEventListener("DOMContentLoaded", function() {
+            clearAdminInputs();
+            renderStorePackages();
+        });
 
         function showPage(pageId) {
             const pages = ['store-page', 'checkout-page', 'my-cards-page', 'admin-login-page', 'admin-dashboard'];
             pages.forEach(p => document.getElementById(p).classList.add('hidden'));
             
-            if(countdownTimer) clearInterval(countdownTimer);
-
             if(pageId === 'store') {
                 renderStorePackages();
                 document.getElementById('store-page').classList.remove('hidden');
@@ -648,6 +612,7 @@
                 renderMyCards();
                 document.getElementById('my-cards-page').classList.remove('hidden');
             } else if(pageId === 'admin-login') {
+                clearAdminInputs();
                 document.getElementById('admin-login-page').classList.remove('hidden');
             } else if(pageId === 'admin-dash') {
                 renderAdminOrders();
@@ -682,27 +647,27 @@
             document.getElementById('selected-pkg-banner').innerHTML = `
                 <div class="pkg-size" style="font-size:18px;">باقتك المختارة: ${selectedPkg.name}</div>
                 <div class="pkg-price" style="font-size:32px;">${selectedPkg.price} <span>جنيه</span></div>
-                <div class="pkg-meta" style="color:var(--text-white);">قم بتحويل المبلغ عبر الكود السريع بالأسفل</div>
+                <div class="pkg-meta" style="color:var(--text-white);">يرجى تحويل المبلغ الموضح إلى الرقم بالأسفل</div>
             `;
-            
-            // Build USSD string
-            const ussdCode = `*9*7*${cashNumber}*${selectedPkg.price}#`;
-            document.getElementById('transfer-code-display').innerText = ussdCode;
-            
+            document.getElementById('cash-number-display').innerText = cashNumber;
             document.getElementById('verification-status').classList.add('hidden');
-            document.getElementById('delivered-card-container').classList.add('hidden');
             document.getElementById('btn-pay').style.display = 'block';
             showPage('checkout');
+        }
+
+        function copyCashNumber() {
+            navigator.clipboard.writeText(cashNumber);
+            alert('تم نسخ رقم كاش: ' + cashNumber);
         }
 
         function processPayment() {
             const phone = document.getElementById('user-phone').value;
             if(!phone || phone.length < 10) {
-                showToast('يرجى إدخال رقم المحفظة بشكل صحيح!');
+                alert('يرجى إدخال رقم المحفظة التي تم التحويل منها أولاً.');
                 return;
             }
 
-            currentOrder = {
+            const newOrder = {
                 id: Date.now(),
                 phone: phone,
                 pkgId: selectedPkg.id,
@@ -713,65 +678,14 @@
                 date: new Date().toLocaleDateString('ar-EG')
             };
 
-            orders.unshift(currentOrder);
+            orders.unshift(newOrder);
 
             document.getElementById('btn-pay').style.display = 'none';
-            document.getElementById('verification-status').classList.remove('hidden');
+            const statusBox = document.getElementById('verification-status');
+            const statusText = document.getElementById('status-text');
 
-            startAutoChecker();
-        }
-
-        // Live 10-Second Loop Timer
-        function startAutoChecker() {
-            let timeLeft = 10;
-            const timerDisplay = document.getElementById('timer-count');
-            timerDisplay.innerText = timeLeft < 10 ? '0' + timeLeft : timeLeft;
-
-            if(countdownTimer) clearInterval(countdownTimer);
-
-            countdownTimer = setInterval(() => {
-                // Check if admin approved it in background
-                if(currentOrder && currentOrder.status === 'approved') {
-                    clearInterval(countdownTimer);
-                    showApprovedCard(currentOrder.cardCode);
-                    return;
-                }
-
-                timeLeft--;
-                timerDisplay.innerText = timeLeft < 10 ? '0' + timeLeft : timeLeft;
-
-                if (timeLeft <= 0) {
-                    timeLeft = 10; // Restart 10s counter loop
-                }
-            }, 1000);
-        }
-
-        function showApprovedCard(cardCode) {
-            document.getElementById('verification-status').classList.add('hidden');
-            document.getElementById('delivered-card-container').classList.remove('hidden');
-            document.getElementById('delivered-code').innerText = cardCode;
-            showToast('تم تسليم الكرت بنجاح! 🎉');
-        }
-
-        function approveOrder(orderId) {
-            const order = orders.find(o => o.id === orderId);
-            if(order) {
-                order.status = 'approved';
-                order.cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
-                
-                const targetPkg = packages.find(p => p.id === order.pkgId);
-                if(targetPkg) {
-                    targetPkg.count = Math.max(0, targetPkg.count - 1);
-                }
-
-                showToast("تم تأكيد الطلب وإصدار الكرت!");
-                renderAdminOrders();
-                renderAdminTable();
-
-                if(currentOrder && currentOrder.id === orderId) {
-                    showApprovedCard(order.cardCode);
-                }
-            }
+            statusBox.classList.remove('hidden');
+            statusText.innerText = "⏳ تم إرسال الطلب بنجاح! جاري مراجعة وصول مبلغ " + selectedPkg.price + " ج من المحفظة (" + phone + "). سيظهر الكرت في صفحة (كروتي) فور تأكيد ملك المجال للتحويل.";
         }
 
         function renderMyCards() {
@@ -790,7 +704,7 @@
                                 <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
                                 <span class="badge-approved">تم التأكيد ✅</span>
                             </div>
-                            <div class="code-val" onclick="copyText('${ord.cardCode}', 'تم نسخ الكرت!')">${ord.cardCode}</div>
+                            <div class="code-val">${ord.cardCode}</div>
                         </div>
                     `;
                 } else {
@@ -800,7 +714,7 @@
                                 <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
                                 <div style="font-size:11px; color:var(--text-muted);">رقم المحفظة: ${ord.phone}</div>
                             </div>
-                            <span class="badge-pending">جاري التحقق التلقائي... ⏳</span>
+                            <span class="badge-pending">بانتظار موافقة ملك المجال... ⏳</span>
                         </div>
                     `;
                 }
@@ -832,15 +746,33 @@
             });
         }
 
+        function approveOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if(order) {
+                order.status = 'approved';
+                order.cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
+                
+                const targetPkg = packages.find(p => p.id === order.pkgId);
+                if(targetPkg) {
+                    targetPkg.count = Math.max(0, targetPkg.count - 1);
+                }
+
+                alert("تم تأكيد الدفع وإصدار الكرت للعميل بنجاح!");
+                renderAdminOrders();
+                renderAdminTable();
+            }
+        }
+
         function loginAdmin() {
             const userInput = document.getElementById('admin-user').value;
             const passInput = document.getElementById('admin-pass').value;
 
             if (userInput === ADMIN_USER && passInput === ADMIN_PASS) {
+                clearAdminInputs();
                 showPage('admin-dash');
-                showToast('أهلاً بك ملك المجال 👑');
             } else {
-                showToast('اسم المستخدم أو كلمة المرور غير صحيحة!');
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
+                clearAdminInputs();
             }
         }
 
@@ -848,8 +780,32 @@
             const newNum = document.getElementById('admin-cash-input').value;
             if(newNum) {
                 cashNumber = newNum;
-                showToast('تم تحديث رقم الكاش بنجاح!');
+                alert('تم تحديث رقم الكاش إلى: ' + cashNumber);
             }
+        }
+
+        function addNewPackage() {
+            const name = document.getElementById('new-pkg-name').value;
+            const price = parseFloat(document.getElementById('new-pkg-price').value);
+            const count = parseInt(document.getElementById('new-pkg-count').value);
+
+            if (name && price && count) {
+                packages.push({ id: Date.now(), name, price, count });
+                renderAdminTable();
+                renderStorePackages();
+                document.getElementById('new-pkg-name').value = '';
+                document.getElementById('new-pkg-price').value = '';
+                document.getElementById('new-pkg-count').value = '';
+                alert('تمت إضافة الباقة بنجاح!');
+            } else {
+                alert('يرجى ملء جميع بيانات الباقة.');
+            }
+        }
+
+        function deletePackage(id) {
+            packages = packages.filter(p => p.id !== id);
+            renderAdminTable();
+            renderStorePackages();
         }
 
         function renderAdminTable() {
@@ -866,17 +822,6 @@
                 `;
             });
         }
-
-        function deletePackage(id) {
-            packages = packages.filter(p => p.id !== id);
-            renderAdminTable();
-            renderStorePackages();
-            showToast('تم حذف الباقة');
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            renderStorePackages();
-        });
     </script>
 </body>
 </html>
