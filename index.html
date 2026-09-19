@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">ABO Al-Hassan - كروت الواي فاي</title>
-    <!-- خط تجوال العصري -->
+    <title>ABO Al-Hassan - ملك المجال 👑</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8e44ad;
-            --primary-grad: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
-            --accent: #00cec9;
-            --bg-body: #0f0c20;
-            --card-glass: rgba(255, 255, 255, 0.96);
-            --text-dark: #2d3436;
-            --text-muted: #636e72;
-            --success: #00b894;
-            --warning: #fdcb6e;
-            --danger: #d63031;
+            --bg-main: #09090b;
+            --card-bg: rgba(24, 24, 27, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-gold: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --accent-purple-glow: rgba(139, 92, 246, 0.35);
+            --text-white: #f8fafc;
+            --text-muted: #a1a1aa;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
         }
 
         * {
@@ -29,51 +28,96 @@
         }
 
         body {
-            background: var(--bg-body);
-            background-image: radial-gradient(circle at 50% 0%, #2d1b4e 0%, #0f0c20 70%);
-            color: var(--text-dark);
+            background-color: var(--bg-main);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
+            color: var(--text-white);
             min-height: 100vh;
+            padding: 20px 15px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding: 15px;
         }
 
-        .container {
+        .app-container {
             width: 100%;
             max-width: 480px;
-            background: var(--card-glass);
-            backdrop-filter: blur(20px);
-            border-radius: 28px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            padding: 22px;
-            min-height: 92vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 30px;
         }
 
-        /* Navigation Header */
-        .header {
+        #toast-container {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            width: 90%;
+            max-width: 400px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(16, 185, 129, 0.9);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #f1f2f6;
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            padding: 12px 18px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .brand-icon {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-gold));
+            color: white;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 18px;
+            box-shadow: 0 0 15px var(--accent-purple-glow);
+        }
+
+        .brand-name {
+            font-size: 18px;
             font-weight: 900;
-            background: var(--primary-grad);
+            background: linear-gradient(135deg, #fff 30%, var(--accent-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 1.3rem;
-            letter-spacing: -0.5px;
         }
 
         .nav-buttons {
@@ -82,784 +126,598 @@
         }
 
         .btn-nav {
-            background: #f1f2f6;
-            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
             padding: 8px 12px;
-            border-radius: 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            color: var(--text-white);
             font-weight: 700;
-            color: var(--text-dark);
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.82rem;
+            transition: all 0.3s ease;
         }
 
-        .btn-nav:hover {
-            background: #6c5ce7;
-            color: #fff;
+        .btn-nav:hover, .btn-nav:active {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
         }
 
-        /* Titles */
+        .hero-section {
+            text-align: right;
+            margin-bottom: 25px;
+        }
+
+        .badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--accent-gold);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
         .hero-title {
-            text-align: center;
-            margin: 10px 0 20px 0;
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1.25;
+            margin-bottom: 8px;
         }
 
-        .hero-title h2 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #2d3436;
-            margin-bottom: 4px;
+        .hero-title span {
+            background: linear-gradient(135deg, var(--accent-gold), #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .hero-title p {
-            font-size: 0.88rem;
+        .hero-subtitle {
             color: var(--text-muted);
-            font-weight: 500;
+            font-size: 14px;
         }
 
-        /* Packages Grid */
         .packages-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 14px;
+            margin-bottom: 25px;
         }
 
-        .package-card {
-            background: #ffffff;
-            border: 2px solid #eef0f7;
+        .pkg-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
             border-radius: 20px;
-            padding: 16px;
-            text-align: center;
+            padding: 18px 16px;
+            text-align: right;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .package-card.selected {
-            border-color: #6c5ce7;
-            background: linear-gradient(145deg, #ffffff, #f3f0ff);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.15);
+        .pkg-card.selected {
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.25), rgba(24, 24, 27, 0.9));
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 10px 25px var(--accent-purple-glow);
         }
 
-        .package-card.selected::before {
-            content: '✓';
-            position: absolute;
-            top: 8px;
-            left: 10px;
-            background: #6c5ce7;
+        .pkg-size { font-size: 15px; font-weight: 800; color: #fff; }
+        .pkg-price { font-size: 28px; font-weight: 900; margin: 6px 0; color: var(--accent-gold); }
+        .pkg-price span { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+        .pkg-meta { font-size: 12px; color: var(--text-muted); }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
             color: white;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .package-card .size {
-            font-size: 1.15rem;
+            border: none;
+            padding: 16px;
+            border-radius: 18px;
+            font-size: 16px;
             font-weight: 800;
-            color: #2d3436;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px var(--accent-purple-glow);
         }
 
-        .package-card .price {
-            font-size: 1.4rem;
-            font-weight: 900;
-            background: var(--primary-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 4px 0;
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            margin-top: 15px;
         }
 
-        .package-card .stock {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: #f1f2f6;
-            padding: 3px 10px;
-            border-radius: 12px;
-            display: inline-block;
-            font-weight: 600;
-        }
-
-        /* Form Controls */
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 18px;
+            text-align: right;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 6px;
-            font-size: 0.88rem;
+            font-size: 13px;
             font-weight: 700;
-            color: var(--text-dark);
+            margin-bottom: 8px;
+            color: var(--text-muted);
         }
 
-        .form-control {
+        .form-input {
             width: 100%;
-            padding: 13px 15px;
-            border: 2px solid #eef0f7;
-            border-radius: 14px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: 0.2s;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .form-control:focus {
-            border-color: #6c5ce7;
-            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
-        }
-
-        /* Buttons */
-        .btn-submit {
-            width: 100%;
-            background: var(--primary-grad);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 16px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.35);
-            transition: all 0.2s ease;
-            margin-top: 5px;
-        }
-
-        .btn-submit:active { transform: scale(0.98); }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.8rem;
-        }
-
-        /* Payment Section Boxes */
-        .payment-box {
-            background: #fcfaff;
-            border: 2px dashed #6c5ce7;
-            border-radius: 20px;
-            padding: 16px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .ussd-code {
-            font-size: 1.3rem;
-            font-weight: 900;
-            color: #4834d4;
-            letter-spacing: 1px;
-            margin: 8px 0;
-            direction: ltr;
-        }
-
-        .action-btns { display: flex; gap: 10px; }
-        .btn-action {
-            flex: 1;
-            padding: 12px;
-            border-radius: 14px;
-            border: none;
-            font-weight: 800;
-            cursor: pointer;
-        }
-        .btn-call { background: #6c5ce7; color: white; }
-        .btn-copy { background: #f1f2f6; color: var(--text-dark); }
-
-        .timer-box {
-            text-align: center;
-            background: #fff9e6;
-            border: 1.5px solid var(--warning);
-            padding: 15px;
-            border-radius: 18px;
-            margin: 15px 0;
-        }
-
-        .timer {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #e17055;
-            margin: 4px 0;
-        }
-
-        .card-result {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-            border-radius: 22px;
-            padding: 22px;
-            text-align: center;
-            box-shadow: 0 12px 30px rgba(56, 239, 125, 0.3);
-            margin-top: 15px;
-        }
-
-        .card-code {
-            font-size: 1.9rem;
-            font-weight: 900;
-            background: rgba(255,255,255,0.25);
-            padding: 12px;
-            border-radius: 14px;
-            margin: 12px 0;
-            letter-spacing: 3px;
-            direction: ltr;
-        }
-
-        .saved-card-item {
-            background: white;
-            border-radius: 16px;
             padding: 14px;
-            margin-bottom: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            border-right: 6px solid #6c5ce7;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            outline: none;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
         }
 
-        /* Admin UI Sections */
-        .admin-section {
-            background: #f8f9fa;
-            border: 1.5px solid #eef0f7;
-            border-radius: 18px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .admin-section h4 {
-            margin-bottom: 10px;
-            color: #6c5ce7;
-            font-size: 1rem;
-        }
-
-        .item-row {
+        .copy-box {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px dashed var(--accent-purple);
+            padding: 14px;
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            background: white;
+        }
+
+        .copy-box span {
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
+        }
+
+        .btn-copy {
+            background: var(--accent-purple);
+            border: none;
+            padding: 8px 14px;
             border-radius: 10px;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            cursor: pointer;
+            font-size: 12px;
+            color: white;
+            font-weight: 800;
         }
 
-        /* View Switching Logic */
-        .view { display: none; }
-        .view.active { display: block; animation: fadeIn 0.3s ease; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .footer-text {
-            margin-top: auto;
+        .counter-card {
             text-align: center;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            padding-top: 15px;
-            font-weight: 600;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            margin-top: 15px;
         }
+
+        .delivered-card-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(24, 24, 27, 0.9));
+            border: 2px solid var(--success-color);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .card-code-display {
+            font-family: monospace;
+            font-size: 26px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px dashed var(--success-color);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+
+        .admin-table th, .admin-table td {
+            border: 1px solid var(--card-border);
+            padding: 10px 6px;
+            text-align: center;
+        }
+
+        .btn-approve {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .badge-pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-gold);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
+        .badge-approved {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success-color);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Header Navigation -->
-    <div class="header">
-        <div class="brand">
-            <span>⚡ <span id="brandDisplay">ABO Al-Hassan</span></span>
-        </div>
-        <div class="nav-buttons">
-            <button class="btn-nav" onclick="switchView('view-select')">الرئيسية 🏠</button>
-            <button class="btn-nav" onclick="switchView('view-cards')">كروتي 📦</button>
-            <button class="btn-nav" onclick="switchView('view-admin-login')">إدارة 🔐</button>
-        </div>
-    </div>
+    <div id="toast-container"></div>
 
-    <!-- VIEW 1: SELECT PACKAGE -->
-    <div id="view-select" class="view active">
-        <div class="hero-title">
-            <h2>اختر باقتك واتصل فوراً</h2>
-            <p>تسليم الكرت تلقائياً فور تحويل المبلغ</p>
-        </div>
-        <div class="packages-grid" id="packagesContainer"></div>
-        <button class="btn-submit" onclick="proceedToCheckout()">متابعة الطلب ➔</button>
-    </div>
-
-    <!-- VIEW 2: CONFIRM & CHECKOUT -->
-    <div id="view-checkout" class="view">
-        <button class="btn-nav" onclick="switchView('view-select')" style="margin-bottom:12px;">➔ تغيير الباقة</button>
-        <div class="hero-title">
-            <h3 id="checkoutPkgTitle">تأكيد الطلب</h3>
-        </div>
-
-        <div class="form-group">
-            <label>رقم الهاتف الذي تم/سيتم التحويل منه</label>
-            <input type="tel" id="userPhone" class="form-control" placeholder="010xxxxxxx" maxlength="11">
-        </div>
-
-        <div class="form-group">
-            <label>عدد الكروت المطلوب</label>
-            <select id="cardQty" class="form-control" onchange="updateTotal()">
-                <option value="1">1 كرت</option>
-                <option value="2">2 كرت</option>
-                <option value="3">3 كرت</option>
-            </select>
-        </div>
-
-        <div class="payment-box">
-            <p style="font-size:0.85rem; color:var(--text-muted);">رقم المحفظة المعتمد للتحويل:</p>
-            <h2 id="walletDisplay" style="color:#6c5ce7; margin:5px 0; font-size:1.5rem; font-weight:900;"></h2>
-        </div>
-
-        <button class="btn-submit" id="confirmOrderBtn" onclick="startPaymentProcess()">تأكيد الطلب والدفع</button>
-    </div>
-
-    <!-- VIEW 3: PAYMENT COUNTDOWN -->
-    <div id="view-payment" class="view">
-        <div class="hero-title">
-            <p style="color:#6c5ce7; font-weight:800;">رقم الطلب: <span id="orderIdDisplay">#---</span></p>
-            <h2>كود التحويل المباشر</h2>
-        </div>
-
-        <div class="payment-box">
-            <div class="ussd-code" id="ussdCodeDisplay"></div>
-            <div class="action-btns">
-                <button class="btn-action btn-call" onclick="makeCall()">فتح الاتصال 📞</button>
-                <button class="btn-action btn-copy" onclick="copyUSSD()">نسخ الكود 📋</button>
+    <div class="app-container">
+        <div class="navbar">
+            <div class="brand" onclick="showPage('store')">
+                <span class="brand-icon">📶</span>
+                <span class="brand-name">ABO Al-Hassan</span>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-nav" onclick="showPage('store')">المتجر</button>
+                <button class="btn-nav" onclick="showPage('my-cards')">كروتي ✉️</button>
+                <button class="btn-nav" onclick="showPage('admin-login')">ملك المجال 👑</button>
             </div>
         </div>
 
-        <div class="timer-box">
-            <p style="font-size:0.95rem; font-weight:800;">بانتظار اعتماد التحويل تلقائياً...</p>
-            <div class="timer" id="countdownTimer">15</div>
-            <p style="font-size:0.75rem; color:var(--text-muted);">تتم مراجعة التحويل وتحديث الحالة تلقائياً</p>
-        </div>
-    </div>
-
-    <!-- VIEW 4: SUCCESS DELIVERY -->
-    <div id="view-success" class="view">
-        <div style="text-align:center; font-size: 3.5rem; margin-bottom:10px;">🎉</div>
-        <div class="hero-title">
-            <h2 style="color:var(--success);">تم الدفع وتسليم الكرت بنجاح!</h2>
-        </div>
-
-        <div class="card-result">
-            <p style="font-weight:700;">كود الواي فاي الخاص بك:</p>
-            <div class="card-code" id="deliveredCardCode">XXXX-XXXX</div>
-            <button class="btn-action btn-copy" style="width:100%; background:white; font-size:1rem;" onclick="copyCardCode()">نسخ كود الكرت 📋</button>
-        </div>
-
-        <button class="btn-submit" onclick="switchView('view-select')" style="margin-top:20px;">طلب كروت أخرى</button>
-    </div>
-
-    <!-- VIEW 5: SAVED CARDS -->
-    <div id="view-cards" class="view">
-        <div class="hero-title">
-            <h2>كروتي المحفوظة 📱</h2>
-            <p>سجل الكروت التي قمت بشرائها سابقاً</p>
-        </div>
-        <div id="savedCardsList"></div>
-        <button class="btn-submit" onclick="switchView('view-select')">العودة للرئيسية</button>
-    </div>
-
-    <!-- VIEW 6: ADMIN LOGIN -->
-    <div id="view-admin-login" class="view">
-        <div class="hero-title">
-            <h2>تسجيل دخول المالك 🔐</h2>
-            <p>ادخل بيانات الإدارة للتحكم الكامل</p>
-        </div>
-        <div class="form-group">
-            <label>اسم المستخدم</label>
-            <input type="text" id="adminUser" class="form-control" placeholder="اسم المستخدم">
-        </div>
-        <div class="form-group">
-            <label>كلمة المرور</label>
-            <input type="password" id="adminPass" class="form-control" placeholder="كلمة المرور">
-        </div>
-        <button class="btn-submit" onclick="adminLogin()">دخول لوحة التحكم</button>
-    </div>
-
-    <!-- VIEW 7: FULL DYNAMIC ADMIN DASHBOARD -->
-    <div id="view-admin-dash" class="view">
-        <div class="hero-title">
-            <h2>لوحة التحكم الشاملة ⚙️</h2>
-            <p>تعديل كل البيانات بدون تعديل الكود</p>
-        </div>
-
-        <!-- 1. General System Settings -->
-        <div class="admin-section">
-            <h4>إعدادات النظام والحساب</h4>
-            <div class="form-group">
-                <label>اسم المتجر / البراند</label>
-                <input type="text" id="settingBrand" class="form-control">
+        <!-- Store Page -->
+        <div id="store-page">
+            <div class="hero-section">
+                <span class="badge-tag">🛡️ تسليم الكرت فور التحقق من الفلوس</span>
+                <h1 class="hero-title">اختر باقتك<br><span>واتصل بالسرعة القصوى.</span></h1>
+                <p class="hero-subtitle">شبكة ABO Al-Hassan - أسرع خدمة تسليم آمنة.</p>
             </div>
-            <div class="form-group">
-                <label>رقم محفظة فودافون كاش</label>
-                <input type="text" id="settingWallet" class="form-control">
-            </div>
-            <div class="form-group">
-                <label>اسم مستخدم لوحة الأدمن</label>
-                <input type="text" id="settingAdminUser" class="form-control">
-            </div>
-            <div class="form-group">
-                <label>كلمة مرور لوحة الأدمن</label>
-                <input type="password" id="settingAdminPass" class="form-control">
-            </div>
-            <button class="btn-submit" onclick="saveSettings()" style="padding:10px; font-size:0.9rem;">حفظ إعدادات النظام</button>
+
+            <div class="packages-grid" id="packages-list"></div>
+            <button class="btn-submit" onclick="goToCheckout()">متابعة الشراء الآن ❯</button>
         </div>
 
-        <!-- 2. Add New Package -->
-        <div class="admin-section">
-            <h4>إضافة باقة جديدة</h4>
-            <div class="form-group">
-                <input type="text" id="newPkgName" class="form-control" placeholder="اسم الباقة (مثل: 50 جيجا)">
-            </div>
-            <div class="form-group">
-                <input type="number" id="newPkgPrice" class="form-control" placeholder="السعر (بالجنيه)">
-            </div>
-            <div class="form-group">
-                <input type="text" id="newPkgDuration" class="form-control" placeholder="المدة (مثل: 30 يوم)">
-            </div>
-            <button class="btn-submit" onclick="addNewPackage()" style="padding:10px; font-size:0.9rem; background:linear-gradient(135deg, #11998e, #38ef7d);">إضافة الباقة للشبكة</button>
-        </div>
+        <!-- Checkout Page -->
+        <div id="checkout-page" class="hidden">
+            <button class="btn-nav" onclick="showPage('store')" style="margin-bottom: 15px;">← العودة للمتجر</button>
+            
+            <div class="pkg-card selected" style="margin-bottom: 20px;" id="selected-pkg-banner"></div>
 
-        <!-- 3. Add Stock/Cards to Package -->
-        <div class="admin-section">
-            <h4>إضافة كروت إلى المخزون</h4>
-            <div class="form-group">
-                <select id="adminPkgSelect" class="form-control"></select>
-            </div>
-            <div class="form-group">
-                <input type="text" id="newCardCodeInput" class="form-control" placeholder="أدخل كود الكرت الجديد">
-            </div>
-            <button class="btn-submit" onclick="addCardToStock()" style="padding:10px; font-size:0.9rem;">إضافة الكرت للمخزون</button>
-        </div>
-
-        <!-- 4. Current Packages & Stock List Control -->
-        <div class="admin-section">
-            <h4>الباقات الحالية والمخزون</h4>
-            <div id="adminPackagesList"></div>
-        </div>
-    </div>
-
-    <div class="footer-text">
-        <span id="footerBrand">ABO Al-Hassan</span> • نظام بيع كروت الواي فاي المباشر
-    </div>
-</div>
-
-<script>
-    // --- Initial System Defaults ---
-    const defaultConfig = {
-        brand: "ABO Al-Hassan",
-        wallet: "01555130523",
-        adminUser: "ABO Al-Hassan",
-        adminPass: "5515879462",
-        packages: [
-            { id: 1, name: "5 جيجا", price: 25, duration: "7 يوم", stock: ["67453701", "88231049", "55120934"] },
-            { id: 2, name: "10 جيجا", price: 50, duration: "15 يوم", stock: ["99128374", "33219847"] },
-            { id: 3, name: "15 جيجا", price: 65, duration: "30 يوم", stock: ["77123984"] },
-            { id: 4, name: "20 جيجا", price: 85, duration: "30 يوم", stock: ["11029384"] },
-            { id: 5, name: "30 جيجا", price: 110, duration: "30 يوم", stock: ["44910293"] }
-        ]
-    };
-
-    // System Data Manager (LocalStorage)
-    function getConfig() {
-        return JSON.parse(localStorage.getItem('sys_wifi_config')) || defaultConfig;
-    }
-
-    function saveConfig(config) {
-        localStorage.setItem('sys_wifi_config', JSON.stringify(config));
-        initApp();
-    }
-
-    let currentConfig = getConfig();
-    let selectedPackage = currentConfig.packages[0] || null;
-    let currentUSSD = "";
-    let activeTimer = null;
-
-    // Initialization
-    function initApp() {
-        currentConfig = getConfig();
-        
-        // Update DOM Dynamic Elements
-        document.getElementById('brandDisplay').innerText = currentConfig.brand;
-        document.getElementById('footerBrand').innerText = currentConfig.brand;
-        document.getElementById('pageTitle').innerText = `${currentConfig.brand} - كروت الواي فاي`;
-        
-        if(!selectedPackage && currentConfig.packages.length > 0) {
-            selectedPackage = currentConfig.packages[0];
-        }
-        
-        renderPackages();
-    }
-
-    window.onload = initApp;
-
-    // Navigation Handler
-    function switchView(viewId) {
-        document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-        document.getElementById(viewId).classList.add('active');
-
-        if(viewId === 'view-cards') loadSavedCards();
-        if(viewId === 'view-admin-dash') loadAdminDashboard();
-    }
-
-    // Render Package Cards
-    function renderPackages() {
-        const container = document.getElementById('packagesContainer');
-        container.innerHTML = '';
-
-        if(currentConfig.packages.length === 0) {
-            container.innerHTML = `<p style="grid-column:1/span 2; text-align:center; color:var(--text-muted); padding:20px;">لا توجد باقات متاحة حالياً</p>`;
-            return;
-        }
-
-        currentConfig.packages.forEach(pkg => {
-            const card = document.createElement('div');
-            const isSelected = selectedPackage && selectedPackage.id === pkg.id;
-            card.className = `package-card ${isSelected ? 'selected' : ''}`;
-            card.onclick = () => {
-                selectedPackage = pkg;
-                renderPackages();
-            };
-            card.innerHTML = `
-                <div class="size">${pkg.name}</div>
-                <div class="price">${pkg.price} ج.م</div>
-                <div class="stock">${pkg.stock.length} كرت متاح</div>
-            `;
-            container.appendChild(card);
-        });
-    }
-
-    // Proceeding to Checkout View
-    function proceedToCheckout() {
-        if (!selectedPackage) return alert("يرجى اختيار باقة أولاً");
-        if (selectedPackage.stock.length === 0) return alert("عذراً، الباقة المختارة نفدت من المخزون حالياً!");
-
-        document.getElementById('checkoutPkgTitle').innerText = `${selectedPackage.name} - بسعر ${selectedPackage.price} جنيه`;
-        document.getElementById('walletDisplay').innerText = currentConfig.wallet;
-        updateTotal();
-        switchView('view-checkout');
-    }
-
-    function updateTotal() {
-        const qty = parseInt(document.getElementById('cardQty').value);
-        const total = selectedPackage.price * qty;
-        document.getElementById('confirmOrderBtn').innerText = `تأكيد طلب ${qty} كرت (${total} ج.م)`;
-    }
-
-    // Payment Logic & Timer
-    function startPaymentProcess() {
-        const phone = document.getElementById('userPhone').value;
-        if (!phone || phone.length < 11) {
-            alert('يرجى إدخال رقم هاتف صحيح مكون من 11 رقم');
-            return;
-        }
-
-        const qty = parseInt(document.getElementById('cardQty').value);
-        const totalPrice = selectedPackage.price * qty;
-
-        // Code Generation
-        currentUSSD = `*9*7*${currentConfig.wallet}*${totalPrice}#`;
-        document.getElementById('ussdCodeDisplay').innerText = currentUSSD;
-
-        const orderId = 'W' + Math.floor(1000000 + Math.random() * 9000000);
-        document.getElementById('orderIdDisplay').innerText = `#${orderId}`;
-
-        switchView('view-payment');
-        startCountdown(orderId);
-    }
-
-    function startCountdown(orderId) {
-        let seconds = 15;
-        document.getElementById('countdownTimer').innerText = seconds;
-
-        if (activeTimer) clearInterval(activeTimer);
-
-        activeTimer = setInterval(() => {
-            seconds--;
-            document.getElementById('countdownTimer').innerText = seconds < 10 ? '0' + seconds : seconds;
-
-            if (seconds <= 0) {
-                clearInterval(activeTimer);
-                fulfillOrder(orderId);
-            }
-        }, 1000);
-    }
-
-    // Card Delivery & Stock Update
-    function fulfillOrder(orderId) {
-        const pkgIndex = currentConfig.packages.findIndex(p => p.id === selectedPackage.id);
-        
-        if (pkgIndex === -1 || currentConfig.packages[pkgIndex].stock.length === 0) {
-            alert('عذراً، انتهى رصيد الكروت لهذه الباقة');
-            switchView('view-select');
-            return;
-        }
-
-        const cardCode = currentConfig.packages[pkgIndex].stock.pop();
-        saveConfig(currentConfig); // Persistence Update
-
-        // Local Storage Saved Cards History
-        let history = JSON.parse(localStorage.getItem('my_wifi_cards') || '[]');
-        history.unshift({
-            id: orderId,
-            code: cardCode,
-            package: selectedPackage.name,
-            date: new Date().toLocaleDateString('ar-EG')
-        });
-        localStorage.setItem('my_wifi_cards', JSON.stringify(history));
-
-        document.getElementById('deliveredCardCode').innerText = cardCode;
-        switchView('view-success');
-    }
-
-    // Action Helpers
-    function makeCall() {
-        window.location.href = `tel:${encodeURIComponent(currentUSSD)}`;
-    }
-
-    function copyUSSD() {
-        navigator.clipboard.writeText(currentUSSD);
-        alert("تم نسخ كود التحويل المباشر بنجاح!");
-    }
-
-    function copyCardCode() {
-        const code = document.getElementById('deliveredCardCode').innerText;
-        navigator.clipboard.writeText(code);
-        alert("تم نسخ كود الكرت بنجاح!");
-    }
-
-    function loadSavedCards() {
-        const history = JSON.parse(localStorage.getItem('my_wifi_cards') || '[]');
-        const container = document.getElementById('savedCardsList');
-        container.innerHTML = '';
-
-        if(history.length === 0) {
-            container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">لا توجد كروت محفوظة حالياً</p>`;
-            return;
-        }
-
-        history.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'saved-card-item';
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; font-size:0.82rem; color:var(--text-muted);">
-                    <span>الطلب: ${item.id}</span>
-                    <span>${item.date}</span>
+            <div class="glass-card">
+                <div class="form-group">
+                    <label>رقم المحفظة التي قمت بالتحويل منها</label>
+                    <input type="text" id="user-phone" class="form-input" placeholder="01xxxxxxxxx">
                 </div>
-                <div style="font-weight:800; color:#6c5ce7; margin:4px 0;">الباقة: ${item.package}</div>
-                <div style="font-size:1.25rem; font-weight:900; background:#f1f2f6; padding:8px; border-radius:10px; text-align:center; direction:ltr;">
-                    ${item.code}
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    }
 
-    // Secure Admin Login
-    function adminLogin() {
-        const u = document.getElementById('adminUser').value;
-        const p = document.getElementById('adminPass').value;
-        if(u === currentConfig.adminUser && p === currentConfig.adminPass) {
-            switchView('view-admin-dash');
-        } else {
-            alert('بيانات الدخول غير صحيحة!');
-        }
-    }
-
-    // Load Admin Dashboard Elements
-    function loadAdminDashboard() {
-        document.getElementById('settingBrand').value = currentConfig.brand;
-        document.getElementById('settingWallet').value = currentConfig.wallet;
-        document.getElementById('settingAdminUser').value = currentConfig.adminUser;
-        document.getElementById('settingAdminPass').value = currentConfig.adminPass;
-
-        const select = document.getElementById('adminPkgSelect');
-        const list = document.getElementById('adminPackagesList');
-        select.innerHTML = '';
-        list.innerHTML = '';
-
-        currentConfig.packages.forEach((pkg, index) => {
-            select.innerHTML += `<option value="${pkg.id}">${pkg.name} (المتوفر: ${pkg.stock.length})</option>`;
-            list.innerHTML += `
-                <div class="item-row">
-                    <div>
-                        <b>${pkg.name}</b> - ${pkg.price} ج.م
-                        <span style="color:var(--text-muted); font-size:0.75rem;">(${pkg.stock.length} كرت)</span>
+                <div class="form-group">
+                    <label>كود التحويل المباشر (اضغط للنسخ)</label>
+                    <div class="copy-box">
+                        <span id="transfer-code-display">*9*7*01067991520*20#</span>
+                        <button class="btn-copy" onclick="copyText(document.getElementById('transfer-code-display').innerText, 'تم نسخ كود التحويل! 📋')">نسخ الكود 📋</button>
                     </div>
-                    <button class="btn-danger" onclick="deletePackage(${index})">حذف الباقة</button>
                 </div>
+
+                <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">تأكيد التحويل وإرسال الطلب ⚡</button>
+
+                <!-- Waiting for Admin Approval Status -->
+                <div id="verification-status" class="counter-card hidden">
+                    <div style="font-size: 30px; margin-bottom: 8px;">⏳</div>
+                    <p style="font-size: 14px; font-weight: 800; color: var(--accent-gold);">جاري تأكيد وصول الفلوس لملك المجال...</p>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">سيظهر كود الكرت هنا تلقائياً فور تأكيد وصول المبلغ لدى الأدمن.</p>
+                </div>
+
+                <!-- Delivered Card -->
+                <div id="delivered-card-container" class="delivered-card-box hidden">
+                    <p style="color: var(--success-color); font-weight: 800; font-size: 16px;">تم تأكيد الفلوس وتسليم الكرت بنجاح ✅</p>
+                    <div class="card-code-display" id="delivered-code">---</div>
+                    <button class="btn-submit" onclick="copyText(document.getElementById('delivered-code').innerText, 'تم نسخ كود الكرت بنجاح! 🎉')">نسخ الكرت 📋</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saved Cards Page -->
+        <div id="my-cards-page" class="hidden">
+            <div class="hero-section">
+                <h1 class="hero-title">كروتي<br><span>المستلمة.</span></h1>
+            </div>
+            <div class="glass-card" id="cards-history-list"></div>
+        </div>
+
+        <!-- Admin Login (بدون حفظ البيانات) -->
+        <div id="admin-login-page" class="hidden">
+            <div class="glass-card">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="font-size: 45px; margin-bottom: 8px;">👑</div>
+                    <h3 style="font-size: 22px; font-weight: 900;">لوحة ملك المجال</h3>
+                </div>
+
+                <form id="admin-form" autocomplete="off" onsubmit="event.preventDefault(); loginAdmin();">
+                    <div class="form-group">
+                        <label>اسم المستخدم</label>
+                        <input type="text" id="admin-user" class="form-input" autocomplete="off" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="admin-pass" class="form-input" autocomplete="new-password" value="">
+                    </div>
+
+                    <button type="submit" class="btn-submit">دخول ملك المجال 🛡️</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard" class="hidden">
+            <div class="hero-section">
+                <h1 class="hero-title">لوحة ملك المجال 👑</h1>
+                <p class="hero-subtitle">إدارة الطلبات والراوترات</p>
+            </div>
+
+            <!-- Orders Approval Table (تأكيد الوصول) -->
+            <div class="glass-card" style="margin-bottom: 15px;">
+                <h4 style="margin-bottom: 12px; font-size: 16px;">طلبات التحويل بانتظار التأكيد 💰</h4>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>المحفظة</th>
+                                <th>الباقة</th>
+                                <th>السعر</th>
+                                <th>الحالة / إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Connected Routers Hardware Info -->
+            <div class="glass-card" style="margin-bottom: 15px;">
+                <h4 style="margin-bottom: 12px; font-size: 16px;">بيانات الراوترات المربوطة بالسستم 📡</h4>
+                <div style="font-size: 12px; text-align: right; line-height: 1.8;">
+                    <p style="color: var(--accent-gold); font-weight: 800;">1. LG U+ Router (GAPD-7200):</p>
+                    <p>• IP: <span style="font-family: monospace;">192.168.219.1</span> | كلمة سر الأدمن: <span style="font-family: monospace;">994A148#KA</span></p>
+                    <p>• الواي فاي: <span style="font-family: monospace;">U+Net5104</span> | باسورد: <span style="font-family: monospace;">FF0D8#8GBD</span></p>
+                    
+                    <p style="color: var(--accent-purple); font-weight: 800; margin-top: 10px;">2. Huawei Router (DN8245V):</p>
+                    <p>• IP: <span style="font-family: monospace;">192.168.1.1</span> | كلمة سر الأدمن: <span style="font-family: monospace;">AA0FBC92</span></p>
+                    <p>• الواي فاي: <span style="font-family: monospace;">WE2E8C08</span> | باسورد: <span style="font-family: monospace;">aa0fbc92</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cashNumber = "01067991520";
+        const ADMIN_PASS = "5515879462";
+        const ADMIN_USER = "ABO Al-Hassan";
+
+        let packages = [
+            { id: 1, name: "4 جيجا", price: 20, count: 10 },
+            { id: 2, name: "5 جيجا", price: 25, count: 10 }
+        ];
+
+        let selectedPkg = packages[0];
+        let orders = [];
+        let currentOrder = null;
+        let checkInterval = null;
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<span>✔ ${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 50);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        function copyText(text, successMessage) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(successMessage);
+            });
+        }
+
+        function generateUniqueCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let randomPart = '';
+            for (let i = 0; i < 6; i++) {
+                randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return `MN3-${randomPart}`;
+        }
+
+        function showPage(pageId) {
+            const pages = ['store-page', 'checkout-page', 'my-cards-page', 'admin-login-page', 'admin-dashboard'];
+            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+
+            if(pageId === 'store') {
+                renderStorePackages();
+                document.getElementById('store-page').classList.remove('hidden');
+            } else if(pageId === 'checkout') {
+                document.getElementById('checkout-page').classList.remove('hidden');
+            } else if(pageId === 'my-cards') {
+                renderMyCards();
+                document.getElementById('my-cards-page').classList.remove('hidden');
+            } else if(pageId === 'admin-login') {
+                // تفريغ البيانات دائماً لمنع الحفظ
+                document.getElementById('admin-user').value = '';
+                document.getElementById('admin-pass').value = '';
+                document.getElementById('admin-login-page').classList.remove('hidden');
+            } else if(pageId === 'admin-dash') {
+                renderAdminOrders();
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+            }
+        }
+
+        function renderStorePackages() {
+            const container = document.getElementById('packages-list');
+            container.innerHTML = '';
+            packages.forEach(pkg => {
+                const isSel = selectedPkg && selectedPkg.id === pkg.id ? 'selected' : '';
+                container.innerHTML += `
+                    <div class="pkg-card ${isSel}" onclick="selectPackage(${pkg.id})">
+                        <div class="pkg-size">${pkg.name}</div>
+                        <div class="pkg-price">${pkg.price} <span>ج</span></div>
+                        <div class="pkg-meta">المتاح: متوفر</div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectPackage(id) {
+            selectedPkg = packages.find(p => p.id === id);
+            renderStorePackages();
+        }
+
+        function goToCheckout() {
+            if(!selectedPkg) return;
+            document.getElementById('selected-pkg-banner').innerHTML = `
+                <div class="pkg-size" style="font-size:18px;">باقتك المختارة: ${selectedPkg.name}</div>
+                <div class="pkg-price" style="font-size:32px;">${selectedPkg.price} <span>جنيه</span></div>
             `;
-        });
-    }
-
-    // Admin Action Options
-    function saveSettings() {
-        currentConfig.brand = document.getElementById('settingBrand').value || currentConfig.brand;
-        currentConfig.wallet = document.getElementById('settingWallet').value || currentConfig.wallet;
-        currentConfig.adminUser = document.getElementById('settingAdminUser').value || currentConfig.adminUser;
-        currentConfig.adminPass = document.getElementById('settingAdminPass').value || currentConfig.adminPass;
-        
-        saveConfig(currentConfig);
-        alert('تم حفظ كافة إعدادات النظام بنجاح!');
-    }
-
-    function addNewPackage() {
-        const name = document.getElementById('newPkgName').value;
-        const price = parseFloat(document.getElementById('newPkgPrice').value);
-        const duration = document.getElementById('newPkgDuration').value || "30 يوم";
-
-        if(!name || isNaN(price)) return alert('يرجى كتابة اسم الباقة وسعرها الصحيح');
-
-        currentConfig.packages.push({
-            id: Date.now(),
-            name: name,
-            price: price,
-            duration: duration,
-            stock: []
-        });
-
-        saveConfig(currentConfig);
-        document.getElementById('newPkgName').value = '';
-        document.getElementById('newPkgPrice').value = '';
-        document.getElementById('newPkgDuration').value = '';
-        loadAdminDashboard();
-        alert('تمت إضافة الباقة الجديدة بنجاح!');
-    }
-
-    function deletePackage(index) {
-        if(confirm('هل أنت تأكد من إزالة هذه الباقة من المبيعات؟')) {
-            currentConfig.packages.splice(index, 1);
-            saveConfig(currentConfig);
-            loadAdminDashboard();
+            
+            const ussdCode = `*9*7*${cashNumber}*${selectedPkg.price}#`;
+            document.getElementById('transfer-code-display').innerText = ussdCode;
+            
+            document.getElementById('verification-status').classList.add('hidden');
+            document.getElementById('delivered-card-container').classList.add('hidden');
+            document.getElementById('btn-pay').style.display = 'block';
+            showPage('checkout');
         }
-    }
 
-    function addCardToStock() {
-        const pkgId = parseInt(document.getElementById('adminPkgSelect').value);
-        const code = document.getElementById('newCardCodeInput').value;
+        function processPayment() {
+            const phone = document.getElementById('user-phone').value;
+            if(!phone || phone.length < 10) {
+                showToast('يرجى إدخال رقم المحفظة بشكل صحيح!');
+                return;
+            }
 
-        if(!code) return alert('أدخل كود الكرت أولاً');
+            currentOrder = {
+                id: Date.now(),
+                phone: phone,
+                pkgName: selectedPkg.name,
+                price: selectedPkg.price,
+                status: 'pending',
+                cardCode: null
+            };
 
-        const pkg = currentConfig.packages.find(p => p.id === pkgId);
-        if(pkg) {
-            pkg.stock.push(code);
-            saveConfig(currentConfig);
-            document.getElementById('newCardCodeInput').value = '';
-            loadAdminDashboard();
-            alert(`تم إضافة الكرت بنجاح إلى ${pkg.name}`);
+            orders.unshift(currentOrder);
+
+            document.getElementById('btn-pay').style.display = 'none';
+            document.getElementById('verification-status').classList.remove('hidden');
+
+            // فحص حالة الطلب كل ثانيتين إذا قام الأدمن بتمرير الفلوس
+            checkInterval = setInterval(() => {
+                if(currentOrder && currentOrder.status === 'approved') {
+                    clearInterval(checkInterval);
+                    document.getElementById('verification-status').classList.add('hidden');
+                    document.getElementById('delivered-card-container').classList.remove('hidden');
+                    document.getElementById('delivered-code').innerText = currentOrder.cardCode;
+                    showToast('تم تأكيد وصول الفلوس وتسليم الكرت! 🎉');
+                }
+            }, 2000);
         }
-    }
-</script>
+
+        function approveOrder(orderId) {
+            const targetOrder = orders.find(o => o.id === orderId);
+            if(targetOrder) {
+                targetOrder.status = 'approved';
+                targetOrder.cardCode = generateUniqueCode();
+                showToast('تم إرسال الكرت للمشتري فوراً!');
+                renderAdminOrders();
+            }
+        }
+
+        function renderAdminOrders() {
+            const tbody = document.getElementById('admin-orders-table');
+            tbody.innerHTML = '';
+            if(orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);">لا توجد طلبات معلقة</td></tr>';
+                return;
+            }
+
+            orders.forEach(ord => {
+                const actionBtn = ord.status === 'pending' 
+                    ? `<button class="btn-approve" onclick="approveOrder(${ord.id})">تأكيد وصول المبلغ وإصدار الكرت ✅</button>`
+                    : `<span class="badge-approved">تم التسليم (${ord.cardCode})</span>`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${ord.phone}</td>
+                        <td>${ord.pkgName}</td>
+                        <td>${ord.price} ج</td>
+                        <td>${actionBtn}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderMyCards() {
+            const container = document.getElementById('cards-history-list');
+            const approvedOrders = orders.filter(o => o.status === 'approved');
+            
+            if (approvedOrders.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px;">لا توجد كروت مفعلة بعد.</p>';
+                return;
+            }
+            container.innerHTML = '';
+            approvedOrders.forEach(ord => {
+                container.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:12px;">
+                        <div>
+                            <div style="font-weight:800;">${ord.pkgName}</div>
+                            <div style="font-size:11px; color:var(--success-color);">تم تأكيد الدفع ✅</div>
+                        </div>
+                        <div style="font-family:monospace; color:var(--accent-gold); font-weight:900;">${ord.cardCode}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function loginAdmin() {
+            const userInput = document.getElementById('admin-user').value;
+            const passInput = document.getElementById('admin-pass').value;
+
+            if (userInput === ADMIN_USER && passInput === ADMIN_PASS) {
+                document.getElementById('admin-user').value = '';
+                document.getElementById('admin-pass').value = '';
+                showPage('admin-dash');
+                showToast('أهلاً بك ملك المجال 👑');
+            } else {
+                showToast('اسم المستخدم أو كلمة المرور غير صحيحة!');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            renderStorePackages();
+        });
+    </script>
 </body>
 </html>
