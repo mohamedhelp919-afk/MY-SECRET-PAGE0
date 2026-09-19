@@ -41,7 +41,7 @@
 
         .app-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             padding-bottom: 30px;
         }
 
@@ -74,10 +74,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .toast.show { opacity: 1; transform: translateY(0); }
 
         .navbar {
             display: flex;
@@ -120,10 +117,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .nav-buttons {
-            display: flex;
-            gap: 6px;
-        }
+        .nav-buttons { display: flex; gap: 6px; }
 
         .btn-nav {
             background: rgba(255, 255, 255, 0.05);
@@ -142,10 +136,7 @@
             border-color: var(--accent-purple);
         }
 
-        .hero-section {
-            text-align: right;
-            margin-bottom: 25px;
-        }
+        .hero-section { text-align: right; margin-bottom: 25px; }
 
         .badge-tag {
             display: inline-flex;
@@ -161,23 +152,9 @@
             margin-bottom: 12px;
         }
 
-        .hero-title {
-            font-size: 30px;
-            font-weight: 900;
-            line-height: 1.25;
-            margin-bottom: 8px;
-        }
-
-        .hero-title span {
-            background: linear-gradient(135deg, var(--accent-gold), #fbbf24);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
-        }
+        .hero-title { font-size: 28px; font-weight: 900; line-height: 1.25; margin-bottom: 8px; }
+        .hero-title span { background: linear-gradient(135deg, var(--accent-gold), #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-subtitle { color: var(--text-muted); font-size: 14px; }
 
         .packages-grid {
             display: grid;
@@ -195,6 +172,7 @@
             text-align: right;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .pkg-card.selected {
@@ -204,8 +182,8 @@
         }
 
         .pkg-size { font-size: 15px; font-weight: 800; color: #fff; }
-        .pkg-price { font-size: 28px; font-weight: 900; margin: 6px 0; color: var(--accent-gold); }
-        .pkg-price span { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+        .pkg-price { font-size: 26px; font-weight: 900; margin: 6px 0; color: var(--accent-gold); }
+        .pkg-price span { font-size: 13px; font-weight: 500; color: var(--text-muted); }
         .pkg-meta { font-size: 12px; color: var(--text-muted); }
 
         .btn-submit {
@@ -222,6 +200,11 @@
             box-shadow: 0 8px 20px var(--accent-purple-glow);
         }
 
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #b91c1c);
+            box-shadow: none;
+        }
+
         .glass-card {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
@@ -232,19 +215,9 @@
             margin-top: 15px;
         }
 
-        .form-group {
-            margin-bottom: 18px;
-            text-align: right;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-        }
-
+        .form-group { margin-bottom: 18px; text-align: right; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text-muted); }
+        
         .form-input {
             width: 100%;
             padding: 14px;
@@ -253,7 +226,7 @@
             border-radius: 14px;
             outline: none;
             text-align: center;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: #fff;
         }
@@ -268,13 +241,7 @@
             align-items: center;
         }
 
-        .copy-box span {
-            font-family: monospace;
-            font-size: 18px;
-            font-weight: 900;
-            color: var(--accent-gold);
-            letter-spacing: 1px;
-        }
+        .copy-box span { font-family: monospace; font-size: 17px; font-weight: 900; color: var(--accent-gold); letter-spacing: 1px; }
 
         .btn-copy {
             background: var(--accent-purple);
@@ -318,6 +285,27 @@
             border: 1px dashed var(--success-color);
         }
 
+        .admin-section-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            text-align: right;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 8px;
+        }
+
+        .admin-pkg-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--card-border);
+        }
+
         .hidden { display: none; }
     </style>
 </head>
@@ -342,7 +330,7 @@
         <!-- Store Page -->
         <div id="store-page">
             <div class="hero-section">
-                <span class="badge-tag">⚡ تأكيد تلقائي آلي عبر أندرويد</span>
+                <span class="badge-tag">⚡ تأكيد تلقائي آلي عبر الأندرويد</span>
                 <h1 class="hero-title">اختر باقتك<br><span>واستلم الكرت آلياً.</span></h1>
                 <p class="hero-subtitle">الدفع محمي ومربوط بالسيرفر المباشر.</p>
             </div>
@@ -366,7 +354,7 @@
                 <div class="form-group">
                     <label>كود التحويل المباشر (اضغط للنسخ)</label>
                     <div class="copy-box">
-                        <span id="transfer-code-display">*9*7*01067991520*20#</span>
+                        <span id="transfer-code-display">*9*7*01555130523*20#</span>
                         <button class="btn-copy" onclick="copyText(document.getElementById('transfer-code-display').innerText, 'تم نسخ كود التحويل! 📋')">نسخ الكود 📋</button>
                     </div>
                 </div>
@@ -397,12 +385,12 @@
             <div class="glass-card" id="cards-history-list"></div>
         </div>
 
-        <!-- Admin Login (No Save) -->
+        <!-- Admin Login -->
         <div id="admin-login-page" class="hidden">
             <div class="glass-card">
                 <div style="text-align: center; margin-bottom: 25px;">
                     <div style="font-size: 45px; margin-bottom: 8px;">👑</div>
-                    <h3 style="font-size: 22px; font-weight: 900;">لوحة التحكم وسيرفر الأندرويد</h3>
+                    <h3 style="font-size: 22px; font-weight: 900;">لوحة التحكم الكاملة والتحكم</h3>
                 </div>
 
                 <form id="admin-form" autocomplete="off" onsubmit="event.preventDefault(); loginAdmin();">
@@ -416,31 +404,56 @@
                         <input type="password" id="admin-pass" class="form-input" autocomplete="new-password">
                     </div>
 
-                    <button type="submit" class="btn-submit">دخول لوحة التحكم 🛡️</button>
+                    <button type="submit" class="btn-submit">دخول لوحة الإدارة 🛡️</button>
                 </form>
             </div>
         </div>
 
-        <!-- Admin Dashboard & Android SMS Gateway Simulator -->
+        <!-- Admin Full Control Dashboard -->
         <div id="admin-dashboard" class="hidden">
             <div class="hero-section">
-                <h1 class="hero-title">لوحة ملك المجال 👑</h1>
-                <p class="hero-subtitle">إدارة السيرفر التلقائي والراوترات</p>
+                <h1 class="hero-title">لوحة التحكم الشاملة 👑</h1>
+                <p class="hero-subtitle">تعديل الكروت، الأسعار، ورقم الاستلام</p>
             </div>
 
-            <!-- Android SMS Receiver Simulator -->
-            <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="margin-bottom: 10px; text-align: right; font-size: 16px;">مستقبل الـ Webhook (محاكي الأندرويد) 🤖📱</h4>
-                <p style="font-size: 12px; color: var(--text-muted); text-align: right; margin-bottom: 12px;">هنا يتم اختبار التقاط رسالة الـ SMS التي يستقبلها هاتف الأندرويد لتأكيد الكرت آلياً:</p>
-                
-                <textarea id="incoming-sms" class="form-input" style="height: 80px; font-size: 12px; text-align: right;" placeholder="مثال: تم استلام مبلغ 20 جنيه من رقم 01012345678 بنجاح."></textarea>
-                
-                <button class="btn-submit" style="margin-top: 10px;" onclick="simulateAndroidWebhook()">محاكاة وصول الرسالة للأندرويد ⚡</button>
-            </div>
-
-            <!-- Connected Routers Info -->
+            <!-- Manage Payment Phone Number -->
             <div class="glass-card">
-                <h4 style="margin-bottom: 12px; font-size: 16px; text-align: right;">بيانات الراوترات المربوطة بالسستم 📡</h4>
+                <div class="admin-section-title">1. تعديل رقم الكاش للاستلام 📱</div>
+                <div class="form-group">
+                    <label>رقم المحفظة الحالية</label>
+                    <input type="text" id="admin-cash-number" class="form-input" value="01555130523">
+                </div>
+                <button class="btn-submit" style="padding:10px;" onclick="updateCashNumber()">حفظ الرقم الجديد 💾</button>
+            </div>
+
+            <!-- Add & Manage Cards/Packages -->
+            <div class="glass-card">
+                <div class="admin-section-title">2. إضافة باقة / كرت جديد 💳</div>
+                <div class="form-group">
+                    <label>اسم الكرت/الباقة</label>
+                    <input type="text" id="new-pkg-name" class="form-input" placeholder="مثال: 10 جيجا - شهر">
+                </div>
+                <div class="form-group">
+                    <label>السعر (بالجنيه)</label>
+                    <input type="number" id="new-pkg-price" class="form-input" placeholder="50">
+                </div>
+                <button class="btn-submit" style="padding:10px; background:var(--accent-gold); color:#000;" onclick="addNewPackage()">إضافة الباقة فوراً ➕</button>
+
+                <div class="admin-section-title" style="margin-top:20px;">الكروت والباقات الحالية:</div>
+                <div id="admin-packages-list"></div>
+            </div>
+
+            <!-- Android Webhook Simulator -->
+            <div class="glass-card">
+                <div class="admin-section-title">3. مستقبل الـ Webhook (محاكي الأندرويد) 🤖</div>
+                <p style="font-size: 12px; color: var(--text-muted); text-align: right; margin-bottom: 12px;">اختبار التقاط رسائل الـ SMS القادمة من هاتف الأندرويد:</p>
+                <textarea id="incoming-sms" class="form-input" style="height: 70px; font-size: 12px; text-align: right;" placeholder="مثال: تم استلام مبلغ 20 جنيه من رقم 01012345678 بنجاح."></textarea>
+                <button class="btn-submit" style="margin-top: 10px; padding:10px;" onclick="simulateAndroidWebhook()">محاكاة استلام الرسالة ⚡</button>
+            </div>
+
+            <!-- Router Information Storage -->
+            <div class="glass-card">
+                <div class="admin-section-title">4. بيانات الراوترات المربوطة 📡</div>
                 <div style="font-size: 12px; text-align: right; line-height: 1.8;">
                     <p style="color: var(--accent-gold); font-weight: 800;">1. LG U+ Router (GAPD-7200):</p>
                     <p>• IP الإدارة: <span style="font-family: monospace;">192.168.219.1</span> | كلمة السر: <span style="font-family: monospace;">994A148#KA</span></p>
@@ -448,7 +461,7 @@
                     <p>• كلمة سر الواي فاي: <span style="font-family: monospace;">FF0D8#8GBD</span></p>
                     <p>• MAC: <span style="font-family: monospace;">18C5.018F.5104</span></p>
                     
-                    <p style="color: var(--accent-purple); font-weight: 800; margin-top: 12px;">2. Huawei Router (DN8245V):</p>
+                    <p style="color: var(--accent-purple); font-weight: 800; margin-top: 10px;">2. Huawei Router (DN8245V):</p>
                     <p>• IP الإدارة: <span style="font-family: monospace;">192.168.1.1</span> | كلمة السر: <span style="font-family: monospace;">AA0FBC92</span></p>
                     <p>• اسم الواي فاي (SSID): <span style="font-family: monospace;">WE2E8C08</span></p>
                     <p>• كلمة سر الواي فاي: <span style="font-family: monospace;">aa0fbc92</span></p>
@@ -458,7 +471,7 @@
     </div>
 
     <script>
-        const cashNumber = "01067991520";
+        let cashNumber = "01555130523";
         const ADMIN_USER = "ABO Al-Hassan";
         const ADMIN_PASS = "5515879462";
 
@@ -517,6 +530,7 @@
                 document.getElementById('admin-pass').value = '';
                 document.getElementById('admin-login-page').classList.remove('hidden');
             } else if(pageId === 'admin-dash') {
+                renderAdminPackages();
                 document.getElementById('admin-dashboard').classList.remove('hidden');
             }
         }
@@ -576,7 +590,6 @@
             document.getElementById('btn-pay').style.display = 'none';
             document.getElementById('verification-status').classList.remove('hidden');
 
-            // التثبت التلقائي دورياً
             autoCheckTimer = setInterval(() => {
                 if(currentOrder && currentOrder.status === 'approved') {
                     clearInterval(autoCheckTimer);
@@ -588,7 +601,59 @@
             }, 1000);
         }
 
-        // محاكي سيرفر الأندرويد الذي يقرأ الـ SMS
+        // --- لوحة التحكم وإدارة الكروت --- //
+        function renderAdminPackages() {
+            const container = document.getElementById('admin-packages-list');
+            container.innerHTML = '';
+            packages.forEach(pkg => {
+                container.innerHTML += `
+                    <div class="admin-pkg-item">
+                        <div>
+                            <span style="font-weight:800;">${pkg.name}</span> - 
+                            <span style="color:var(--accent-gold); font-weight:900;">${pkg.price} جنيه</span>
+                        </div>
+                        <button class="btn-nav" style="background:var(--danger-color); border:none; padding:4px 8px;" onclick="deletePackage(${pkg.id})">حذف ❌</button>
+                    </div>
+                `;
+            });
+        }
+
+        function addNewPackage() {
+            const name = document.getElementById('new-pkg-name').value;
+            const price = parseFloat(document.getElementById('new-pkg-price').value);
+
+            if(!name || !price) {
+                showToast('ادخل اسم الباقة والسعر صح!');
+                return;
+            }
+
+            const newPkg = { id: Date.now(), name: name, price: price };
+            packages.push(newPkg);
+            if(!selectedPkg) selectedPkg = newPkg;
+
+            document.getElementById('new-pkg-name').value = '';
+            document.getElementById('new-pkg-price').value = '';
+
+            renderAdminPackages();
+            renderStorePackages();
+            showToast('تمت إضافة الباقة بنجاح! 💳');
+        }
+
+        function deletePackage(id) {
+            packages = packages.filter(p => p.id !== id);
+            if(selectedPkg && selectedPkg.id === id) selectedPkg = packages[0] || null;
+            renderAdminPackages();
+            renderStorePackages();
+            showToast('تم حذف الباقة بنجاح!');
+        }
+
+        function updateCashNumber() {
+            const num = document.getElementById('admin-cash-number').value;
+            if(!num || num.length < 10) return showToast('ادخل رقم صحيح!');
+            cashNumber = num;
+            showToast('تم تحديث رقم المحفظة المباشر! 📱');
+        }
+
         function simulateAndroidWebhook() {
             const smsText = document.getElementById('incoming-sms').value;
             if(!smsText) return showToast('يرجى كتابة نص الرسالة للمحاكاة!');
