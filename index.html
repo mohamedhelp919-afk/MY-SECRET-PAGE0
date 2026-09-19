@@ -16,6 +16,7 @@
             --text-muted: #6b7280;
             --dark-box-bg: #1e1e38;
             --border-color: #e5e7eb;
+            --success-color: #10b981;
         }
 
         * {
@@ -52,6 +53,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
 
         .brand-icon {
@@ -77,6 +79,11 @@
             text-decoration: none;
             font-weight: 500;
             cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-nav:hover {
+            background: var(--primary-light);
         }
 
         /* Hero */
@@ -94,7 +101,7 @@
         }
 
         .hero-title {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 800;
             color: var(--primary-color);
             line-height: 1.2;
@@ -106,7 +113,7 @@
             font-size: 13px;
         }
 
-        /* Grid */
+        /* Grid Packages */
         .packages-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -123,6 +130,7 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             transition: 0.2s;
+            position: relative;
         }
 
         .pkg-card.selected {
@@ -135,7 +143,7 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        .pkg-size { font-size: 13px; font-weight: bold; }
+        .pkg-size { font-size: 14px; font-weight: bold; }
         .pkg-price { font-size: 24px; font-weight: 800; margin: 4px 0; }
         .pkg-price span { font-size: 14px; }
         .pkg-meta { font-size: 11px; color: var(--text-muted); }
@@ -150,6 +158,11 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-hover);
         }
 
         .white-card {
@@ -182,44 +195,111 @@
             font-size: 15px;
         }
 
-        .credentials-box {
-            background: #fef3c7;
-            border: 1px solid #f59e0b;
+        .copy-box {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            padding: 14px;
             border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn-copy {
+            background: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Stats & Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            background: var(--dark-box-bg);
             padding: 15px;
-            text-align: right;
+            border-radius: 20px;
+            color: white;
             margin-bottom: 20px;
         }
 
-        .credentials-box h4 {
-            color: #92400e;
-            margin-bottom: 8px;
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
         }
 
-        .credentials-box p {
-            font-size: 13px;
-            color: #78350f;
-            margin-bottom: 4px;
+        .stat-num { font-size: 24px; font-weight: bold; }
+        .stat-label { font-size: 12px; color: #a5b4fc; }
+
+        .card-item {
+            background: #f8fafc;
+            border: 1px dashed var(--primary-color);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-val {
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .admin-table th, .admin-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: center;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
         }
 
         .hidden { display: none; }
     </style>
 </head>
 <body>
+
     <div class="app-container">
-        <!-- Header -->
+        <!-- الهيدر العلوي -->
         <div class="navbar">
-            <div class="brand">
+            <div class="brand" onclick="showPage('store')">
                 <span class="brand-icon">📶</span>
                 <strong>MEN3AM</strong>
             </div>
             <div class="nav-buttons">
                 <button class="btn-nav" onclick="showPage('store')">المتجر</button>
-                <button class="btn-nav" onclick="showPage('admin')">إدارة 🔒</button>
+                <button class="btn-nav" onclick="showPage('my-cards')">كروتي ✉️</button>
+                <button class="btn-nav" onclick="showPage('admin-login')">إدارة 🔒</button>
             </div>
         </div>
 
-        <!-- STORE PAGE -->
+        <!-- 1. صفحة المتجر رئيسية -->
         <div id="store-page">
             <div class="hero-section">
                 <span class="badge-tag">• تسليم الكرت تلقائياً بعد التحويل</span>
@@ -227,73 +307,325 @@
                 <p class="hero-subtitle">شبكة MEN3AM - اختيار واضح وخطوات سريعة.</p>
             </div>
 
-            <div class="packages-grid">
-                <div class="pkg-card selected">
-                    <div class="pkg-size">5 جيجا</div>
-                    <div class="pkg-price">25 <span>ج</span></div>
-                    <div class="pkg-meta">31 متاح</div>
-                </div>
-                <div class="pkg-card">
-                    <div class="pkg-size">10 جيجا</div>
-                    <div class="pkg-price">50 <span>ج</span></div>
-                    <div class="pkg-meta">58 متاح</div>
-                </div>
-                <div class="pkg-card">
-                    <div class="pkg-size">15 جيجا</div>
-                    <div class="pkg-price">65 <span>ج</span></div>
-                    <div class="pkg-meta">89 متاح</div>
-                </div>
-                <div class="pkg-card">
-                    <div class="pkg-size">30 جيجا</div>
-                    <div class="pkg-price">110 <span>ج</span></div>
-                    <div class="pkg-meta">90 متاح</div>
-                </div>
+            <!-- شبكة الباقات -->
+            <div class="packages-grid" id="packages-list">
+                <!-- يتم إنشاؤها وتحديثها ديناميكياً بواسطة السيستم -->
             </div>
 
-            <button class="btn-submit">متابعة طلب 5 جيجا ❯</button>
+            <button class="btn-submit" onclick="goToCheckout()">متابعة الشراء ❯</button>
         </div>
 
-        <!-- ADMIN PAGE -->
-        <div id="admin-page" class="hidden">
-            <div class="credentials-box">
-                <h4>🔑 بيانات دخول مالك المتجر (MEN3AM)</h4>
-                <p><strong>اسم المستخدم:</strong> men3am_admin</p>
-                <p><strong>كلمة المرور:</strong> Men3am@2026</p>
+        <!-- 2. صفحة الدفع والتحويل (مثل الصورة) -->
+        <div id="checkout-page" class="hidden">
+            <button class="btn-nav" onclick="showPage('store')" style="margin-bottom: 15px;">← تغيير الباقة</button>
+            
+            <div class="pkg-card selected" style="margin-bottom: 20px;" id="selected-pkg-banner">
+                <!-- تفاصيل الباقة المختارة -->
             </div>
 
             <div class="white-card">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <div style="font-size: 30px;">🔒</div>
-                    <h3>دخول مالك المتجر | MEN3AM</h3>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">أدخل البيانات الموضحة بأعلى للفتح</p>
+                <div class="form-group">
+                    <label>رقم الهاتف</label>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 5px;">اكتب رقم الهاتف الذي تم التحويل من خلاله</p>
+                    <input type="text" id="user-phone" class="form-input" placeholder="010xxxxxxxx">
                 </div>
 
                 <div class="form-group">
-                    <label>اسم المستخدم (Username)</label>
-                    <input type="text" class="form-input" value="men3am_admin">
+                    <label>عدد الكروت</label>
+                    <select class="form-input" id="cards-count">
+                        <option value="1">1 كرت</option>
+                        <option value="2">2 كرت</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>حول إلى فودافون كاش</label>
+                    <div class="copy-box">
+                        <span id="cash-number-display">01030201647</span>
+                        <button class="btn-copy" onclick="copyCashNumber()">نسخ الرقم 📋</button>
+                    </div>
+                </div>
+
+                <button class="btn-submit" style="background: var(--success-color);" onclick="processPayment()">تأكيد واستلام الكرت تلقائياً ⚡</button>
+            </div>
+        </div>
+
+        <!-- 3. صفحة كروتي المحفوظة -->
+        <div id="my-cards-page" class="hidden">
+            <div class="hero-section">
+                <h1 class="hero-title">كروتي<br>المحفوظة.</h1>
+                <p class="hero-subtitle">تظهر هنا كروت WiFi التي قمت بشرائها.</p>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-label">إجمالي الكروت</div>
+                    <div class="stat-num" id="total-my-cards">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">الحالة</div>
+                    <div class="stat-num" style="font-size: 16px; color:#34d399; margin-top:5px;">نشط 📶</div>
+                </div>
+            </div>
+
+            <div class="white-card" id="cards-history-list">
+                <!-- الكروت المشتراة تظهر هنا -->
+            </div>
+        </div>
+
+        <!-- 4. صفحة دخول مالك المتجر -->
+        <div id="admin-login-page" class="hidden">
+            <div class="white-card">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 35px;">🔒</div>
+                    <h3>دخول مالك المتجر | MEN3AM</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">أدخل بيانات الإدارة للوصول للإعدادات</p>
+                </div>
+
+                <div class="form-group">
+                    <label>اسم المستخدم</label>
+                    <input type="text" id="admin-user" class="form-input" placeholder="Username">
                 </div>
 
                 <div class="form-group">
                     <label>كلمة المرور</label>
-                    <input type="password" class="form-input" value="Men3am@2026">
+                    <input type="password" id="admin-pass" class="form-input" placeholder="Password">
                 </div>
 
-                <button class="btn-submit">فتح لوحة مالك المتجر 🛡️</button>
+                <button class="btn-submit" onclick="loginAdmin()">فتح السيستم 🛡️</button>
+            </div>
+        </div>
+
+        <!-- 5. لوحة التحكم والإعدادات الكاملة (السيستم) -->
+        <div id="admin-dashboard" class="hidden">
+            <div class="hero-section">
+                <h1 class="hero-title">سيستم الإدارة ⚙️</h1>
+                <p class="hero-subtitle">التحكم الكامل في الباقات، الأرقام والكروت</p>
+            </div>
+
+            <!-- تعديل رقم الكاش -->
+            <div class="white-card" style="margin-bottom: 15px;">
+                <h4>تعديل رقم تحويل كاش</h4>
+                <div class="form-group" style="margin-top: 10px;">
+                    <input type="text" id="admin-cash-input" class="form-input">
+                </div>
+                <button class="btn-submit" onclick="updateCashNumber()">حفظ الرقم الجديد</button>
+            </div>
+
+            <!-- إضافة باقة جديدة -->
+            <div class="white-card" style="margin-bottom: 15px;">
+                <h4>إضافة باقة جديدة للمتجر</h4>
+                <div class="form-group" style="margin-top: 10px;">
+                    <input type="text" id="new-pkg-name" class="form-input" placeholder="اسم الباقة (مثلاً: 4 جيجا)">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="new-pkg-price" class="form-input" placeholder="السعر بالجنيه (مثلاً: 20)">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="new-pkg-count" class="form-input" placeholder="المتاح في المخزن (مثلاً: 50)">
+                </div>
+                <button class="btn-submit" style="background:#2563eb;" onclick="addNewPackage()">إضافة الباقة فوراً ➕</button>
+            </div>
+
+            <!-- التحكم بالباقات الحالية -->
+            <div class="white-card">
+                <h4>الباقات الحالية بالمتجر</h4>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>الباقة</th>
+                            <th>السعر</th>
+                            <th>المتاح</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-pkg-table">
+                        <!-- الجدول ينشأ تلقائياً -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        function showPage(page) {
-            document.getElementById('store-page').classList.add('hidden');
-            document.getElementById('admin-page').classList.add('hidden');
+        // Data State (بيانات النظام)
+        let cashNumber = "01030201647";
+        let packages = [
+            { id: 1, name: "4 جيجا", price: 20, count: 50 },
+            { id: 2, name: "5 جيجا", price: 25, count: 31 },
+            { id: 3, name: "10 جيجا", price: 50, count: 58 },
+            { id: 4, name: "15 جيجا", price: 65, count: 89 },
+            { id: 5, name: "30 جيجا", price: 110, count: 90 }
+        ];
+        let selectedPkg = packages[0];
+        let myCards = [];
+
+        // Navigation
+        function showPage(pageId) {
+            const pages = ['store-page', 'checkout-page', 'my-cards-page', 'admin-login-page', 'admin-dashboard'];
+            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
             
-            if (page === 'store') {
+            if(pageId === 'store') {
+                renderStorePackages();
                 document.getElementById('store-page').classList.remove('hidden');
-            } else if (page === 'admin') {
-                document.getElementById('admin-page').classList.remove('hidden');
+            } else if(pageId === 'checkout') {
+                document.getElementById('checkout-page').classList.remove('hidden');
+            } else if(pageId === 'my-cards') {
+                renderMyCards();
+                document.getElementById('my-cards-page').classList.remove('hidden');
+            } else if(pageId === 'admin-login') {
+                document.getElementById('admin-login-page').classList.remove('hidden');
+            } else if(pageId === 'admin-dash') {
+                renderAdminTable();
+                document.getElementById('admin-cash-input').value = cashNumber;
+                document.getElementById('admin-dashboard').classList.remove('hidden');
             }
         }
+
+        // Render Store
+        function renderStorePackages() {
+            const container = document.getElementById('packages-list');
+            container.innerHTML = '';
+            packages.forEach(pkg => {
+                const isSel = selectedPkg.id === pkg.id ? 'selected' : '';
+                container.innerHTML += `
+                    <div class="pkg-card ${isSel}" onclick="selectPackage(${pkg.id})">
+                        <div class="pkg-size">${pkg.name}</div>
+                        <div class="pkg-price">${pkg.price} <span>ج</span></div>
+                        <div class="pkg-meta">${pkg.count} متاح</div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectPackage(id) {
+            selectedPkg = packages.find(p => p.id === id);
+            renderStorePackages();
+        }
+
+        function goToCheckout() {
+            document.getElementById('selected-pkg-banner').innerHTML = `
+                <div class="pkg-size">${selectedPkg.name}</div>
+                <div class="pkg-price">${selectedPkg.price} <span>جنيه</span></div>
+                <div class="pkg-meta">1 كرت • تسليم فوري كود الواي فاي</div>
+            `;
+            document.getElementById('cash-number-display').innerText = cashNumber;
+            showPage('checkout');
+        }
+
+        function copyCashNumber() {
+            navigator.clipboard.writeText(cashNumber);
+            alert('تم نسخ رقم كاش: ' + cashNumber);
+        }
+
+        // Processing Order & Auto Card Delivery
+        function processPayment() {
+            const phone = document.getElementById('user-phone').value;
+            if(!phone || phone.length < 10) {
+                alert('يرجى كتابة رقم الهاتف الصحيح الذي قمت بالتحويل منه');
+                return;
+            }
+
+            // توليد كود كرت تلقائي
+            const cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
+            myCards.unshift({
+                code: cardCode,
+                pkgName: selectedPkg.name,
+                date: new Date().toLocaleDateString('ar-EG')
+            });
+
+            alert('✅ تم تأكيد استلام التحويل! جاري نقل كود الكرت إلى قائمة "كروتي"');
+            showPage('my-cards');
+        }
+
+        function renderMyCards() {
+            document.getElementById('total-my-cards').innerText = myCards.length;
+            const list = document.getElementById('cards-history-list');
+            if(myCards.length === 0) {
+                list.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 35px;">💳</div>
+                        <p style="color:var(--text-muted); font-size:13px; margin-top:5px;">لا توجد كروت محفوظة حالياً</p>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = '<h4>سجل كروتي المفعلة:</h4><br>';
+                myCards.forEach(c => {
+                    list.innerHTML += `
+                        <div class="card-item">
+                            <div>
+                                <strong>كارت: ${c.pkgName}</strong>
+                                <div style="font-size:11px; color:var(--text-muted);">${c.date}</div>
+                            </div>
+                            <div class="code-val">${c.code}</div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        // Admin System Operations
+        function loginAdmin() {
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
+
+            if(u === "men3am" && p === "123456") {
+                showPage('admin-dash');
+            } else {
+                alert('بيانات الدخول غير صحيحة!');
+            }
+        }
+
+        function updateCashNumber() {
+            const val = document.getElementById('admin-cash-input').value;
+            if(val) {
+                cashNumber = val;
+                alert('تم تحديث رقم الكاش بنجاح إلى: ' + cashNumber);
+            }
+        }
+
+        function addNewPackage() {
+            const name = document.getElementById('new-pkg-name').value;
+            const price = document.getElementById('new-pkg-price').value;
+            const count = document.getElementById('new-pkg-count').value;
+
+            if(name && price) {
+                packages.push({
+                    id: Date.now(),
+                    name: name,
+                    price: Number(price),
+                    count: count ? Number(count) : 50
+                });
+                alert('تمت إضافة الباقة بنجاح!');
+                renderAdminTable();
+                document.getElementById('new-pkg-name').value = '';
+                document.getElementById('new-pkg-price').value = '';
+                document.getElementById('new-pkg-count').value = '';
+            }
+        }
+
+        function deletePackage(id) {
+            packages = packages.filter(p => p.id !== id);
+            renderAdminTable();
+        }
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('admin-pkg-table');
+            tbody.innerHTML = '';
+            packages.forEach(p => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${p.name}</td>
+                        <td>${p.price} ج</td>
+                        <td>${p.count}</td>
+                        <td><button class="btn-danger" onclick="deletePackage(${p.id})">حذف</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Start App
+        renderStorePackages();
     </script>
 </body>
 </html>
