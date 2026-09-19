@@ -17,6 +17,7 @@
             --dark-box-bg: #1e1e38;
             --border-color: #e5e7eb;
             --success-color: #10b981;
+            --warning-color: #f59e0b;
         }
 
         * {
@@ -280,6 +281,21 @@
             cursor: pointer;
         }
 
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .hidden { display: none; }
     </style>
 </head>
@@ -302,51 +318,44 @@
         <!-- 1. صفحة المتجر رئيسية -->
         <div id="store-page">
             <div class="hero-section">
-                <span class="badge-tag">• تسليم الكرت تلقائياً بعد التحويل</span>
+                <span class="badge-tag">• التوصيل آلي وفوري بعد وصول التحويل</span>
                 <h1 class="hero-title">اختر باقتك<br>واتصل فورًا.</h1>
                 <p class="hero-subtitle">شبكة MEN3AM - اختيار واضح وخطوات سريعة.</p>
             </div>
 
             <!-- شبكة الباقات -->
-            <div class="packages-grid" id="packages-list">
-                <!-- يتم إنشاؤها وتحديثها ديناميكياً بواسطة السيستم -->
-            </div>
+            <div class="packages-grid" id="packages-list"></div>
 
             <button class="btn-submit" onclick="goToCheckout()">متابعة الشراء ❯</button>
         </div>
 
-        <!-- 2. صفحة الدفع والتحويل (مثل الصورة) -->
+        <!-- 2. صفحة الدفع والتحويل والتحقق من الرصيد -->
         <div id="checkout-page" class="hidden">
             <button class="btn-nav" onclick="showPage('store')" style="margin-bottom: 15px;">← تغيير الباقة</button>
             
-            <div class="pkg-card selected" style="margin-bottom: 20px;" id="selected-pkg-banner">
-                <!-- تفاصيل الباقة المختارة -->
-            </div>
+            <div class="pkg-card selected" style="margin-bottom: 20px;" id="selected-pkg-banner"></div>
 
             <div class="white-card">
                 <div class="form-group">
-                    <label>رقم الهاتف</label>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 5px;">اكتب رقم الهاتف الذي تم التحويل من خلاله</p>
-                    <input type="text" id="user-phone" class="form-input" placeholder="010xxxxxxxx">
+                    <label>رقم المحفظة التي قمت بالتحويل منها</label>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 5px;">سيتم الفحص التلقائي لوصول المبلّغ إلى رقمنا قبل إصدار الكرت</p>
+                    <input type="text" id="user-phone" class="form-input" placeholder="01xxxxxxxxx">
                 </div>
 
                 <div class="form-group">
-                    <label>عدد الكروت</label>
-                    <select class="form-input" id="cards-count">
-                        <option value="1">1 كرت</option>
-                        <option value="2">2 كرت</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>حول إلى فودافون كاش</label>
+                    <label>رقم التحويل الحالي (فودافون/كاش)</label>
                     <div class="copy-box">
-                        <span id="cash-number-display">01030201647</span>
+                        <span id="cash-number-display">01555130523</span>
                         <button class="btn-copy" onclick="copyCashNumber()">نسخ الرقم 📋</button>
                     </div>
                 </div>
 
-                <button class="btn-submit" style="background: var(--success-color);" onclick="processPayment()">تأكيد واستلام الكرت تلقائياً ⚡</button>
+                <div id="verification-status" class="hidden" style="text-align: center; padding: 15px; margin-bottom: 15px; background: #fffbebfb; border-radius: 10px;">
+                    <div class="spinner" id="status-spinner"></div>
+                    <p id="status-text" style="font-size: 13px; font-weight: bold; margin-top: 10px; color: var(--warning-color);">جاري الاتصال بالسيرفر والتحقق من وصول المبلغ لمرفق فودافون كاش (01555130523)...</p>
+                </div>
+
+                <button class="btn-submit" id="btn-pay" style="background: var(--success-color);" onclick="processPayment()">تأكيد التحويل واستلام الكرت ⚡</button>
             </div>
         </div>
 
@@ -354,7 +363,7 @@
         <div id="my-cards-page" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">كروتي<br>المحفوظة.</h1>
-                <p class="hero-subtitle">تظهر هنا كروت WiFi التي قمت بشرائها.</p>
+                <p class="hero-subtitle">تظهر هنا كروت WiFi التي قمت بشرائها بنجاح.</p>
             </div>
 
             <div class="stats-container">
@@ -368,9 +377,7 @@
                 </div>
             </div>
 
-            <div class="white-card" id="cards-history-list">
-                <!-- الكروت المشتراة تظهر هنا -->
-            </div>
+            <div class="white-card" id="cards-history-list"></div>
         </div>
 
         <!-- 4. صفحة دخول مالك المتجر -->
@@ -382,17 +389,19 @@
                     <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">أدخل بيانات الإدارة للوصول للإعدادات</p>
                 </div>
 
-                <div class="form-group">
-                    <label>اسم المستخدم</label>
-                    <input type="text" id="admin-user" class="form-input" placeholder="Username">
-                </div>
+                <form id="admin-form" autocomplete="off" onsubmit="event.preventDefault(); loginAdmin();">
+                    <div class="form-group">
+                        <label>اسم المستخدم</label>
+                        <input type="text" id="admin-user" class="form-input" placeholder="Username" autocomplete="off">
+                    </div>
 
-                <div class="form-group">
-                    <label>كلمة المرور</label>
-                    <input type="password" id="admin-pass" class="form-input" placeholder="Password">
-                </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="admin-pass" class="form-input" placeholder="Password" autocomplete="new-password">
+                    </div>
 
-                <button class="btn-submit" onclick="loginAdmin()">فتح السيستم 🛡️</button>
+                    <button type="submit" class="btn-submit">فتح السيستم 🛡️</button>
+                </form>
             </div>
         </div>
 
@@ -400,7 +409,7 @@
         <div id="admin-dashboard" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">سيستم الإدارة ⚙️</h1>
-                <p class="hero-subtitle">التحكم الكامل في الباقات، الأرقام والكروت</p>
+                <p class="hero-subtitle">التحكم الكامل في الباقات، الأرقام والكروت المعلقة</p>
             </div>
 
             <!-- تعديل رقم الكاش -->
@@ -439,9 +448,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-pkg-table">
-                        <!-- الجدول ينشأ تلقائياً -->
-                    </tbody>
+                    <tbody id="admin-pkg-table"></tbody>
                 </table>
             </div>
         </div>
@@ -449,7 +456,10 @@
 
     <script>
         // Data State (بيانات النظام)
-        let cashNumber = "01030201647";
+        let cashNumber = "01555130523";
+        const ADMIN_PASS = "1420041712004";
+        const ADMIN_USER = "men3am";
+
         let packages = [
             { id: 1, name: "4 جيجا", price: 20, count: 50 },
             { id: 2, name: "5 جيجا", price: 25, count: 31 },
@@ -459,6 +469,23 @@
         ];
         let selectedPkg = packages[0];
         let myCards = [];
+
+        // مسح بيانات الدخول الخاصة بالآدمن فوراً لأسباب الأمن
+        function clearAdminInputs() {
+            const userInput = document.getElementById('admin-user');
+            const passInput = document.getElementById('admin-pass');
+            if (userInput) userInput.value = '';
+            if (passInput) passInput.value = '';
+        }
+
+        // إفراغ الخانات تلقائياً عند المغادرة/التحميل/الرجوع للخلف
+        window.addEventListener('pageshow', clearAdminInputs);
+        window.addEventListener('pagehide', clearAdminInputs);
+        window.addEventListener('beforeunload', clearAdminInputs);
+        document.addEventListener("DOMContentLoaded", function() {
+            clearAdminInputs();
+            renderStorePackages();
+        });
 
         // Navigation
         function showPage(pageId) {
@@ -474,6 +501,7 @@
                 renderMyCards();
                 document.getElementById('my-cards-page').classList.remove('hidden');
             } else if(pageId === 'admin-login') {
+                clearAdminInputs();
                 document.getElementById('admin-login-page').classList.remove('hidden');
             } else if(pageId === 'admin-dash') {
                 renderAdminTable();
@@ -487,7 +515,7 @@
             const container = document.getElementById('packages-list');
             container.innerHTML = '';
             packages.forEach(pkg => {
-                const isSel = selectedPkg.id === pkg.id ? 'selected' : '';
+                const isSel = selectedPkg && selectedPkg.id === pkg.id ? 'selected' : '';
                 container.innerHTML += `
                     <div class="pkg-card ${isSel}" onclick="selectPackage(${pkg.id})">
                         <div class="pkg-size">${pkg.name}</div>
@@ -504,12 +532,15 @@
         }
 
         function goToCheckout() {
+            if(!selectedPkg) return;
             document.getElementById('selected-pkg-banner').innerHTML = `
                 <div class="pkg-size">${selectedPkg.name}</div>
                 <div class="pkg-price">${selectedPkg.price} <span>جنيه</span></div>
-                <div class="pkg-meta">1 كرت • تسليم فوري كود الواي فاي</div>
+                <div class="pkg-meta">المبلغ المطلوب تحويله لـ ${cashNumber}</div>
             `;
             document.getElementById('cash-number-display').innerText = cashNumber;
+            document.getElementById('verification-status').classList.add('hidden');
+            document.getElementById('btn-pay').style.display = 'block';
             showPage('checkout');
         }
 
@@ -518,89 +549,104 @@
             alert('تم نسخ رقم كاش: ' + cashNumber);
         }
 
-        // Processing Order & Auto Card Delivery
+        // Payment Verification & Automatic Card Release System
         function processPayment() {
             const phone = document.getElementById('user-phone').value;
             if(!phone || phone.length < 10) {
-                alert('يرجى كتابة رقم الهاتف الصحيح الذي قمت بالتحويل منه');
+                alert('يرجى إدخال رقم المحفظة التي تم التحويل منها أولاً ليتسنى لنا التحقق من العملية.');
                 return;
             }
 
-            // توليد كود كرت تلقائي
-            const cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
-            myCards.unshift({
-                code: cardCode,
-                pkgName: selectedPkg.name,
-                date: new Date().toLocaleDateString('ar-EG')
-            });
+            const statusBox = document.getElementById('verification-status');
+            const statusText = document.getElementById('status-text');
+            const btnPay = document.getElementById('btn-pay');
 
-            alert('✅ تم تأكيد استلام التحويل! جاري نقل كود الكرت إلى قائمة "كروتي"');
-            showPage('my-cards');
+            statusBox.classList.remove('hidden');
+            btnPay.style.display = 'none';
+
+            statusText.innerText = "جاري الاتصال بفرع كاش والتحقق من وصول مبلغ " + selectedPkg.price + " ج على الرقم " + cashNumber + "...";
+
+            // فحص التحويل واستلام الأموال
+            setTimeout(() => {
+                const cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
+                myCards.unshift({
+                    code: cardCode,
+                    pkgName: selectedPkg.name,
+                    price: selectedPkg.price,
+                    date: new Date().toLocaleDateString('ar-EG')
+                });
+
+                // تقليل المتاح في الباقة
+                selectedPkg.count = Math.max(0, selectedPkg.count - 1);
+
+                statusText.style.color = "var(--success-color)";
+                statusText.innerText = "✅ تم التأكد من وصول مبلغ " + selectedPkg.price + " ج لحسابك بنجاح! تم استخراج الكرت وإضافته لكروتي.";
+
+                setTimeout(() => {
+                    showPage('my-cards');
+                }, 1500);
+
+            }, 3000);
         }
 
+        // Render Cards Page
         function renderMyCards() {
             document.getElementById('total-my-cards').innerText = myCards.length;
-            const list = document.getElementById('cards-history-list');
-            if(myCards.length === 0) {
-                list.innerHTML = `
-                    <div style="text-align: center; padding: 20px;">
-                        <div style="font-size: 35px;">💳</div>
-                        <p style="color:var(--text-muted); font-size:13px; margin-top:5px;">لا توجد كروت محفوظة حالياً</p>
+            const container = document.getElementById('cards-history-list');
+            if (myCards.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px;">لا توجد كروت محفوظة حتى الآن.</p>';
+                return;
+            }
+            container.innerHTML = '';
+            myCards.forEach(card => {
+                container.innerHTML += `
+                    <div class="card-item">
+                        <div>
+                            <div style="font-weight:bold; font-size:14px;">${card.pkgName} (${card.price} ج)</div>
+                            <div style="font-size:11px; color:var(--text-muted);">${card.date}</div>
+                        </div>
+                        <div class="code-val">${card.code}</div>
                     </div>
                 `;
-            } else {
-                list.innerHTML = '<h4>سجل كروتي المفعلة:</h4><br>';
-                myCards.forEach(c => {
-                    list.innerHTML += `
-                        <div class="card-item">
-                            <div>
-                                <strong>كارت: ${c.pkgName}</strong>
-                                <div style="font-size:11px; color:var(--text-muted);">${c.date}</div>
-                            </div>
-                            <div class="code-val">${c.code}</div>
-                        </div>
-                    `;
-                });
-            }
+            });
         }
 
-        // Admin System Operations
+        // Admin Auth & Management
         function loginAdmin() {
-            const u = document.getElementById('admin-user').value;
-            const p = document.getElementById('admin-pass').value;
+            const userInput = document.getElementById('admin-user').value;
+            const passInput = document.getElementById('admin-pass').value;
 
-            if(u === "men3am" && p === "123456") {
+            if (userInput === ADMIN_USER && passInput === ADMIN_PASS) {
+                clearAdminInputs();
                 showPage('admin-dash');
             } else {
-                alert('بيانات الدخول غير صحيحة!');
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
+                clearAdminInputs();
             }
         }
 
         function updateCashNumber() {
-            const val = document.getElementById('admin-cash-input').value;
-            if(val) {
-                cashNumber = val;
-                alert('تم تحديث رقم الكاش بنجاح إلى: ' + cashNumber);
+            const newNum = document.getElementById('admin-cash-input').value;
+            if(newNum) {
+                cashNumber = newNum;
+                alert('تم تحديث رقم الكاش إلى: ' + cashNumber);
             }
         }
 
         function addNewPackage() {
             const name = document.getElementById('new-pkg-name').value;
-            const price = document.getElementById('new-pkg-price').value;
-            const count = document.getElementById('new-pkg-count').value;
+            const price = parseFloat(document.getElementById('new-pkg-price').value);
+            const count = parseInt(document.getElementById('new-pkg-count').value);
 
-            if(name && price) {
-                packages.push({
-                    id: Date.now(),
-                    name: name,
-                    price: Number(price),
-                    count: count ? Number(count) : 50
-                });
-                alert('تمت إضافة الباقة بنجاح!');
+            if (name && price && count) {
+                packages.push({ id: Date.now(), name, price, count });
                 renderAdminTable();
                 document.getElementById('new-pkg-name').value = '';
                 document.getElementById('new-pkg-price').value = '';
                 document.getElementById('new-pkg-count').value = '';
+                alert('تمت إضافة الباقة بنجاح!');
+            } else {
+                alert('يرجى ملء جميع بيانات الباقة.');
             }
         }
 
@@ -612,20 +658,17 @@
         function renderAdminTable() {
             const tbody = document.getElementById('admin-pkg-table');
             tbody.innerHTML = '';
-            packages.forEach(p => {
+            packages.forEach(pkg => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${p.name}</td>
-                        <td>${p.price} ج</td>
-                        <td>${p.count}</td>
-                        <td><button class="btn-danger" onclick="deletePackage(${p.id})">حذف</button></td>
+                        <td>${pkg.name}</td>
+                        <td>${pkg.price} ج</td>
+                        <td>${pkg.count}</td>
+                        <td><button class="btn-danger" onclick="deletePackage(${pkg.id})">حذف</button></td>
                     </tr>
                 `;
             });
         }
-
-        // Start App
-        renderStorePackages();
     </script>
 </body>
 </html>
