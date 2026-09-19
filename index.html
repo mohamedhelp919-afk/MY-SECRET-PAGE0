@@ -3,62 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star Online - تسجيل الدخول للشبكة</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- استدعاء خط تجوال العربي -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>MEN3AM - متجر كروت WiFi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #f3f0ff 0%, #f8fafc 100%);
+            --primary-color: #6d28d9;
+            --primary-hover: #5b21b6;
+            --primary-light: #f3e8ff;
+            --card-bg: #ffffff;
+            --text-dark: #1e1b4b;
+            --text-muted: #6b7280;
+            --dark-box-bg: #1e1e38;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            padding-bottom: 30px;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-icon {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-nav {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Hero */
+        .hero-section {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .badge-tag {
+            display: inline-block;
+            color: var(--primary-color);
+            font-size: 12px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary-color);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Grid */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pkg-card {
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 15px;
+            text-align: right;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: 0.2s;
+        }
+
+        .pkg-card.selected {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-hover);
+        }
+
+        .pkg-card.selected .pkg-meta {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .pkg-size { font-size: 13px; font-weight: bold; }
+        .pkg-price { font-size: 24px; font-weight: 800; margin: 4px 0; }
+        .pkg-price span { font-size: 14px; }
+        .pkg-meta { font-size: 11px; color: var(--text-muted); }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .white-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            margin-top: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .credentials-box {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .credentials-box h4 {
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .credentials-box p {
+            font-size: 13px;
+            color: #78350f;
+            margin-bottom: 4px;
+        }
+
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
-
-    <div class="card-container">
-        <!-- شعار وتفاصيل الشبكة -->
-        <div class="logo-header">
-            <div class="icon-wifi">📶</div>
-            <h1>Star Online</h1>
-            <p>مرحباً بك في شبكة الواي فاي</p>
-        </div>
-
-        <!-- نموذج تسجيل الدخول -->
-        <form id="loginForm" action="$(link-login-only)" method="post">
-            <div class="input-group">
-                <label for="username">رقم الكارت / الكود</label>
-                <input type="text" id="username" name="username" placeholder="أدخل كود الشحن هنا" required autocomplete="off">
+    <div class="app-container">
+        <!-- Header -->
+        <div class="navbar">
+            <div class="brand">
+                <span class="brand-icon">📶</span>
+                <strong>MEN3AM</strong>
             </div>
-
-            <!-- خيار كلمة السر إذا كانت الشبكة تتطلب اسم مستخدم وكلمة سر -->
-            <div class="input-group hidden" id="passwordGroup">
-                <label for="password">كلمة السر</label>
-                <input type="password" id="password" name="password" placeholder="أدخل كلمة السر">
-            </div>
-
-            <button type="submit" class="btn-primary">دخول للشبكة</button>
-        </form>
-
-        <div class="divider"><span>أو</span></div>
-
-        <!-- أزرار الإجراءات السريعة -->
-        <div class="actions">
-            <button class="btn-secondary" onclick="checkStatus()">معرفة الرصيد / المتبقي</button>
-            <a href="https://wa.me/201000000000" class="btn-whatsapp" target="_blank">
-                الدعم الفني عبر واتساب
-            </a>
-        </div>
-
-        <!-- أسعار الكروت / الباقات -->
-        <div class="pricing-section">
-            <h3>أسعار كروت الواي فاي</h3>
-            <div class="price-tags">
-                <div class="tag"><span>5 ج.م</span> 1 جيجا / يوم</div>
-                <div class="tag"><span>10 ج.م</span> 3 جيجا / 3 أيام</div>
-                <div class="tag"><span>25 ج.م</span> 10 جيجا / أسبوع</div>
+            <div class="nav-buttons">
+                <button class="btn-nav" onclick="showPage('store')">المتجر</button>
+                <button class="btn-nav" onclick="showPage('admin')">إدارة 🔒</button>
             </div>
         </div>
 
-        <div class="footer">
-            <p>جميع الحقوق محفوظة &copy; 2026 Star Online</p>
+        <!-- STORE PAGE -->
+        <div id="store-page">
+            <div class="hero-section">
+                <span class="badge-tag">• تسليم الكرت تلقائياً بعد التحويل</span>
+                <h1 class="hero-title">اختر باقتك<br>واتصل فورًا.</h1>
+                <p class="hero-subtitle">شبكة MEN3AM - اختيار واضح وخطوات سريعة.</p>
+            </div>
+
+            <div class="packages-grid">
+                <div class="pkg-card selected">
+                    <div class="pkg-size">5 جيجا</div>
+                    <div class="pkg-price">25 <span>ج</span></div>
+                    <div class="pkg-meta">31 متاح</div>
+                </div>
+                <div class="pkg-card">
+                    <div class="pkg-size">10 جيجا</div>
+                    <div class="pkg-price">50 <span>ج</span></div>
+                    <div class="pkg-meta">58 متاح</div>
+                </div>
+                <div class="pkg-card">
+                    <div class="pkg-size">15 جيجا</div>
+                    <div class="pkg-price">65 <span>ج</span></div>
+                    <div class="pkg-meta">89 متاح</div>
+                </div>
+                <div class="pkg-card">
+                    <div class="pkg-size">30 جيجا</div>
+                    <div class="pkg-price">110 <span>ج</span></div>
+                    <div class="pkg-meta">90 متاح</div>
+                </div>
+            </div>
+
+            <button class="btn-submit">متابعة طلب 5 جيجا ❯</button>
+        </div>
+
+        <!-- ADMIN PAGE -->
+        <div id="admin-page" class="hidden">
+            <div class="credentials-box">
+                <h4>🔑 بيانات دخول مالك المتجر (MEN3AM)</h4>
+                <p><strong>اسم المستخدم:</strong> men3am_admin</p>
+                <p><strong>كلمة المرور:</strong> Men3am@2026</p>
+            </div>
+
+            <div class="white-card">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 30px;">🔒</div>
+                    <h3>دخول مالك المتجر | MEN3AM</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">أدخل البيانات الموضحة بأعلى للفتح</p>
+                </div>
+
+                <div class="form-group">
+                    <label>اسم المستخدم (Username)</label>
+                    <input type="text" class="form-input" value="men3am_admin">
+                </div>
+
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" class="form-input" value="Men3am@2026">
+                </div>
+
+                <button class="btn-submit">فتح لوحة مالك المتجر 🛡️</button>
+            </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        function showPage(page) {
+            document.getElementById('store-page').classList.add('hidden');
+            document.getElementById('admin-page').classList.add('hidden');
+            
+            if (page === 'store') {
+                document.getElementById('store-page').classList.remove('hidden');
+            } else if (page === 'admin') {
+                document.getElementById('admin-page').classList.remove('hidden');
+            }
+        }
+    </script>
 </body>
 </html>
