@@ -250,7 +250,7 @@
             color: var(--text-muted);
         }
 
-        .form-input, .form-select {
+        .form-input {
             width: 100%;
             padding: 14px;
             background: rgba(0, 0, 0, 0.4);
@@ -260,11 +260,6 @@
             text-align: center;
             font-size: 16px;
             font-weight: 700;
-            color: #fff;
-        }
-
-        .form-select option {
-            background: #18181b;
             color: #fff;
         }
 
@@ -376,7 +371,6 @@
             background: rgba(245, 158, 11, 0.1);
             padding: 6px 12px;
             border-radius: 10px;
-            cursor: pointer;
         }
 
         /* Admin Table */
@@ -434,7 +428,7 @@
 </head>
 <body>
 
-    <!-- Notification Toast System -->
+    <!-- Smooth Toast Container -->
     <div id="toast-container"></div>
 
     <div class="app-container">
@@ -485,14 +479,14 @@
 
                 <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">بدء التحقق التلقائي ⚡</button>
 
-                <!-- Timer Counter -->
+                <!-- Live Auto-Checking Counter Box -->
                 <div id="verification-status" class="counter-card hidden">
                     <p style="font-size: 13px; font-weight: 700; color: var(--accent-gold);">بانتظار اعتماد التحويل تلقائياً...</p>
                     <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">تتحدث الحالة تلقائياً عند وصول التأكيد</p>
                     <div class="timer-display" id="timer-count">10</div>
                 </div>
 
-                <!-- Delivered Card -->
+                <!-- Delivered Card View -->
                 <div id="delivered-card-container" class="delivered-card-box hidden">
                     <p style="color: var(--success-color); font-weight: 800; font-size: 16px;">تم اعتماد الدفع وتسليم الكرت ✅</p>
                     <div class="card-code-display" id="delivered-code">---</div>
@@ -550,10 +544,9 @@
         <div id="admin-dashboard" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">لوحة ملك المجال 👑</h1>
-                <p class="hero-subtitle">إدارة الطلبات، الكروت، والباقات</p>
+                <p class="hero-subtitle">إدارة الطلبات، الباقات، وأرقام التحويل</p>
             </div>
 
-            <!-- Orders Approval Table -->
             <div class="glass-card" style="margin-bottom: 15px;">
                 <h4 style="margin-bottom: 12px; font-size: 16px;">طلبات التحويل المعلقة 💸</h4>
                 <div style="overflow-x: auto;">
@@ -572,39 +565,6 @@
                 </div>
             </div>
 
-            <!-- Card Stock Management Section (قسم إضافة وتعديل الكروت) -->
-            <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="font-size: 16px;">إضافة كرت جديد للمخزن 💳</h4>
-                <div class="form-group" style="margin-top: 12px;">
-                    <label>اختر الباقة</label>
-                    <select id="card-pkg-select" class="form-select"></select>
-                </div>
-                <div class="form-group">
-                    <label>كود الكارت</label>
-                    <input type="text" id="new-card-code" class="form-input" placeholder="مثلاً: MN3-887412">
-                </div>
-                <button class="btn-submit" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="addNewCardToStock()">إضافة الكارت للمخزن ➕</button>
-            </div>
-
-            <!-- Stock Table -->
-            <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="margin-bottom: 12px; font-size: 16px;">مخزن الكروت الحالي 📦</h4>
-                <div style="overflow-x: auto;">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>الكود</th>
-                                <th>الباقة</th>
-                                <th>الحالة</th>
-                                <th>حذف</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-cards-table"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Cash Number Settings -->
             <div class="glass-card" style="margin-bottom: 15px;">
                 <h4 style="font-size: 16px;">تعديل رقم تحويل الكاش</h4>
                 <div class="form-group" style="margin-top: 12px;">
@@ -613,7 +573,6 @@
                 <button class="btn-submit" onclick="updateCashNumber()">حفظ الرقم الجديد</button>
             </div>
 
-            <!-- Package Management -->
             <div class="glass-card">
                 <h4 style="margin-bottom: 12px; font-size: 16px;">الباقات الحالية بالمتجر</h4>
                 <div style="overflow-x: auto;">
@@ -639,24 +598,18 @@
         const ADMIN_USER = "ABO Al-Hassan";
 
         let packages = [
-            { id: 1, name: "4 جيجا", price: 20, count: 2 },
-            { id: 2, name: "5 جيجا", price: 25, count: 1 },
-            { id: 3, name: "10 جيجا", price: 50, count: 0 }
+            { id: 1, name: "4 جيجا", price: 20, count: 50 },
+            { id: 2, name: "5 جيجا", price: 25, count: 31 },
+            { id: 3, name: "10 جيجا", price: 50, count: 58 },
+            { id: 4, name: "15 جيجا", price: 65, count: 89 },
+            { id: 5, name: "30 جيجا", price: 110, count: 90 }
         ];
-
-        // Stock Cards
-        let stockCards = [
-            { id: 101, pkgId: 1, code: "MN3-948102", isUsed: false },
-            { id: 102, pkgId: 1, code: "MN3-512903", isUsed: false },
-            { id: 103, pkgId: 2, code: "MN3-110293", isUsed: false }
-        ];
-
         let selectedPkg = packages[0];
         let orders = [];
         let currentOrder = null;
         let countdownTimer = null;
 
-        // Toast Messages
+        // Smooth Toast Function
         function showToast(message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -664,6 +617,7 @@
             toast.innerHTML = `<span>✔ ${message}</span>`;
             
             container.appendChild(toast);
+
             setTimeout(() => toast.classList.add('show'), 50);
 
             setTimeout(() => {
@@ -672,7 +626,7 @@
             }, 3000);
         }
 
-        // Copy Helper
+        // Copy Text Helper
         function copyText(text, successMessage) {
             navigator.clipboard.writeText(text).then(() => {
                 showToast(successMessage);
@@ -698,8 +652,6 @@
             } else if(pageId === 'admin-dash') {
                 renderAdminOrders();
                 renderAdminTable();
-                renderAdminCardsTable();
-                populateCardPkgSelect();
                 document.getElementById('admin-cash-input').value = cashNumber;
                 document.getElementById('admin-dashboard').classList.remove('hidden');
             }
@@ -733,6 +685,7 @@
                 <div class="pkg-meta" style="color:var(--text-white);">قم بتحويل المبلغ عبر الكود السريع بالأسفل</div>
             `;
             
+            // Build USSD string
             const ussdCode = `*9*7*${cashNumber}*${selectedPkg.price}#`;
             document.getElementById('transfer-code-display').innerText = ussdCode;
             
@@ -768,6 +721,7 @@
             startAutoChecker();
         }
 
+        // Live 10-Second Loop Timer
         function startAutoChecker() {
             let timeLeft = 10;
             const timerDisplay = document.getElementById('timer-count');
@@ -776,6 +730,7 @@
             if(countdownTimer) clearInterval(countdownTimer);
 
             countdownTimer = setInterval(() => {
+                // Check if admin approved it in background
                 if(currentOrder && currentOrder.status === 'approved') {
                     clearInterval(countdownTimer);
                     showApprovedCard(currentOrder.cardCode);
@@ -786,7 +741,7 @@
                 timerDisplay.innerText = timeLeft < 10 ? '0' + timeLeft : timeLeft;
 
                 if (timeLeft <= 0) {
-                    timeLeft = 10;
+                    timeLeft = 10; // Restart 10s counter loop
                 }
             }, 1000);
         }
@@ -798,96 +753,11 @@
             showToast('تم تسليم الكرت بنجاح! 🎉');
         }
 
-        /* --- Admin Card Stock Functions (إدارة الكروت) --- */
-        function populateCardPkgSelect() {
-            const select = document.getElementById('card-pkg-select');
-            select.innerHTML = '';
-            packages.forEach(pkg => {
-                select.innerHTML += `<option value="${pkg.id}">${pkg.name} (${pkg.price} ج)</option>`;
-            });
-        }
-
-        function addNewCardToStock() {
-            const pkgId = parseInt(document.getElementById('card-pkg-select').value);
-            const codeInput = document.getElementById('new-card-code');
-            const code = codeInput.value.trim();
-
-            if(!code) {
-                showToast('يرجى كتابة كود الكارت!');
-                return;
-            }
-
-            stockCards.push({
-                id: Date.now(),
-                pkgId: pkgId,
-                code: code,
-                isUsed: false
-            });
-
-            // Recalculate package count
-            const targetPkg = packages.find(p => p.id === pkgId);
-            if(targetPkg) targetPkg.count++;
-
-            codeInput.value = '';
-            showToast('تمت إضافة الكارت بنجاح!');
-            renderAdminCardsTable();
-            renderAdminTable();
-            renderStorePackages();
-        }
-
-        function deleteCardFromStock(cardId) {
-            const cardIndex = stockCards.findIndex(c => c.id === cardId);
-            if(cardIndex !== -1) {
-                const card = stockCards[cardIndex];
-                if(!card.isUsed) {
-                    const targetPkg = packages.find(p => p.id === card.pkgId);
-                    if(targetPkg) targetPkg.count = Math.max(0, targetPkg.count - 1);
-                }
-                stockCards.splice(cardIndex, 1);
-                showToast('تم حذف الكارت من المخزن!');
-                renderAdminCardsTable();
-                renderAdminTable();
-                renderStorePackages();
-            }
-        }
-
-        function renderAdminCardsTable() {
-            const tbody = document.getElementById('admin-cards-table');
-            tbody.innerHTML = '';
-            if(stockCards.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);">لا توجد كروت في المخزن</td></tr>';
-                return;
-            }
-
-            stockCards.forEach(card => {
-                const pkg = packages.find(p => p.id === card.pkgId);
-                const pkgName = pkg ? pkg.name : 'غير معروفة';
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong style="color:var(--accent-gold);">${card.code}</strong></td>
-                        <td>${pkgName}</td>
-                        <td>${card.isUsed ? '<span class="badge-pending">تم استخدامه</span>' : '<span class="badge-approved">متاح</span>'}</td>
-                        <td><button class="btn-danger" onclick="deleteCardFromStock(${card.id})">حذف</button></td>
-                    </tr>
-                `;
-            });
-        }
-
         function approveOrder(orderId) {
             const order = orders.find(o => o.id === orderId);
             if(order) {
-                // Find available card from stock
-                const availableCard = stockCards.find(c => c.pkgId === order.pkgId && !c.isUsed);
-                
-                if(availableCard) {
-                    availableCard.isUsed = true;
-                    order.cardCode = availableCard.code;
-                } else {
-                    // Fallback generator if stock is empty
-                    order.cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
-                }
-
                 order.status = 'approved';
+                order.cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
                 
                 const targetPkg = packages.find(p => p.id === order.pkgId);
                 if(targetPkg) {
@@ -897,7 +767,6 @@
                 showToast("تم تأكيد الطلب وإصدار الكرت!");
                 renderAdminOrders();
                 renderAdminTable();
-                renderAdminCardsTable();
 
                 if(currentOrder && currentOrder.id === orderId) {
                     showApprovedCard(order.cardCode);
@@ -1002,7 +871,6 @@
             packages = packages.filter(p => p.id !== id);
             renderAdminTable();
             renderStorePackages();
-            populateCardPkgSelect();
             showToast('تم حذف الباقة');
         }
 
