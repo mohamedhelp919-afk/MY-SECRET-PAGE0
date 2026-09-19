@@ -272,6 +272,16 @@
             text-align: center;
         }
 
+        .btn-approve {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
         .btn-danger {
             background: #ef4444;
             color: white;
@@ -281,19 +291,22 @@
             cursor: pointer;
         }
 
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+        .badge-pending {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .badge-approved {
+            background: #d1fae5;
+            color: #059669;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
         }
 
         .hidden { display: none; }
@@ -318,18 +331,16 @@
         <!-- 1. صفحة المتجر رئيسية -->
         <div id="store-page">
             <div class="hero-section">
-                <span class="badge-tag">• التوصيل آلي وفوري بعد وصول التحويل</span>
+                <span class="badge-tag">• التوصيل آلي وفوري بعد التأكد من التحويل</span>
                 <h1 class="hero-title">اختر باقتك<br>واتصل فورًا.</h1>
                 <p class="hero-subtitle">شبكة MEN3AM - اختيار واضح وخطوات سريعة.</p>
             </div>
 
-            <!-- شبكة الباقات -->
             <div class="packages-grid" id="packages-list"></div>
-
             <button class="btn-submit" onclick="goToCheckout()">متابعة الشراء ❯</button>
         </div>
 
-        <!-- 2. صفحة الدفع والتحويل والتحقق من الرصيد -->
+        <!-- 2. صفحة الدفع -->
         <div id="checkout-page" class="hidden">
             <button class="btn-nav" onclick="showPage('store')" style="margin-bottom: 15px;">← تغيير الباقة</button>
             
@@ -338,7 +349,7 @@
             <div class="white-card">
                 <div class="form-group">
                     <label>رقم المحفظة التي قمت بالتحويل منها</label>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 5px;">سيتم الفحص التلقائي لوصول المبلّغ إلى رقمنا قبل إصدار الكرت</p>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 5px;">سيتم مراجعة وصول المبلّغ لـ رقمنا قبل إصدار الكرت</p>
                     <input type="text" id="user-phone" class="form-input" placeholder="01xxxxxxxxx">
                 </div>
 
@@ -351,11 +362,10 @@
                 </div>
 
                 <div id="verification-status" class="hidden" style="text-align: center; padding: 15px; margin-bottom: 15px; background: #fffbebfb; border-radius: 10px;">
-                    <div class="spinner" id="status-spinner"></div>
-                    <p id="status-text" style="font-size: 13px; font-weight: bold; margin-top: 10px; color: var(--warning-color);">جاري الاتصال بالسيرفر والتحقق من وصول المبلغ لمرفق فودافون كاش (01555130523)...</p>
+                    <p id="status-text" style="font-size: 13px; font-weight: bold; color: var(--warning-color);"></p>
                 </div>
 
-                <button class="btn-submit" id="btn-pay" style="background: var(--success-color);" onclick="processPayment()">تأكيد التحويل واستلام الكرت ⚡</button>
+                <button class="btn-submit" id="btn-pay" style="background: var(--success-color);" onclick="processPayment()">تأكيد التحويل وإرسال للتحقق ⚡</button>
             </div>
         </div>
 
@@ -363,12 +373,12 @@
         <div id="my-cards-page" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">كروتي<br>المحفوظة.</h1>
-                <p class="hero-subtitle">تظهر هنا كروت WiFi التي قمت بشرائها بنجاح.</p>
+                <p class="hero-subtitle">تظهر هنا الطلبات والكروت التي قمت بشرائها.</p>
             </div>
 
             <div class="stats-container">
                 <div class="stat-box">
-                    <div class="stat-label">إجمالي الكروت</div>
+                    <div class="stat-label">إجمالي الطلبات</div>
                     <div class="stat-num" id="total-my-cards">0</div>
                 </div>
                 <div class="stat-box">
@@ -409,7 +419,24 @@
         <div id="admin-dashboard" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">سيستم الإدارة ⚙️</h1>
-                <p class="hero-subtitle">التحكم الكامل في الباقات، الأرقام والكروت المعلقة</p>
+                <p class="hero-subtitle">مراجعة التحويلات، الباقات ورقم التحويل</p>
+            </div>
+
+            <!-- جدول طلبات التحويل المعلقة والتأكيد -->
+            <div class="white-card" style="margin-bottom: 15px;">
+                <h4>طلبات التحويل المعلقة 💸</h4>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>رقم المحفظة</th>
+                            <th>الباقة</th>
+                            <th>السعر</th>
+                            <th>الحالة</th>
+                            <th>الإجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders-table"></tbody>
+                </table>
             </div>
 
             <!-- تعديل رقم الكاش -->
@@ -455,7 +482,6 @@
     </div>
 
     <script>
-        // Data State (بيانات النظام)
         let cashNumber = "01555130523";
         const ADMIN_PASS = "1420041712004";
         const ADMIN_USER = "men3am";
@@ -468,9 +494,8 @@
             { id: 5, name: "30 جيجا", price: 110, count: 90 }
         ];
         let selectedPkg = packages[0];
-        let myCards = [];
+        let orders = []; // قائمة الطلبات
 
-        // مسح بيانات الدخول الخاصة بالآدمن فوراً لأسباب الأمن
         function clearAdminInputs() {
             const userInput = document.getElementById('admin-user');
             const passInput = document.getElementById('admin-pass');
@@ -478,7 +503,6 @@
             if (passInput) passInput.value = '';
         }
 
-        // إفراغ الخانات تلقائياً عند المغادرة/التحميل/الرجوع للخلف
         window.addEventListener('pageshow', clearAdminInputs);
         window.addEventListener('pagehide', clearAdminInputs);
         window.addEventListener('beforeunload', clearAdminInputs);
@@ -487,7 +511,6 @@
             renderStorePackages();
         });
 
-        // Navigation
         function showPage(pageId) {
             const pages = ['store-page', 'checkout-page', 'my-cards-page', 'admin-login-page', 'admin-dashboard'];
             pages.forEach(p => document.getElementById(p).classList.add('hidden'));
@@ -504,13 +527,13 @@
                 clearAdminInputs();
                 document.getElementById('admin-login-page').classList.remove('hidden');
             } else if(pageId === 'admin-dash') {
+                renderAdminOrders();
                 renderAdminTable();
                 document.getElementById('admin-cash-input').value = cashNumber;
                 document.getElementById('admin-dashboard').classList.remove('hidden');
             }
         }
 
-        // Render Store
         function renderStorePackages() {
             const container = document.getElementById('packages-list');
             container.innerHTML = '';
@@ -549,69 +572,113 @@
             alert('تم نسخ رقم كاش: ' + cashNumber);
         }
 
-        // Payment Verification & Automatic Card Release System
+        // تسجيل الطلب فقط كـ Pending دون إعطاء كارت تلقائي
         function processPayment() {
             const phone = document.getElementById('user-phone').value;
             if(!phone || phone.length < 10) {
-                alert('يرجى إدخال رقم المحفظة التي تم التحويل منها أولاً ليتسنى لنا التحقق من العملية.');
+                alert('يرجى إدخال رقم المحفظة التي تم التحويل منها أولاً.');
                 return;
             }
 
+            const newOrder = {
+                id: Date.now(),
+                phone: phone,
+                pkgId: selectedPkg.id,
+                pkgName: selectedPkg.name,
+                price: selectedPkg.price,
+                status: 'pending',
+                cardCode: null,
+                date: new Date().toLocaleDateString('ar-EG')
+            };
+
+            orders.unshift(newOrder);
+
+            document.getElementById('btn-pay').style.display = 'none';
             const statusBox = document.getElementById('verification-status');
             const statusText = document.getElementById('status-text');
-            const btnPay = document.getElementById('btn-pay');
 
             statusBox.classList.remove('hidden');
-            btnPay.style.display = 'none';
-
-            statusText.innerText = "جاري الاتصال بفرع كاش والتحقق من وصول مبلغ " + selectedPkg.price + " ج على الرقم " + cashNumber + "...";
-
-            // فحص التحويل واستلام الأموال
-            setTimeout(() => {
-                const cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
-                myCards.unshift({
-                    code: cardCode,
-                    pkgName: selectedPkg.name,
-                    price: selectedPkg.price,
-                    date: new Date().toLocaleDateString('ar-EG')
-                });
-
-                // تقليل المتاح في الباقة
-                selectedPkg.count = Math.max(0, selectedPkg.count - 1);
-
-                statusText.style.color = "var(--success-color)";
-                statusText.innerText = "✅ تم التأكد من وصول مبلغ " + selectedPkg.price + " ج لحسابك بنجاح! تم استخراج الكرت وإضافته لكروتي.";
-
-                setTimeout(() => {
-                    showPage('my-cards');
-                }, 1500);
-
-            }, 3000);
+            statusText.innerText = "⏳ تم إرسال الطلب بنجاح! جاري مراجعة وصول مبلغ " + selectedPkg.price + " ج من المحفظة (" + phone + "). سيظهر الكرت في صفحة (كروتي) فور تأكيد الإدارة للتحويل.";
         }
 
-        // Render Cards Page
         function renderMyCards() {
-            document.getElementById('total-my-cards').innerText = myCards.length;
+            document.getElementById('total-my-cards').innerText = orders.length;
             const container = document.getElementById('cards-history-list');
-            if (myCards.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px;">لا توجد كروت محفوظة حتى الآن.</p>';
+            if (orders.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px;">لا توجد كروت أو طلبات حتى الآن.</p>';
                 return;
             }
             container.innerHTML = '';
-            myCards.forEach(card => {
-                container.innerHTML += `
-                    <div class="card-item">
-                        <div>
-                            <div style="font-weight:bold; font-size:14px;">${card.pkgName} (${card.price} ج)</div>
-                            <div style="font-size:11px; color:var(--text-muted);">${card.date}</div>
+            orders.forEach(ord => {
+                if(ord.status === 'approved') {
+                    container.innerHTML += `
+                        <div class="card-item">
+                            <div>
+                                <div style="font-weight:bold; font-size:14px;">${ord.pkgName} (${ord.price} ج)</div>
+                                <span class="badge-approved">تم التأكد والإصدار ✅</span>
+                            </div>
+                            <div class="code-val">${ord.cardCode}</div>
                         </div>
-                        <div class="code-val">${card.code}</div>
-                    </div>
+                    `;
+                } else {
+                    container.innerHTML += `
+                        <div class="card-item">
+                            <div>
+                                <div style="font-weight:bold; font-size:14px;">${ord.pkgName} (${ord.price} ج)</div>
+                                <div style="font-size:11px; color:var(--text-muted);">رقم المحفظة: ${ord.phone}</div>
+                            </div>
+                            <span class="badge-pending">بانتظار تأكيد الإدارة... ⏳</span>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // عرض جدول طلبات المراجعة للادمن
+        function renderAdminOrders() {
+            const tbody = document.getElementById('admin-orders-table');
+            tbody.innerHTML = '';
+            if(orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">لا توجد طلبات جديدة</td></tr>';
+                return;
+            }
+
+            orders.forEach(ord => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${ord.phone}</td>
+                        <td>${ord.pkgName}</td>
+                        <td>${ord.price} ج</td>
+                        <td>${ord.status === 'approved' ? '<span class="badge-approved">مقبول</span>' : '<span class="badge-pending">معلق</span>'}</td>
+                        <td>
+                            ${ord.status === 'pending' 
+                                ? `<button class="btn-approve" onclick="approveOrder(${ord.id})">تأكيد الدفع 🟢</button>` 
+                                : `<strong>${ord.cardCode}</strong>`}
+                        </td>
+                    </tr>
                 `;
             });
         }
 
-        // Admin Auth & Management
+        // موافقة الأدمن وإصدار الكارت وخصم المخزون
+        function approveOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if(order) {
+                order.status = 'approved';
+                order.cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
+                
+                // خصم من المخزون عند التأكيد
+                const targetPkg = packages.find(p => p.id === order.pkgId);
+                if(targetPkg) {
+                    targetPkg.count = Math.max(0, targetPkg.count - 1);
+                }
+
+                alert("تم تأكيد الدفع وإصدار الكرت للعميل بنجاح!");
+                renderAdminOrders();
+                renderAdminTable();
+            }
+        }
+
         function loginAdmin() {
             const userInput = document.getElementById('admin-user').value;
             const passInput = document.getElementById('admin-pass').value;
@@ -641,6 +708,7 @@
             if (name && price && count) {
                 packages.push({ id: Date.now(), name, price, count });
                 renderAdminTable();
+                renderStorePackages();
                 document.getElementById('new-pkg-name').value = '';
                 document.getElementById('new-pkg-price').value = '';
                 document.getElementById('new-pkg-count').value = '';
@@ -653,6 +721,7 @@
         function deletePackage(id) {
             packages = packages.filter(p => p.id !== id);
             renderAdminTable();
+            renderStorePackages();
         }
 
         function renderAdminTable() {
