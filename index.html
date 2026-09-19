@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEN3AM - متجر كروت WiFi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    <title>MEN3AM - ملك المجال 👑</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(180deg, #f3f0ff 0%, #f8fafc 100%);
-            --primary-color: #6d28d9;
-            --primary-hover: #5b21b6;
-            --primary-light: #f3e8ff;
-            --card-bg: #ffffff;
-            --text-dark: #1e1b4b;
-            --text-muted: #6b7280;
-            --dark-box-bg: #1e1e38;
-            --border-color: #e5e7eb;
+            --bg-main: #09090b;
+            --card-bg: rgba(24, 24, 27, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-gold: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --accent-purple-glow: rgba(139, 92, 246, 0.35);
+            --text-white: #f8fafc;
+            --text-muted: #a1a1aa;
             --success-color: #10b981;
-            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
         }
 
         * {
@@ -25,13 +24,17 @@
             margin: 0;
             padding: 0;
             font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: var(--bg-gradient);
-            color: var(--text-dark);
+            background-color: var(--bg-main);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
+            color: var(--text-white);
             min-height: 100vh;
-            padding: 15px;
+            padding: 20px 15px;
             display: flex;
             justify-content: center;
         }
@@ -42,211 +45,281 @@
             padding-bottom: 30px;
         }
 
-        /* Navbar */
+        /* Navbar الفاخر */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            padding: 12px 18px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
         }
 
         .brand-icon {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-gold));
             color: white;
-            padding: 8px 12px;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 18px;
+            box-shadow: 0 0 15px var(--accent-purple-glow);
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff 30%, var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .nav-buttons {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-nav {
-            background: white;
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            color: var(--text-white);
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s ease;
         }
 
-        .btn-nav:hover {
-            background: var(--primary-light);
+        .btn-nav:hover, .btn-nav:active {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 12px var(--accent-purple-glow);
         }
 
         /* Hero */
         .hero-section {
             text-align: right;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .badge-tag {
-            display: inline-block;
-            color: var(--primary-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--accent-gold);
+            padding: 6px 14px;
+            border-radius: 50px;
             font-size: 12px;
-            margin-bottom: 8px;
-            font-weight: bold;
+            font-weight: 700;
+            margin-bottom: 12px;
         }
 
         .hero-title {
-            font-size: 30px;
-            font-weight: 800;
-            color: var(--primary-color);
-            line-height: 1.2;
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1.25;
             margin-bottom: 8px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--accent-gold), #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero-subtitle {
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 14px;
+            font-weight: 500;
         }
 
-        /* Grid Packages */
+        /* Grid Packages الفاخرة */
         .packages-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 14px;
+            margin-bottom: 25px;
         }
 
         .pkg-card {
-            background: white;
-            border: 2px solid transparent;
-            border-radius: 16px;
-            padding: 15px;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 18px 16px;
             text-align: right;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            transition: 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            overflow: hidden;
+        }
+
+        .pkg-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .pkg-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(139, 92, 246, 0.4);
         }
 
         .pkg-card.selected {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-hover);
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.25), rgba(24, 24, 27, 0.9));
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 10px 25px var(--accent-purple-glow);
         }
 
-        .pkg-card.selected .pkg-meta {
-            color: rgba(255, 255, 255, 0.8);
-        }
+        .pkg-card.selected::before { opacity: 1; }
 
-        .pkg-size { font-size: 14px; font-weight: bold; }
-        .pkg-price { font-size: 24px; font-weight: 800; margin: 4px 0; }
-        .pkg-price span { font-size: 14px; }
-        .pkg-meta { font-size: 11px; color: var(--text-muted); }
+        .pkg-size { font-size: 15px; font-weight: 800; color: #fff; }
+        .pkg-price { font-size: 28px; font-weight: 900; margin: 6px 0; color: var(--accent-gold); }
+        .pkg-price span { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+        .pkg-meta { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
+        /* Buttons & Forms */
         .btn-submit {
             width: 100%;
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
             color: white;
             border: none;
-            padding: 14px;
-            border-radius: 14px;
+            padding: 16px;
+            border-radius: 18px;
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px var(--accent-purple-glow);
         }
 
         .btn-submit:hover {
-            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(139, 92, 246, 0.5);
         }
 
-        .white-card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        .btn-submit:active { transform: translateY(0); }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             margin-top: 15px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             text-align: right;
         }
 
         .form-group label {
             display: block;
             font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 6px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-muted);
         }
 
         .form-input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
             outline: none;
             text-align: center;
-            font-size: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 12px var(--accent-purple-glow);
         }
 
         .copy-box {
-            background: var(--primary-light);
-            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px dashed var(--accent-purple);
             padding: 14px;
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: bold;
-            font-size: 18px;
+        }
+
+        .copy-box span {
+            font-family: monospace;
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
         }
 
         .btn-copy {
-            background: white;
+            background: var(--accent-purple);
             border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 13px;
-            color: var(--primary-color);
-            font-weight: bold;
+            font-size: 12px;
+            color: white;
+            font-weight: 800;
+            transition: 0.2s;
         }
 
-        /* Stats & Cards */
+        .btn-copy:hover { background: #7c3aed; }
+
+        /* Stats & Cards History */
         .stats-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            background: var(--dark-box-bg);
-            padding: 15px;
-            border-radius: 20px;
-            color: white;
             margin-bottom: 20px;
         }
 
         .stat-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 16px;
+            border-radius: 20px;
             text-align: center;
         }
 
-        .stat-num { font-size: 24px; font-weight: bold; }
-        .stat-label { font-size: 12px; color: #a5b4fc; }
+        .stat-num { font-size: 26px; font-weight: 900; color: var(--accent-gold); margin-top: 4px; }
+        .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 700; }
 
         .card-item {
-            background: #f8fafc;
-            border: 1px dashed var(--primary-color);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -255,21 +328,31 @@
         .code-val {
             font-family: monospace;
             font-size: 18px;
-            font-weight: bold;
-            color: var(--primary-color);
+            font-weight: 900;
+            color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
+        /* Admin Table */
         .admin-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 12px;
         }
 
         .admin-table th, .admin-table td {
-            border: 1px solid var(--border-color);
-            padding: 8px;
+            border: 1px solid var(--card-border);
+            padding: 10px 6px;
             text-align: center;
+        }
+
+        .admin-table th {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
         }
 
         .btn-approve {
@@ -277,36 +360,37 @@
             color: white;
             border: none;
             padding: 6px 10px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 800;
         }
 
         .btn-danger {
-            background: #ef4444;
+            background: var(--danger-color);
             color: white;
             border: none;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 6px 10px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: 800;
         }
 
         .badge-pending {
-            background: #fef3c7;
-            color: #d97706;
-            padding: 3px 8px;
-            border-radius: 6px;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-gold);
+            padding: 4px 8px;
+            border-radius: 8px;
             font-size: 11px;
-            font-weight: bold;
+            font-weight: 800;
         }
 
         .badge-approved {
-            background: #d1fae5;
-            color: #059669;
-            padding: 3px 8px;
-            border-radius: 6px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success-color);
+            padding: 4px 8px;
+            border-radius: 8px;
             font-size: 11px;
-            font-weight: bold;
+            font-weight: 800;
         }
 
         .hidden { display: none; }
@@ -315,65 +399,65 @@
 <body>
 
     <div class="app-container">
-        <!-- الهيدر العلوي -->
+        <!-- Navbar العلوي -->
         <div class="navbar">
             <div class="brand" onclick="showPage('store')">
                 <span class="brand-icon">📶</span>
-                <strong>MEN3AM</strong>
+                <span class="brand-name">MEN3AM</span>
             </div>
             <div class="nav-buttons">
                 <button class="btn-nav" onclick="showPage('store')">المتجر</button>
                 <button class="btn-nav" onclick="showPage('my-cards')">كروتي ✉️</button>
-                <button class="btn-nav" onclick="showPage('admin-login')">إدارة 🔒</button>
+                <button class="btn-nav" onclick="showPage('admin-login')">ملك المجال 👑</button>
             </div>
         </div>
 
         <!-- 1. صفحة المتجر رئيسية -->
         <div id="store-page">
             <div class="hero-section">
-                <span class="badge-tag">• التوصيل آلي وفوري بعد التأكد من التحويل</span>
-                <h1 class="hero-title">اختر باقتك<br>واتصل فورًا.</h1>
-                <p class="hero-subtitle">شبكة MEN3AM - اختيار واضح وخطوات سريعة.</p>
+                <span class="badge-tag">⚡ التوصيل آلي ومضمون 100%</span>
+                <h1 class="hero-title">اختر باقتك<br><span>واتصل بالسرعة القصوى.</span></h1>
+                <p class="hero-subtitle">شبكة MEN3AM - أقوى تغطية وأعلى ثبات.</p>
             </div>
 
             <div class="packages-grid" id="packages-list"></div>
-            <button class="btn-submit" onclick="goToCheckout()">متابعة الشراء ❯</button>
+            <button class="btn-submit" onclick="goToCheckout()">متابعة الشراء الآن ❯</button>
         </div>
 
         <!-- 2. صفحة الدفع -->
         <div id="checkout-page" class="hidden">
-            <button class="btn-nav" onclick="showPage('store')" style="margin-bottom: 15px;">← تغيير الباقة</button>
+            <button class="btn-nav" onclick="showPage('store')" style="margin-bottom: 15px;">← العودة للمتجر</button>
             
             <div class="pkg-card selected" style="margin-bottom: 20px;" id="selected-pkg-banner"></div>
 
-            <div class="white-card">
+            <div class="glass-card">
                 <div class="form-group">
                     <label>رقم المحفظة التي قمت بالتحويل منها</label>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 5px;">سيتم مراجعة وصول المبلّغ لـ رقمنا قبل إصدار الكرت</p>
                     <input type="text" id="user-phone" class="form-input" placeholder="01xxxxxxxxx">
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px; text-align: center;">يتم التحقق من تحويلك تلقائياً قبل إصدار الكرت</p>
                 </div>
 
                 <div class="form-group">
-                    <label>رقم التحويل الحالي (فودافون/كاش)</label>
+                    <label>رقم تحويل الكاش المعتمد</label>
                     <div class="copy-box">
                         <span id="cash-number-display">01555130523</span>
                         <button class="btn-copy" onclick="copyCashNumber()">نسخ الرقم 📋</button>
                     </div>
                 </div>
 
-                <div id="verification-status" class="hidden" style="text-align: center; padding: 15px; margin-bottom: 15px; background: #fffbebfb; border-radius: 10px;">
-                    <p id="status-text" style="font-size: 13px; font-weight: bold; color: var(--warning-color);"></p>
+                <div id="verification-status" class="hidden" style="text-align: center; padding: 15px; margin-bottom: 15px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 14px;">
+                    <p id="status-text" style="font-size: 13px; font-weight: 700; color: var(--accent-gold); line-height: 1.5;"></p>
                 </div>
 
-                <button class="btn-submit" id="btn-pay" style="background: var(--success-color);" onclick="processPayment()">تأكيد التحويل وإرسال للتحقق ⚡</button>
+                <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">تأكيد التحويل وإرسال الطلب ⚡</button>
             </div>
         </div>
 
         <!-- 3. صفحة كروتي المحفوظة -->
         <div id="my-cards-page" class="hidden">
             <div class="hero-section">
-                <h1 class="hero-title">كروتي<br>المحفوظة.</h1>
-                <p class="hero-subtitle">تظهر هنا الطلبات والكروت التي قمت بشرائها.</p>
+                <h1 class="hero-title">كروتي<br><span>المحفوظة.</span></h1>
+                <p class="hero-subtitle">سجل جميع الطلبات والكروت المفعلة الخاصة بك.</p>
             </div>
 
             <div class="stats-container">
@@ -382,21 +466,21 @@
                     <div class="stat-num" id="total-my-cards">0</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">الحالة</div>
-                    <div class="stat-num" style="font-size: 16px; color:#34d399; margin-top:5px;">نشط 📶</div>
+                    <div class="stat-label">حالة الاتصال</div>
+                    <div class="stat-num" style="font-size: 16px; color: var(--success-color); margin-top: 8px;">مستقر 📶</div>
                 </div>
             </div>
 
-            <div class="white-card" id="cards-history-list"></div>
+            <div class="glass-card" id="cards-history-list"></div>
         </div>
 
-        <!-- 4. صفحة دخول مالك المتجر -->
+        <!-- 4. صفحة دخول ملك المجال -->
         <div id="admin-login-page" class="hidden">
-            <div class="white-card">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <div style="font-size: 35px;">🔒</div>
-                    <h3>دخول مالك المتجر | MEN3AM</h3>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">أدخل بيانات الإدارة للوصول للإعدادات</p>
+            <div class="glass-card">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="font-size: 45px; margin-bottom: 8px;">👑</div>
+                    <h3 style="font-size: 22px; font-weight: 900;">لوحة ملك المجال</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">تسجيل الدخول للتحكم بالسيستم</p>
                 </div>
 
                 <form id="admin-form" autocomplete="off" onsubmit="event.preventDefault(); loginAdmin();">
@@ -410,73 +494,77 @@
                         <input type="password" id="admin-pass" class="form-input" placeholder="Password" autocomplete="new-password">
                     </div>
 
-                    <button type="submit" class="btn-submit">فتح السيستم 🛡️</button>
+                    <button type="submit" class="btn-submit">دخول ملك المجال 🛡️</button>
                 </form>
             </div>
         </div>
 
-        <!-- 5. لوحة التحكم والإعدادات الكاملة (السيستم) -->
+        <!-- 5. لوحة التحكم والإعدادات (الملكية) -->
         <div id="admin-dashboard" class="hidden">
             <div class="hero-section">
-                <h1 class="hero-title">سيستم الإدارة ⚙️</h1>
-                <p class="hero-subtitle">مراجعة التحويلات، الباقات ورقم التحويل</p>
+                <h1 class="hero-title">لوحة ملك المجال 👑</h1>
+                <p class="hero-subtitle">إدارة الطلبات، الباقات، وأرقام التحويل</p>
             </div>
 
-            <!-- جدول طلبات التحويل المعلقة والتأكيد -->
-            <div class="white-card" style="margin-bottom: 15px;">
-                <h4>طلبات التحويل المعلقة 💸</h4>
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>رقم المحفظة</th>
-                            <th>الباقة</th>
-                            <th>السعر</th>
-                            <th>الحالة</th>
-                            <th>الإجراء</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-orders-table"></tbody>
-                </table>
+            <!-- جدول الطلبات المعلقة -->
+            <div class="glass-card" style="margin-bottom: 15px;">
+                <h4 style="margin-bottom: 12px; font-size: 16px;">طلبات التحويل المعلقة 💸</h4>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>المحفظة</th>
+                                <th>الباقة</th>
+                                <th>السعر</th>
+                                <th>الحالة</th>
+                                <th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- تعديل رقم الكاش -->
-            <div class="white-card" style="margin-bottom: 15px;">
-                <h4>تعديل رقم تحويل كاش</h4>
-                <div class="form-group" style="margin-top: 10px;">
+            <div class="glass-card" style="margin-bottom: 15px;">
+                <h4 style="font-size: 16px;">تعديل رقم تحويل الكاش</h4>
+                <div class="form-group" style="margin-top: 12px;">
                     <input type="text" id="admin-cash-input" class="form-input">
                 </div>
                 <button class="btn-submit" onclick="updateCashNumber()">حفظ الرقم الجديد</button>
             </div>
 
             <!-- إضافة باقة جديدة -->
-            <div class="white-card" style="margin-bottom: 15px;">
-                <h4>إضافة باقة جديدة للمتجر</h4>
-                <div class="form-group" style="margin-top: 10px;">
+            <div class="glass-card" style="margin-bottom: 15px;">
+                <h4 style="font-size: 16px;">إضافة باقة جديدة للمتجر</h4>
+                <div class="form-group" style="margin-top: 12px;">
                     <input type="text" id="new-pkg-name" class="form-input" placeholder="اسم الباقة (مثلاً: 4 جيجا)">
                 </div>
                 <div class="form-group">
-                    <input type="number" id="new-pkg-price" class="form-input" placeholder="السعر بالجنيه (مثلاً: 20)">
+                    <input type="number" id="new-pkg-price" class="form-input" placeholder="السعر (مثلاً: 20)">
                 </div>
                 <div class="form-group">
-                    <input type="number" id="new-pkg-count" class="form-input" placeholder="المتاح في المخزن (مثلاً: 50)">
+                    <input type="number" id="new-pkg-count" class="form-input" placeholder="المتاح بالمخزن (مثلاً: 50)">
                 </div>
-                <button class="btn-submit" style="background:#2563eb;" onclick="addNewPackage()">إضافة الباقة فوراً ➕</button>
+                <button class="btn-submit" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="addNewPackage()">إضافة الباقة فوراً ➕</button>
             </div>
 
             <!-- التحكم بالباقات الحالية -->
-            <div class="white-card">
-                <h4>الباقات الحالية بالمتجر</h4>
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>الباقة</th>
-                            <th>السعر</th>
-                            <th>المتاح</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-pkg-table"></tbody>
-                </table>
+            <div class="glass-card">
+                <h4 style="margin-bottom: 12px; font-size: 16px;">الباقات الحالية بالمتجر</h4>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>الباقة</th>
+                                <th>السعر</th>
+                                <th>المتاح</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-pkg-table"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -494,7 +582,7 @@
             { id: 5, name: "30 جيجا", price: 110, count: 90 }
         ];
         let selectedPkg = packages[0];
-        let orders = []; // قائمة الطلبات
+        let orders = [];
 
         function clearAdminInputs() {
             const userInput = document.getElementById('admin-user');
@@ -543,7 +631,7 @@
                     <div class="pkg-card ${isSel}" onclick="selectPackage(${pkg.id})">
                         <div class="pkg-size">${pkg.name}</div>
                         <div class="pkg-price">${pkg.price} <span>ج</span></div>
-                        <div class="pkg-meta">${pkg.count} متاح</div>
+                        <div class="pkg-meta">المتاح: ${pkg.count} كرت</div>
                     </div>
                 `;
             });
@@ -557,9 +645,9 @@
         function goToCheckout() {
             if(!selectedPkg) return;
             document.getElementById('selected-pkg-banner').innerHTML = `
-                <div class="pkg-size">${selectedPkg.name}</div>
-                <div class="pkg-price">${selectedPkg.price} <span>جنيه</span></div>
-                <div class="pkg-meta">المبلغ المطلوب تحويله لـ ${cashNumber}</div>
+                <div class="pkg-size" style="font-size:18px;">باقتك المختارة: ${selectedPkg.name}</div>
+                <div class="pkg-price" style="font-size:32px;">${selectedPkg.price} <span>جنيه</span></div>
+                <div class="pkg-meta" style="color:var(--text-white);">يرجى تحويل المبلغ الموضح إلى الرقم بالأسفل</div>
             `;
             document.getElementById('cash-number-display').innerText = cashNumber;
             document.getElementById('verification-status').classList.add('hidden');
@@ -572,7 +660,6 @@
             alert('تم نسخ رقم كاش: ' + cashNumber);
         }
 
-        // تسجيل الطلب فقط كـ Pending دون إعطاء كارت تلقائي
         function processPayment() {
             const phone = document.getElementById('user-phone').value;
             if(!phone || phone.length < 10) {
@@ -598,14 +685,14 @@
             const statusText = document.getElementById('status-text');
 
             statusBox.classList.remove('hidden');
-            statusText.innerText = "⏳ تم إرسال الطلب بنجاح! جاري مراجعة وصول مبلغ " + selectedPkg.price + " ج من المحفظة (" + phone + "). سيظهر الكرت في صفحة (كروتي) فور تأكيد الإدارة للتحويل.";
+            statusText.innerText = "⏳ تم إرسال الطلب بنجاح! جاري مراجعة وصول مبلغ " + selectedPkg.price + " ج من المحفظة (" + phone + "). سيظهر الكرت في صفحة (كروتي) فور تأكيد ملك المجال للتحويل.";
         }
 
         function renderMyCards() {
             document.getElementById('total-my-cards').innerText = orders.length;
             const container = document.getElementById('cards-history-list');
             if (orders.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px;">لا توجد كروت أو طلبات حتى الآن.</p>';
+                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px; padding: 10px 0;">لا توجد كروت أو طلبات مسجلة حتى الآن.</p>';
                 return;
             }
             container.innerHTML = '';
@@ -614,8 +701,8 @@
                     container.innerHTML += `
                         <div class="card-item">
                             <div>
-                                <div style="font-weight:bold; font-size:14px;">${ord.pkgName} (${ord.price} ج)</div>
-                                <span class="badge-approved">تم التأكد والإصدار ✅</span>
+                                <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
+                                <span class="badge-approved">تم التأكيد ✅</span>
                             </div>
                             <div class="code-val">${ord.cardCode}</div>
                         </div>
@@ -624,22 +711,21 @@
                     container.innerHTML += `
                         <div class="card-item">
                             <div>
-                                <div style="font-weight:bold; font-size:14px;">${ord.pkgName} (${ord.price} ج)</div>
+                                <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
                                 <div style="font-size:11px; color:var(--text-muted);">رقم المحفظة: ${ord.phone}</div>
                             </div>
-                            <span class="badge-pending">بانتظار تأكيد الإدارة... ⏳</span>
+                            <span class="badge-pending">بانتظار موافقة ملك المجال... ⏳</span>
                         </div>
                     `;
                 }
             });
         }
 
-        // عرض جدول طلبات المراجعة للادمن
         function renderAdminOrders() {
             const tbody = document.getElementById('admin-orders-table');
             tbody.innerHTML = '';
             if(orders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5">لا توجد طلبات جديدة</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted);">لا توجد طلبات معلقة</td></tr>';
                 return;
             }
 
@@ -652,22 +738,20 @@
                         <td>${ord.status === 'approved' ? '<span class="badge-approved">مقبول</span>' : '<span class="badge-pending">معلق</span>'}</td>
                         <td>
                             ${ord.status === 'pending' 
-                                ? `<button class="btn-approve" onclick="approveOrder(${ord.id})">تأكيد الدفع 🟢</button>` 
-                                : `<strong>${ord.cardCode}</strong>`}
+                                ? `<button class="btn-approve" onclick="approveOrder(${ord.id})">تأكيد 🟢</button>` 
+                                : `<strong style="color:var(--accent-gold);">${ord.cardCode}</strong>`}
                         </td>
                     </tr>
                 `;
             });
         }
 
-        // موافقة الأدمن وإصدار الكارت وخصم المخزون
         function approveOrder(orderId) {
             const order = orders.find(o => o.id === orderId);
             if(order) {
                 order.status = 'approved';
                 order.cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
                 
-                // خصم من المخزون عند التأكيد
                 const targetPkg = packages.find(p => p.id === order.pkgId);
                 if(targetPkg) {
                     targetPkg.count = Math.max(0, targetPkg.count - 1);
