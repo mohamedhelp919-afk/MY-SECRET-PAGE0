@@ -1,0 +1,179 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Tajawal', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.card-container {
+    background: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.logo-header .icon-wifi {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.logo-header h1 {
+    color: #0f172a;
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.logo-header p {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.input-group {
+    text-align: right;
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 6px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.input-group input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.divider {
+    margin: 20px 0;
+    position: relative;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.divider span {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 0 10px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-secondary, .btn-whatsapp {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-whatsapp {
+    background: #25d366;
+    color: white;
+    border: none;
+}
+
+.pricing-section {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px stroke #e2e8f0;
+}
+
+.pricing-section h3 {
+    font-size: 14px;
+    color: #475569;
+    margin-bottom: 10px;
+}
+
+.price-tags {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.tag {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 8px 5px;
+    border-radius: 8px;
+    font-size: 11px;
+    color: #64748b;
+    flex: 1;
+}
+
+.tag span {
+    display: block;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.hidden {
+    display: none;
+}
