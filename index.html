@@ -296,6 +296,14 @@
             margin-top: 15px;
         }
 
+        .timer-display {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            margin: 10px 0;
+            font-family: monospace;
+        }
+
         .delivered-card-box {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(24, 24, 27, 0.9));
             border: 2px solid var(--success-color);
@@ -316,6 +324,46 @@
             padding: 12px;
             border-radius: 12px;
             border: 1px dashed var(--success-color);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 16px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .stat-num { font-size: 26px; font-weight: 900; color: var(--accent-gold); margin-top: 4px; }
+        .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 700; }
+
+        .card-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-val {
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
         }
 
         .admin-table {
@@ -390,9 +438,9 @@
         <!-- Store Page -->
         <div id="store-page">
             <div class="hero-section">
-                <span class="badge-tag">🛡️ تسليم الكرت فور التحقق من الفلوس</span>
+                <span class="badge-tag">⚡ التوصيل آلي ومضمون 100%</span>
                 <h1 class="hero-title">اختر باقتك<br><span>واتصل بالسرعة القصوى.</span></h1>
-                <p class="hero-subtitle">شبكة ABO Al-Hassan - أسرع خدمة تسليم آمنة.</p>
+                <p class="hero-subtitle">شبكة ABO Al-Hassan - أقوى تغطية وأعلى ثبات.</p>
             </div>
 
             <div class="packages-grid" id="packages-list"></div>
@@ -415,22 +463,22 @@
                     <label>كود التحويل المباشر (اضغط للنسخ)</label>
                     <div class="copy-box">
                         <span id="transfer-code-display">*9*7*01067991520*20#</span>
-                        <button class="btn-copy" onclick="copyText(document.getElementById('transfer-code-display').innerText, 'تم نسخ كود التحويل! 📋')">نسخ الكود 📋</button>
+                        <button class="btn-copy" onclick="copyText(document.getElementById('transfer-code-display').innerText, 'تم نسخ كود التحويل المباشر! 📋')">نسخ الكود 📋</button>
                     </div>
                 </div>
 
-                <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">تأكيد التحويل وإرسال الطلب ⚡</button>
+                <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">بدء التحقق والتسليم التلقائي ⚡</button>
 
-                <!-- Waiting for Admin Approval Status -->
+                <!-- Timer Counter -->
                 <div id="verification-status" class="counter-card hidden">
-                    <div style="font-size: 30px; margin-bottom: 8px;">⏳</div>
-                    <p style="font-size: 14px; font-weight: 800; color: var(--accent-gold);">جاري تأكيد وصول الفلوس لملك المجال...</p>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">سيظهر كود الكرت هنا تلقائياً فور تأكيد وصول المبلغ لدى الأدمن.</p>
+                    <p style="font-size: 13px; font-weight: 700; color: var(--accent-gold);">جاري معالجة وإصدار الكرت تلقائياً...</p>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">سيظهر كود الكارت هنا فور انتهاء العد</p>
+                    <div class="timer-display" id="timer-count">10</div>
                 </div>
 
                 <!-- Delivered Card -->
                 <div id="delivered-card-container" class="delivered-card-box hidden">
-                    <p style="color: var(--success-color); font-weight: 800; font-size: 16px;">تم تأكيد الفلوس وتسليم الكرت بنجاح ✅</p>
+                    <p style="color: var(--success-color); font-weight: 800; font-size: 16px;">تم الدفع وتسليم الكرت بنجاح ✅</p>
                     <div class="card-code-display" id="delivered-code">---</div>
                     <button class="btn-submit" onclick="copyText(document.getElementById('delivered-code').innerText, 'تم نسخ كود الكرت بنجاح! 🎉')">نسخ الكرت 📋</button>
                 </div>
@@ -440,12 +488,25 @@
         <!-- Saved Cards Page -->
         <div id="my-cards-page" class="hidden">
             <div class="hero-section">
-                <h1 class="hero-title">كروتي<br><span>المستلمة.</span></h1>
+                <h1 class="hero-title">كروتي<br><span>المحفوظة.</span></h1>
+                <p class="hero-subtitle">سجل جميع الطلبات والكروت المفعلة الخاصة بك.</p>
             </div>
+
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-label">إجمالي الطلبات</div>
+                    <div class="stat-num" id="total-my-cards">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">حالة الاتصال</div>
+                    <div class="stat-num" style="font-size: 16px; color: var(--success-color); margin-top: 8px;">مستقر 📶</div>
+                </div>
+            </div>
+
             <div class="glass-card" id="cards-history-list"></div>
         </div>
 
-        <!-- Admin Login (بدون حفظ البيانات) -->
+        <!-- Admin Login (لا يحفظ البيانات تلقائيًا) -->
         <div id="admin-login-page" class="hidden">
             <div class="glass-card">
                 <div style="text-align: center; margin-bottom: 25px;">
@@ -473,12 +534,12 @@
         <div id="admin-dashboard" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">لوحة ملك المجال 👑</h1>
-                <p class="hero-subtitle">إدارة الطلبات والراوترات</p>
+                <p class="hero-subtitle">إدارة الطلبات، الكروت، والباقات</p>
             </div>
 
-            <!-- Orders Approval Table (تأكيد الوصول) -->
+            <!-- Orders Approval Table -->
             <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="margin-bottom: 12px; font-size: 16px;">طلبات التحويل بانتظار التأكيد 💰</h4>
+                <h4 style="margin-bottom: 12px; font-size: 16px;">طلبات التحويل السابقة 💸</h4>
                 <div style="overflow-x: auto;">
                     <table class="admin-table">
                         <thead>
@@ -486,7 +547,7 @@
                                 <th>المحفظة</th>
                                 <th>الباقة</th>
                                 <th>السعر</th>
-                                <th>الحالة / إجراء</th>
+                                <th>الكود المسلم</th>
                             </tr>
                         </thead>
                         <tbody id="admin-orders-table"></tbody>
@@ -494,17 +555,63 @@
                 </div>
             </div>
 
-            <!-- Connected Routers Hardware Info -->
+            <!-- Add New Card -->
             <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="margin-bottom: 12px; font-size: 16px;">بيانات الراوترات المربوطة بالسستم 📡</h4>
-                <div style="font-size: 12px; text-align: right; line-height: 1.8;">
-                    <p style="color: var(--accent-gold); font-weight: 800;">1. LG U+ Router (GAPD-7200):</p>
-                    <p>• IP: <span style="font-family: monospace;">192.168.219.1</span> | كلمة سر الأدمن: <span style="font-family: monospace;">994A148#KA</span></p>
-                    <p>• الواي فاي: <span style="font-family: monospace;">U+Net5104</span> | باسورد: <span style="font-family: monospace;">FF0D8#8GBD</span></p>
-                    
-                    <p style="color: var(--accent-purple); font-weight: 800; margin-top: 10px;">2. Huawei Router (DN8245V):</p>
-                    <p>• IP: <span style="font-family: monospace;">192.168.1.1</span> | كلمة سر الأدمن: <span style="font-family: monospace;">AA0FBC92</span></p>
-                    <p>• الواي فاي: <span style="font-family: monospace;">WE2E8C08</span> | باسورد: <span style="font-family: monospace;">aa0fbc92</span></p>
+                <h4 style="font-size: 16px; margin-bottom: 12px;">إضافة كرت جديد للمخزن 💳</h4>
+                <div class="form-group">
+                    <label>اسم الكرت (الباقة)</label>
+                    <input type="text" id="new-card-name" class="form-input" placeholder="مثلاً: 4 جيجا">
+                </div>
+                <div class="form-group">
+                    <label>السعر (بالجنيه)</label>
+                    <input type="number" id="new-card-price" class="form-input" placeholder="مثلاً: 20">
+                </div>
+                <button class="btn-submit" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="addNewCardToStock()">إضافة الكارت تلقائيًا ➕</button>
+            </div>
+
+            <!-- Stock Table -->
+            <div class="glass-card" style="margin-bottom: 15px;">
+                <h4 style="margin-bottom: 12px; font-size: 16px;">مخزن الكروت الحالي 📦</h4>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>اسم الكرت</th>
+                                <th>السعر</th>
+                                <th>الكود التلقائي</th>
+                                <th>الحالة</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-cards-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Cash Number Settings -->
+            <div class="glass-card" style="margin-bottom: 15px;">
+                <h4 style="font-size: 16px;">تعديل رقم تحويل الكاش</h4>
+                <div class="form-group" style="margin-top: 12px;">
+                    <input type="text" id="admin-cash-input" class="form-input">
+                </div>
+                <button class="btn-submit" onclick="updateCashNumber()">حفظ الرقم الجديد</button>
+            </div>
+
+            <!-- Package Management -->
+            <div class="glass-card">
+                <h4 style="margin-bottom: 12px; font-size: 16px;">الباقات الحالية بالمتجر</h4>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>الباقة</th>
+                                <th>السعر</th>
+                                <th>المتاح</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-pkg-table"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -516,22 +623,30 @@
         const ADMIN_USER = "ABO Al-Hassan";
 
         let packages = [
-            { id: 1, name: "4 جيجا", price: 20, count: 10 },
-            { id: 2, name: "5 جيجا", price: 25, count: 10 }
+            { id: 1, name: "4 جيجا", price: 20, count: 2 },
+            { id: 2, name: "5 جيجا", price: 25, count: 1 }
+        ];
+
+        let stockCards = [
+            { id: 101, name: "4 جيجا", price: 20, code: "MN3-948102", isUsed: false },
+            { id: 102, name: "4 جيجا", price: 20, code: "MN3-512903", isUsed: false },
+            { id: 103, name: "5 جيجا", price: 25, code: "MN3-110293", isUsed: false }
         ];
 
         let selectedPkg = packages[0];
         let orders = [];
         let currentOrder = null;
-        let checkInterval = null;
+        let countdownTimer = null;
 
         function showToast(message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
             toast.innerHTML = `<span>✔ ${message}</span>`;
+            
             container.appendChild(toast);
             setTimeout(() => toast.classList.add('show'), 50);
+
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 400);
@@ -556,6 +671,8 @@
         function showPage(pageId) {
             const pages = ['store-page', 'checkout-page', 'my-cards-page', 'admin-login-page', 'admin-dashboard'];
             pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+            
+            if(countdownTimer) clearInterval(countdownTimer);
 
             if(pageId === 'store') {
                 renderStorePackages();
@@ -566,12 +683,15 @@
                 renderMyCards();
                 document.getElementById('my-cards-page').classList.remove('hidden');
             } else if(pageId === 'admin-login') {
-                // تفريغ البيانات دائماً لمنع الحفظ
+                // تفريغ اسم المستخدم وكلمة السر عند الدخول للصفحة
                 document.getElementById('admin-user').value = '';
                 document.getElementById('admin-pass').value = '';
                 document.getElementById('admin-login-page').classList.remove('hidden');
             } else if(pageId === 'admin-dash') {
                 renderAdminOrders();
+                renderAdminTable();
+                renderAdminCardsTable();
+                document.getElementById('admin-cash-input').value = cashNumber;
                 document.getElementById('admin-dashboard').classList.remove('hidden');
             }
         }
@@ -585,7 +705,7 @@
                     <div class="pkg-card ${isSel}" onclick="selectPackage(${pkg.id})">
                         <div class="pkg-size">${pkg.name}</div>
                         <div class="pkg-price">${pkg.price} <span>ج</span></div>
-                        <div class="pkg-meta">المتاح: متوفر</div>
+                        <div class="pkg-meta">المتاح: ${pkg.count} كرت</div>
                     </div>
                 `;
             });
@@ -601,6 +721,7 @@
             document.getElementById('selected-pkg-banner').innerHTML = `
                 <div class="pkg-size" style="font-size:18px;">باقتك المختارة: ${selectedPkg.name}</div>
                 <div class="pkg-price" style="font-size:32px;">${selectedPkg.price} <span>جنيه</span></div>
+                <div class="pkg-meta" style="color:var(--text-white);">قم بتحويل المبلغ عبر الكود السريع بالأسفل</div>
             `;
             
             const ussdCode = `*9*7*${cashNumber}*${selectedPkg.price}#`;
@@ -622,10 +743,12 @@
             currentOrder = {
                 id: Date.now(),
                 phone: phone,
+                pkgId: selectedPkg.id,
                 pkgName: selectedPkg.name,
                 price: selectedPkg.price,
                 status: 'pending',
-                cardCode: null
+                cardCode: null,
+                date: new Date().toLocaleDateString('ar-EG')
             };
 
             orders.unshift(currentOrder);
@@ -633,70 +756,174 @@
             document.getElementById('btn-pay').style.display = 'none';
             document.getElementById('verification-status').classList.remove('hidden');
 
-            // فحص حالة الطلب كل ثانيتين إذا قام الأدمن بتمرير الفلوس
-            checkInterval = setInterval(() => {
-                if(currentOrder && currentOrder.status === 'approved') {
-                    clearInterval(checkInterval);
-                    document.getElementById('verification-status').classList.add('hidden');
-                    document.getElementById('delivered-card-container').classList.remove('hidden');
-                    document.getElementById('delivered-code').innerText = currentOrder.cardCode;
-                    showToast('تم تأكيد وصول الفلوس وتسليم الكرت! 🎉');
+            startAutoChecker();
+        }
+
+        function startAutoChecker() {
+            let timeLeft = 10;
+            const timerDisplay = document.getElementById('timer-count');
+            timerDisplay.innerText = timeLeft < 10 ? '0' + timeLeft : timeLeft;
+
+            if(countdownTimer) clearInterval(countdownTimer);
+
+            countdownTimer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.innerText = timeLeft < 10 ? '0' + timeLeft : timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    // إصدار وتسليم الكرت تلقائيًا فور انتهاء العد
+                    autoDeliverCard();
                 }
-            }, 2000);
+            }, 1000);
         }
 
-        function approveOrder(orderId) {
-            const targetOrder = orders.find(o => o.id === orderId);
-            if(targetOrder) {
-                targetOrder.status = 'approved';
-                targetOrder.cardCode = generateUniqueCode();
-                showToast('تم إرسال الكرت للمشتري فوراً!');
-                renderAdminOrders();
+        function autoDeliverCard() {
+            if(!currentOrder) return;
+
+            // البحث عن كرت متاح من المخزن
+            const availableCard = stockCards.find(c => c.name === currentOrder.pkgName && c.price === currentOrder.price && !c.isUsed);
+
+            if(availableCard) {
+                availableCard.isUsed = true;
+                currentOrder.cardCode = availableCard.code;
+            } else {
+                // إنشاء كود تلقائي فوري إن كان المخزن فارغًا
+                currentOrder.cardCode = generateUniqueCode();
             }
+
+            currentOrder.status = 'approved';
+
+            // خصم الكرت من المخزون في المتجر
+            const targetPkg = packages.find(p => p.id === currentOrder.pkgId);
+            if(targetPkg) {
+                targetPkg.count = Math.max(0, targetPkg.count - 1);
+            }
+
+            showApprovedCard(currentOrder.cardCode);
         }
 
-        function renderAdminOrders() {
-            const tbody = document.getElementById('admin-orders-table');
-            tbody.innerHTML = '';
-            if(orders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);">لا توجد طلبات معلقة</td></tr>';
+        function showApprovedCard(cardCode) {
+            document.getElementById('verification-status').classList.add('hidden');
+            document.getElementById('delivered-card-container').classList.remove('hidden');
+            document.getElementById('delivered-code').innerText = cardCode;
+            showToast('تم تسليم الكرت بنجاح! 🎉');
+        }
+
+        function addNewCardToStock() {
+            const cardName = document.getElementById('new-card-name').value.trim();
+            const cardPrice = parseFloat(document.getElementById('new-card-price').value);
+
+            if(!cardName || isNaN(cardPrice) || cardPrice <= 0) {
+                showToast('يرجى إدخال اسم الكرت والسعر بشكل صحيح!');
                 return;
             }
 
-            orders.forEach(ord => {
-                const actionBtn = ord.status === 'pending' 
-                    ? `<button class="btn-approve" onclick="approveOrder(${ord.id})">تأكيد وصول المبلغ وإصدار الكرت ✅</button>`
-                    : `<span class="badge-approved">تم التسليم (${ord.cardCode})</span>`;
+            const autoGeneratedCode = generateUniqueCode();
 
+            stockCards.push({
+                id: Date.now(),
+                name: cardName,
+                price: cardPrice,
+                code: autoGeneratedCode,
+                isUsed: false
+            });
+
+            let existingPkg = packages.find(p => p.name === cardName && p.price === cardPrice);
+            if (existingPkg) {
+                existingPkg.count++;
+            } else {
+                packages.push({
+                    id: Date.now(),
+                    name: cardName,
+                    price: cardPrice,
+                    count: 1
+                });
+            }
+
+            document.getElementById('new-card-name').value = '';
+            document.getElementById('new-card-price').value = '';
+
+            showToast(`تم إضافة الكرت بكود: ${autoGeneratedCode}`);
+            renderAdminCardsTable();
+            renderAdminTable();
+            renderStorePackages();
+        }
+
+        function deleteCardFromStock(cardId) {
+            const cardIndex = stockCards.findIndex(c => c.id === cardId);
+            if(cardIndex !== -1) {
+                const card = stockCards[cardIndex];
+                if(!card.isUsed) {
+                    const targetPkg = packages.find(p => p.name === card.name && p.price === card.price);
+                    if(targetPkg) targetPkg.count = Math.max(0, targetPkg.count - 1);
+                }
+                stockCards.splice(cardIndex, 1);
+                showToast('تم حذف الكارت من المخزن!');
+                renderAdminCardsTable();
+                renderAdminTable();
+                renderStorePackages();
+            }
+        }
+
+        function renderAdminCardsTable() {
+            const tbody = document.getElementById('admin-cards-table');
+            tbody.innerHTML = '';
+            if(stockCards.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted);">لا توجد كروت في المخزن</td></tr>';
+                return;
+            }
+
+            stockCards.forEach(card => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${ord.phone}</td>
-                        <td>${ord.pkgName}</td>
-                        <td>${ord.price} ج</td>
-                        <td>${actionBtn}</td>
+                        <td><strong>${card.name}</strong></td>
+                        <td>${card.price} ج</td>
+                        <td><strong style="color:var(--accent-gold);">${card.code}</strong></td>
+                        <td>${card.isUsed ? '<span class="badge-pending">تم استخدامه</span>' : '<span class="badge-approved">متاح</span>'}</td>
+                        <td><button class="btn-danger" onclick="deleteCardFromStock(${card.id})">حذف</button></td>
                     </tr>
                 `;
             });
         }
 
         function renderMyCards() {
+            document.getElementById('total-my-cards').innerText = orders.length;
             const container = document.getElementById('cards-history-list');
-            const approvedOrders = orders.filter(o => o.status === 'approved');
-            
-            if (approvedOrders.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px;">لا توجد كروت مفعلة بعد.</p>';
+            if (orders.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px; padding: 10px 0;">لا توجد كروت أو طلبات مسجلة حتى الآن.</p>';
                 return;
             }
             container.innerHTML = '';
-            approvedOrders.forEach(ord => {
+            orders.forEach(ord => {
                 container.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:12px;">
+                    <div class="card-item">
                         <div>
-                            <div style="font-weight:800;">${ord.pkgName}</div>
-                            <div style="font-size:11px; color:var(--success-color);">تم تأكيد الدفع ✅</div>
+                            <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
+                            <span class="badge-approved">تم التسليم ✅</span>
                         </div>
-                        <div style="font-family:monospace; color:var(--accent-gold); font-weight:900;">${ord.cardCode}</div>
+                        <div class="code-val" onclick="copyText('${ord.cardCode}', 'تم نسخ الكرت!')">${ord.cardCode}</div>
                     </div>
+                `;
+            });
+        }
+
+        function renderAdminOrders() {
+            const tbody = document.getElementById('admin-orders-table');
+            tbody.innerHTML = '';
+            if(orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);">لا توجد طلبات مسجلة بعد</td></tr>';
+                return;
+            }
+
+            orders.forEach(ord => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${ord.phone}</td>
+                        <td>${ord.pkgName}</td>
+                        <td>${ord.price} ج</td>
+                        <td><strong style="color:var(--accent-gold);">${ord.cardCode}</strong></td>
+                    </tr>
                 `;
             });
         }
@@ -706,13 +933,45 @@
             const passInput = document.getElementById('admin-pass').value;
 
             if (userInput === ADMIN_USER && passInput === ADMIN_PASS) {
+                // تفريغ المدخلات مباشرة للحماية وعدم الحفظ
                 document.getElementById('admin-user').value = '';
                 document.getElementById('admin-pass').value = '';
+                
                 showPage('admin-dash');
                 showToast('أهلاً بك ملك المجال 👑');
             } else {
                 showToast('اسم المستخدم أو كلمة المرور غير صحيحة!');
             }
+        }
+
+        function updateCashNumber() {
+            const newNum = document.getElementById('admin-cash-input').value;
+            if(newNum) {
+                cashNumber = newNum;
+                showToast('تم تحديث رقم الكاش بنجاح!');
+            }
+        }
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('admin-pkg-table');
+            tbody.innerHTML = '';
+            packages.forEach(pkg => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${pkg.name}</td>
+                        <td>${pkg.price} ج</td>
+                        <td>${pkg.count}</td>
+                        <td><button class="btn-danger" onclick="deletePackage(${pkg.id})">حذف</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deletePackage(id) {
+            packages = packages.filter(p => p.id !== id);
+            renderAdminTable();
+            renderStorePackages();
+            showToast('تم حذف الباقة');
         }
 
         document.addEventListener("DOMContentLoaded", function() {
