@@ -45,6 +45,7 @@
             padding-bottom: 30px;
         }
 
+        /* Toast Notification System */
         #toast-container {
             position: fixed;
             top: 15px;
@@ -79,6 +80,7 @@
             transform: translateY(0);
         }
 
+        /* Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -142,6 +144,7 @@
             border-color: var(--accent-purple);
         }
 
+        /* Hero */
         .hero-section {
             text-align: right;
             margin-bottom: 25px;
@@ -179,6 +182,7 @@
             font-size: 14px;
         }
 
+        /* Grid Packages */
         .packages-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -208,6 +212,7 @@
         .pkg-price span { font-size: 14px; font-weight: 500; color: var(--text-muted); }
         .pkg-meta { font-size: 12px; color: var(--text-muted); }
 
+        /* Buttons & Forms */
         .btn-submit {
             width: 100%;
             background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
@@ -287,6 +292,7 @@
             font-weight: 800;
         }
 
+        /* Live Counter Box */
         .counter-card {
             text-align: center;
             padding: 20px;
@@ -304,6 +310,7 @@
             font-family: monospace;
         }
 
+        /* Delivered Card Box */
         .delivered-card-box {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(24, 24, 27, 0.9));
             border: 2px solid var(--success-color);
@@ -326,6 +333,7 @@
             border: 1px dashed var(--success-color);
         }
 
+        /* Stats & History */
         .stats-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -366,6 +374,7 @@
             cursor: pointer;
         }
 
+        /* Admin Table */
         .admin-table {
             width: 100%;
             border-collapse: collapse;
@@ -420,9 +429,11 @@
 </head>
 <body>
 
+    <!-- Notification Toast System -->
     <div id="toast-container"></div>
 
     <div class="app-container">
+        <!-- Navbar -->
         <div class="navbar">
             <div class="brand" onclick="showPage('store')">
                 <span class="brand-icon">📶</span>
@@ -435,7 +446,7 @@
             </div>
         </div>
 
-        <!-- Store Page -->
+        <!-- 1. Store Page -->
         <div id="store-page">
             <div class="hero-section">
                 <span class="badge-tag">⚡ التوصيل آلي ومضمون 100%</span>
@@ -447,7 +458,7 @@
             <button class="btn-submit" onclick="goToCheckout()">متابعة الشراء الآن ❯</button>
         </div>
 
-        <!-- Checkout Page -->
+        <!-- 2. Checkout Page -->
         <div id="checkout-page" class="hidden">
             <button class="btn-nav" onclick="showPage('store')" style="margin-bottom: 15px;">← العودة للمتجر</button>
             
@@ -467,25 +478,25 @@
                     </div>
                 </div>
 
-                <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">بدء التحقق والتسليم التلقائي ⚡</button>
+                <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">بدء التحقق التلقائي ⚡</button>
 
                 <!-- Timer Counter -->
                 <div id="verification-status" class="counter-card hidden">
-                    <p style="font-size: 13px; font-weight: 700; color: var(--accent-gold);">جاري معالجة وإصدار الكرت تلقائياً...</p>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">سيظهر كود الكارت هنا فور انتهاء العد</p>
+                    <p style="font-size: 13px; font-weight: 700; color: var(--accent-gold);">بانتظار اعتماد التحويل تلقائياً...</p>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">تتحدث الحالة تلقائياً عند وصول التأكيد</p>
                     <div class="timer-display" id="timer-count">10</div>
                 </div>
 
                 <!-- Delivered Card -->
                 <div id="delivered-card-container" class="delivered-card-box hidden">
-                    <p style="color: var(--success-color); font-weight: 800; font-size: 16px;">تم الدفع وتسليم الكرت بنجاح ✅</p>
+                    <p style="color: var(--success-color); font-weight: 800; font-size: 16px;">تم اعتماد الدفع وتسليم الكرت ✅</p>
                     <div class="card-code-display" id="delivered-code">---</div>
                     <button class="btn-submit" onclick="copyText(document.getElementById('delivered-code').innerText, 'تم نسخ كود الكرت بنجاح! 🎉')">نسخ الكرت 📋</button>
                 </div>
             </div>
         </div>
 
-        <!-- Saved Cards Page -->
+        <!-- 3. Saved Cards Page -->
         <div id="my-cards-page" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">كروتي<br><span>المحفوظة.</span></h1>
@@ -506,7 +517,7 @@
             <div class="glass-card" id="cards-history-list"></div>
         </div>
 
-        <!-- Admin Login (لا يحفظ البيانات تلقائيًا) -->
+        <!-- 4. Admin Login -->
         <div id="admin-login-page" class="hidden">
             <div class="glass-card">
                 <div style="text-align: center; margin-bottom: 25px;">
@@ -514,15 +525,15 @@
                     <h3 style="font-size: 22px; font-weight: 900;">لوحة ملك المجال</h3>
                 </div>
 
-                <form id="admin-form" autocomplete="off" onsubmit="event.preventDefault(); loginAdmin();">
+                <form id="admin-form" onsubmit="event.preventDefault(); loginAdmin();">
                     <div class="form-group">
                         <label>اسم المستخدم</label>
-                        <input type="text" id="admin-user" class="form-input" autocomplete="off" value="">
+                        <input type="text" id="admin-user" class="form-input">
                     </div>
 
                     <div class="form-group">
                         <label>كلمة المرور</label>
-                        <input type="password" id="admin-pass" class="form-input" autocomplete="new-password" value="">
+                        <input type="password" id="admin-pass" class="form-input">
                     </div>
 
                     <button type="submit" class="btn-submit">دخول ملك المجال 🛡️</button>
@@ -530,7 +541,7 @@
             </div>
         </div>
 
-        <!-- Admin Dashboard -->
+        <!-- 5. Admin Dashboard -->
         <div id="admin-dashboard" class="hidden">
             <div class="hero-section">
                 <h1 class="hero-title">لوحة ملك المجال 👑</h1>
@@ -539,7 +550,7 @@
 
             <!-- Orders Approval Table -->
             <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="margin-bottom: 12px; font-size: 16px;">طلبات التحويل السابقة 💸</h4>
+                <h4 style="margin-bottom: 12px; font-size: 16px;">طلبات التحويل المعلقة 💸</h4>
                 <div style="overflow-x: auto;">
                     <table class="admin-table">
                         <thead>
@@ -547,7 +558,8 @@
                                 <th>المحفظة</th>
                                 <th>الباقة</th>
                                 <th>السعر</th>
-                                <th>الكود المسلم</th>
+                                <th>الحالة</th>
+                                <th>الإجراء</th>
                             </tr>
                         </thead>
                         <tbody id="admin-orders-table"></tbody>
@@ -555,7 +567,7 @@
                 </div>
             </div>
 
-            <!-- Add New Card -->
+            <!-- Add New Card (اسم الكرت والسعر فقط - الكود تلقائي) -->
             <div class="glass-card" style="margin-bottom: 15px;">
                 <h4 style="font-size: 16px; margin-bottom: 12px;">إضافة كرت جديد للمخزن 💳</h4>
                 <div class="form-group">
@@ -566,6 +578,7 @@
                     <label>السعر (بالجنيه)</label>
                     <input type="number" id="new-card-price" class="form-input" placeholder="مثلاً: 20">
                 </div>
+                <p style="font-size: 11px; color: var(--accent-gold); text-align: center; margin-bottom: 12px;">⚡ سيتم إنشاء كود فريد ومختلف للكرت تلقائيًا!</p>
                 <button class="btn-submit" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="addNewCardToStock()">إضافة الكارت تلقائيًا ➕</button>
             </div>
 
@@ -627,6 +640,7 @@
             { id: 2, name: "5 جيجا", price: 25, count: 1 }
         ];
 
+        // Stock Cards with Unique Codes
         let stockCards = [
             { id: 101, name: "4 جيجا", price: 20, code: "MN3-948102", isUsed: false },
             { id: 102, name: "4 جيجا", price: 20, code: "MN3-512903", isUsed: false },
@@ -638,6 +652,7 @@
         let currentOrder = null;
         let countdownTimer = null;
 
+        // Toast Messages
         function showToast(message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -653,12 +668,14 @@
             }, 3000);
         }
 
+        // Copy Helper
         function copyText(text, successMessage) {
             navigator.clipboard.writeText(text).then(() => {
                 showToast(successMessage);
             });
         }
 
+        // Generate Unique Code Generator
         function generateUniqueCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let randomPart = '';
@@ -683,9 +700,6 @@
                 renderMyCards();
                 document.getElementById('my-cards-page').classList.remove('hidden');
             } else if(pageId === 'admin-login') {
-                // تفريغ اسم المستخدم وكلمة السر عند الدخول للصفحة
-                document.getElementById('admin-user').value = '';
-                document.getElementById('admin-pass').value = '';
                 document.getElementById('admin-login-page').classList.remove('hidden');
             } else if(pageId === 'admin-dash') {
                 renderAdminOrders();
@@ -767,40 +781,19 @@
             if(countdownTimer) clearInterval(countdownTimer);
 
             countdownTimer = setInterval(() => {
+                if(currentOrder && currentOrder.status === 'approved') {
+                    clearInterval(countdownTimer);
+                    showApprovedCard(currentOrder.cardCode);
+                    return;
+                }
+
                 timeLeft--;
                 timerDisplay.innerText = timeLeft < 10 ? '0' + timeLeft : timeLeft;
 
                 if (timeLeft <= 0) {
-                    clearInterval(countdownTimer);
-                    // إصدار وتسليم الكرت تلقائيًا فور انتهاء العد
-                    autoDeliverCard();
+                    timeLeft = 10;
                 }
             }, 1000);
-        }
-
-        function autoDeliverCard() {
-            if(!currentOrder) return;
-
-            // البحث عن كرت متاح من المخزن
-            const availableCard = stockCards.find(c => c.name === currentOrder.pkgName && c.price === currentOrder.price && !c.isUsed);
-
-            if(availableCard) {
-                availableCard.isUsed = true;
-                currentOrder.cardCode = availableCard.code;
-            } else {
-                // إنشاء كود تلقائي فوري إن كان المخزن فارغًا
-                currentOrder.cardCode = generateUniqueCode();
-            }
-
-            currentOrder.status = 'approved';
-
-            // خصم الكرت من المخزون في المتجر
-            const targetPkg = packages.find(p => p.id === currentOrder.pkgId);
-            if(targetPkg) {
-                targetPkg.count = Math.max(0, targetPkg.count - 1);
-            }
-
-            showApprovedCard(currentOrder.cardCode);
         }
 
         function showApprovedCard(cardCode) {
@@ -810,6 +803,7 @@
             showToast('تم تسليم الكرت بنجاح! 🎉');
         }
 
+        /* --- Admin Card Stock Functions (إضافة وتوليد الكروت تلقائياً) --- */
         function addNewCardToStock() {
             const cardName = document.getElementById('new-card-name').value.trim();
             const cardPrice = parseFloat(document.getElementById('new-card-price').value);
@@ -819,8 +813,10 @@
                 return;
             }
 
+            // Generate Auto Unique Code
             const autoGeneratedCode = generateUniqueCode();
 
+            // Add Card To Stock
             stockCards.push({
                 id: Date.now(),
                 name: cardName,
@@ -829,6 +825,7 @@
                 isUsed: false
             });
 
+            // Find or Create Matching Package for Store
             let existingPkg = packages.find(p => p.name === cardName && p.price === cardPrice);
             if (existingPkg) {
                 existingPkg.count++;
@@ -841,10 +838,11 @@
                 });
             }
 
+            // Reset inputs
             document.getElementById('new-card-name').value = '';
             document.getElementById('new-card-price').value = '';
 
-            showToast(`تم إضافة الكرت بكود: ${autoGeneratedCode}`);
+            showToast(`تم إضافة الكرت بكود تلقائي: ${autoGeneratedCode}`);
             renderAdminCardsTable();
             renderAdminTable();
             renderStorePackages();
@@ -887,6 +885,38 @@
             });
         }
 
+        function approveOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if(order) {
+                // Find available card from stock
+                const availableCard = stockCards.find(c => c.name === order.pkgName && c.price === order.price && !c.isUsed);
+                
+                if(availableCard) {
+                    availableCard.isUsed = true;
+                    order.cardCode = availableCard.code;
+                } else {
+                    // Emergency fallback unique code if stock is empty
+                    order.cardCode = generateUniqueCode();
+                }
+
+                order.status = 'approved';
+                
+                const targetPkg = packages.find(p => p.id === order.pkgId);
+                if(targetPkg) {
+                    targetPkg.count = Math.max(0, targetPkg.count - 1);
+                }
+
+                showToast("تم تأكيد الطلب وإصدار الكرت!");
+                renderAdminOrders();
+                renderAdminTable();
+                renderAdminCardsTable();
+
+                if(currentOrder && currentOrder.id === orderId) {
+                    showApprovedCard(order.cardCode);
+                }
+            }
+        }
+
         function renderMyCards() {
             document.getElementById('total-my-cards').innerText = orders.length;
             const container = document.getElementById('cards-history-list');
@@ -896,15 +926,27 @@
             }
             container.innerHTML = '';
             orders.forEach(ord => {
-                container.innerHTML += `
-                    <div class="card-item">
-                        <div>
-                            <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
-                            <span class="badge-approved">تم التسليم ✅</span>
+                if(ord.status === 'approved') {
+                    container.innerHTML += `
+                        <div class="card-item">
+                            <div>
+                                <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
+                                <span class="badge-approved">تم التأكيد ✅</span>
+                            </div>
+                            <div class="code-val" onclick="copyText('${ord.cardCode}', 'تم نسخ الكرت!')">${ord.cardCode}</div>
                         </div>
-                        <div class="code-val" onclick="copyText('${ord.cardCode}', 'تم نسخ الكرت!')">${ord.cardCode}</div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    container.innerHTML += `
+                        <div class="card-item">
+                            <div>
+                                <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
+                                <div style="font-size:11px; color:var(--text-muted);">رقم المحفظة: ${ord.phone}</div>
+                            </div>
+                            <span class="badge-pending">جاري التحقق التلقائي... ⏳</span>
+                        </div>
+                    `;
+                }
             });
         }
 
@@ -912,7 +954,7 @@
             const tbody = document.getElementById('admin-orders-table');
             tbody.innerHTML = '';
             if(orders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);">لا توجد طلبات مسجلة بعد</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted);">لا توجد طلبات معلقة</td></tr>';
                 return;
             }
 
@@ -922,7 +964,12 @@
                         <td>${ord.phone}</td>
                         <td>${ord.pkgName}</td>
                         <td>${ord.price} ج</td>
-                        <td><strong style="color:var(--accent-gold);">${ord.cardCode}</strong></td>
+                        <td>${ord.status === 'approved' ? '<span class="badge-approved">مقبول</span>' : '<span class="badge-pending">معلق</span>'}</td>
+                        <td>
+                            ${ord.status === 'pending' 
+                                ? `<button class="btn-approve" onclick="approveOrder(${ord.id})">تأكيد 🟢</button>` 
+                                : `<strong style="color:var(--accent-gold);">${ord.cardCode}</strong>`}
+                        </td>
                     </tr>
                 `;
             });
@@ -933,10 +980,6 @@
             const passInput = document.getElementById('admin-pass').value;
 
             if (userInput === ADMIN_USER && passInput === ADMIN_PASS) {
-                // تفريغ المدخلات مباشرة للحماية وعدم الحفظ
-                document.getElementById('admin-user').value = '';
-                document.getElementById('admin-pass').value = '';
-                
                 showPage('admin-dash');
                 showToast('أهلاً بك ملك المجال 👑');
             } else {
