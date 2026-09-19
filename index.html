@@ -250,7 +250,7 @@
             color: var(--text-muted);
         }
 
-        .form-input {
+        .form-input, .form-select {
             width: 100%;
             padding: 14px;
             background: rgba(0, 0, 0, 0.4);
@@ -260,6 +260,11 @@
             text-align: center;
             font-size: 16px;
             font-weight: 700;
+            color: #fff;
+        }
+
+        .form-select option {
+            background: #18181b;
             color: #fff;
         }
 
@@ -567,19 +572,18 @@
                 </div>
             </div>
 
-            <!-- Add New Card (اسم الكرت والسعر فقط - الكود تلقائي) -->
+            <!-- Card Stock Management Section (قسم إضافة وتعديل الكروت) -->
             <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="font-size: 16px; margin-bottom: 12px;">إضافة كرت جديد للمخزن 💳</h4>
-                <div class="form-group">
-                    <label>اسم الكرت (الباقة)</label>
-                    <input type="text" id="new-card-name" class="form-input" placeholder="مثلاً: 4 جيجا">
+                <h4 style="font-size: 16px;">إضافة كرت جديد للمخزن 💳</h4>
+                <div class="form-group" style="margin-top: 12px;">
+                    <label>اختر الباقة</label>
+                    <select id="card-pkg-select" class="form-select"></select>
                 </div>
                 <div class="form-group">
-                    <label>السعر (بالجنيه)</label>
-                    <input type="number" id="new-card-price" class="form-input" placeholder="مثلاً: 20">
+                    <label>كود الكارت</label>
+                    <input type="text" id="new-card-code" class="form-input" placeholder="مثلاً: MN3-887412">
                 </div>
-                <p style="font-size: 11px; color: var(--accent-gold); text-align: center; margin-bottom: 12px;">⚡ سيتم إنشاء كود فريد ومختلف للكرت تلقائيًا!</p>
-                <button class="btn-submit" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="addNewCardToStock()">إضافة الكارت تلقائيًا ➕</button>
+                <button class="btn-submit" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="addNewCardToStock()">إضافة الكارت للمخزن ➕</button>
             </div>
 
             <!-- Stock Table -->
@@ -589,9 +593,8 @@
                     <table class="admin-table">
                         <thead>
                             <tr>
-                                <th>اسم الكرت</th>
-                                <th>السعر</th>
-                                <th>الكود التلقائي</th>
+                                <th>الكود</th>
+                                <th>الباقة</th>
                                 <th>الحالة</th>
                                 <th>حذف</th>
                             </tr>
@@ -637,14 +640,15 @@
 
         let packages = [
             { id: 1, name: "4 جيجا", price: 20, count: 2 },
-            { id: 2, name: "5 جيجا", price: 25, count: 1 }
+            { id: 2, name: "5 جيجا", price: 25, count: 1 },
+            { id: 3, name: "10 جيجا", price: 50, count: 0 }
         ];
 
-        // Stock Cards with Unique Codes
+        // Stock Cards
         let stockCards = [
-            { id: 101, name: "4 جيجا", price: 20, code: "MN3-948102", isUsed: false },
-            { id: 102, name: "4 جيجا", price: 20, code: "MN3-512903", isUsed: false },
-            { id: 103, name: "5 جيجا", price: 25, code: "MN3-110293", isUsed: false }
+            { id: 101, pkgId: 1, code: "MN3-948102", isUsed: false },
+            { id: 102, pkgId: 1, code: "MN3-512903", isUsed: false },
+            { id: 103, pkgId: 2, code: "MN3-110293", isUsed: false }
         ];
 
         let selectedPkg = packages[0];
@@ -675,16 +679,6 @@
             });
         }
 
-        // Generate Unique Code Generator
-        function generateUniqueCode() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-            let randomPart = '';
-            for (let i = 0; i < 6; i++) {
-                randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return `MN3-${randomPart}`;
-        }
-
         function showPage(pageId) {
             const pages = ['store-page', 'checkout-page', 'my-cards-page', 'admin-login-page', 'admin-dashboard'];
             pages.forEach(p => document.getElementById(p).classList.add('hidden'));
@@ -705,6 +699,7 @@
                 renderAdminOrders();
                 renderAdminTable();
                 renderAdminCardsTable();
+                populateCardPkgSelect();
                 document.getElementById('admin-cash-input').value = cashNumber;
                 document.getElementById('admin-dashboard').classList.remove('hidden');
             }
@@ -803,46 +798,38 @@
             showToast('تم تسليم الكرت بنجاح! 🎉');
         }
 
-        /* --- Admin Card Stock Functions (إضافة وتوليد الكروت تلقائياً) --- */
-        function addNewCardToStock() {
-            const cardName = document.getElementById('new-card-name').value.trim();
-            const cardPrice = parseFloat(document.getElementById('new-card-price').value);
+        /* --- Admin Card Stock Functions (إدارة الكروت) --- */
+        function populateCardPkgSelect() {
+            const select = document.getElementById('card-pkg-select');
+            select.innerHTML = '';
+            packages.forEach(pkg => {
+                select.innerHTML += `<option value="${pkg.id}">${pkg.name} (${pkg.price} ج)</option>`;
+            });
+        }
 
-            if(!cardName || isNaN(cardPrice) || cardPrice <= 0) {
-                showToast('يرجى إدخال اسم الكرت والسعر بشكل صحيح!');
+        function addNewCardToStock() {
+            const pkgId = parseInt(document.getElementById('card-pkg-select').value);
+            const codeInput = document.getElementById('new-card-code');
+            const code = codeInput.value.trim();
+
+            if(!code) {
+                showToast('يرجى كتابة كود الكارت!');
                 return;
             }
 
-            // Generate Auto Unique Code
-            const autoGeneratedCode = generateUniqueCode();
-
-            // Add Card To Stock
             stockCards.push({
                 id: Date.now(),
-                name: cardName,
-                price: cardPrice,
-                code: autoGeneratedCode,
+                pkgId: pkgId,
+                code: code,
                 isUsed: false
             });
 
-            // Find or Create Matching Package for Store
-            let existingPkg = packages.find(p => p.name === cardName && p.price === cardPrice);
-            if (existingPkg) {
-                existingPkg.count++;
-            } else {
-                packages.push({
-                    id: Date.now(),
-                    name: cardName,
-                    price: cardPrice,
-                    count: 1
-                });
-            }
+            // Recalculate package count
+            const targetPkg = packages.find(p => p.id === pkgId);
+            if(targetPkg) targetPkg.count++;
 
-            // Reset inputs
-            document.getElementById('new-card-name').value = '';
-            document.getElementById('new-card-price').value = '';
-
-            showToast(`تم إضافة الكرت بكود تلقائي: ${autoGeneratedCode}`);
+            codeInput.value = '';
+            showToast('تمت إضافة الكارت بنجاح!');
             renderAdminCardsTable();
             renderAdminTable();
             renderStorePackages();
@@ -853,7 +840,7 @@
             if(cardIndex !== -1) {
                 const card = stockCards[cardIndex];
                 if(!card.isUsed) {
-                    const targetPkg = packages.find(p => p.name === card.name && p.price === card.price);
+                    const targetPkg = packages.find(p => p.id === card.pkgId);
                     if(targetPkg) targetPkg.count = Math.max(0, targetPkg.count - 1);
                 }
                 stockCards.splice(cardIndex, 1);
@@ -868,16 +855,17 @@
             const tbody = document.getElementById('admin-cards-table');
             tbody.innerHTML = '';
             if(stockCards.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted);">لا توجد كروت في المخزن</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted);">لا توجد كروت في المخزن</td></tr>';
                 return;
             }
 
             stockCards.forEach(card => {
+                const pkg = packages.find(p => p.id === card.pkgId);
+                const pkgName = pkg ? pkg.name : 'غير معروفة';
                 tbody.innerHTML += `
                     <tr>
-                        <td><strong>${card.name}</strong></td>
-                        <td>${card.price} ج</td>
                         <td><strong style="color:var(--accent-gold);">${card.code}</strong></td>
+                        <td>${pkgName}</td>
                         <td>${card.isUsed ? '<span class="badge-pending">تم استخدامه</span>' : '<span class="badge-approved">متاح</span>'}</td>
                         <td><button class="btn-danger" onclick="deleteCardFromStock(${card.id})">حذف</button></td>
                     </tr>
@@ -889,14 +877,14 @@
             const order = orders.find(o => o.id === orderId);
             if(order) {
                 // Find available card from stock
-                const availableCard = stockCards.find(c => c.name === order.pkgName && c.price === order.price && !c.isUsed);
+                const availableCard = stockCards.find(c => c.pkgId === order.pkgId && !c.isUsed);
                 
                 if(availableCard) {
                     availableCard.isUsed = true;
                     order.cardCode = availableCard.code;
                 } else {
-                    // Emergency fallback unique code if stock is empty
-                    order.cardCode = generateUniqueCode();
+                    // Fallback generator if stock is empty
+                    order.cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
                 }
 
                 order.status = 'approved';
@@ -1014,6 +1002,7 @@
             packages = packages.filter(p => p.id !== id);
             renderAdminTable();
             renderStorePackages();
+            populateCardPkgSelect();
             showToast('تم حذف الباقة');
         }
 
