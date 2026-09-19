@@ -3,289 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الدفع الخاصة</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .payment-wrapper {
-            background: #ffffff;
-            width: 100%;
-            max-width: 480px;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .header {
-            background: #f8f9fa;
-            padding: 25px 20px;
-            text-align: center;
-            border-bottom: 1px solid #eeeeee;
-        }
-
-        .header h2 {
-            color: #2c3e50;
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .header p {
-            color: #7f8c8d;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .order-summary {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: #e8f4fd;
-            margin: 20px;
-            border-radius: 8px;
-            border: 1px dashed #3498db;
-        }
-
-        .order-summary span {
-            color: #2980b9;
-            font-weight: 600;
-        }
-
-        .order-summary .amount {
-            font-size: 22px;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-
-        .payment-form {
-            padding: 0 20px 25px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #34495e;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px 15px;
-            border: 2px solid #e0e6ed;
-            border-radius: 8px;
-            font-size: 15px;
-            color: #2c3e50;
-            transition: all 0.3s ease;
-            background: #fdfdfd;
-            direction: ltr;
-            text-align: right;
-        }
-
-        .input-group input:focus {
-            border-color: #3498db;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-            background: #ffffff;
-        }
-
-        .row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .row .input-group {
-            flex: 1;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        .secure-badge {
-            text-align: center;
-            margin-top: 15px;
-            color: #95a5a6;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .card-icons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .card-icons div {
-            background: #f1f2f6;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #57606f;
-        }
-
-        /* رسالة النجاح */
-        .toast {
-            position: absolute;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2ecc71;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
-            transition: top 0.4s cubic-bezier(0.68, -0.55, 0.26, 1.55);
-            z-index: 10;
-        }
-        .toast.show {
-            top: 20px;
-        }
-    </style>
+    <title>Star Online - تسجيل الدخول للشبكة</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- استدعاء خط تجوال العربي -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="payment-wrapper">
-        <div class="toast" id="toastMessage">تم بدء معالجة الدفع بنجاح!</div>
-        
-        <div class="header">
-            <h2>بوابة الدفع الإلكتروني</h2>
-            <p>أكمل بياناتك بأمان لإتمام طلبك</p>
+    <div class="card-container">
+        <!-- شعار وتفاصيل الشبكة -->
+        <div class="logo-header">
+            <div class="icon-wifi">📶</div>
+            <h1>Star Online</h1>
+            <p>مرحباً بك في شبكة الواي فاي</p>
         </div>
 
-        <div class="order-summary">
-            <span>إجمالي المطلوب دفعه:</span>
-            <div class="amount">1,500 ج.م</div>
-        </div>
-
-        <form class="payment-form" id="customPaymentForm">
-            
-            <div class="card-icons">
-                <div>💳 Visa</div>
-                <div>💳 MasterCard</div>
-                <div>💳 Meeza</div>
-            </div>
-
+        <!-- نموذج تسجيل الدخول -->
+        <form id="loginForm" action="$(link-login-only)" method="post">
             <div class="input-group">
-                <label for="cardName">الاسم على البطاقة</label>
-                <input type="text" id="cardName" placeholder="الاسم ثلاثي كما هو بالبطاقة" required dir="rtl">
+                <label for="username">رقم الكارت / الكود</label>
+                <input type="text" id="username" name="username" placeholder="أدخل كود الشحن هنا" required autocomplete="off">
             </div>
 
-            <div class="input-group">
-                <label for="cardNumber">رقم البطاقة</label>
-                <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required autocomplete="off">
+            <!-- خيار كلمة السر إذا كانت الشبكة تتطلب اسم مستخدم وكلمة سر -->
+            <div class="input-group hidden" id="passwordGroup">
+                <label for="password">كلمة السر</label>
+                <input type="password" id="password" name="password" placeholder="أدخل كلمة السر">
             </div>
 
-            <div class="row">
-                <div class="input-group">
-                    <label for="expDate">تاريخ الانتهاء</label>
-                    <input type="text" id="expDate" placeholder="MM/YY" maxlength="5" required autocomplete="off">
-                </div>
-                <div class="input-group">
-                    <label for="cvv">رمز CVC</label>
-                    <input type="password" id="cvv" placeholder="123" maxlength="3" required autocomplete="off">
-                </div>
-            </div>
-
-            <button type="submit" class="btn-submit">تأكيد الدفع</button>
-            
-            <div class="secure-badge">
-                🔒 يتم تشفير بياناتك بالكامل (تصميم خاص)
-            </div>
+            <button type="submit" class="btn-primary">دخول للشبكة</button>
         </form>
+
+        <div class="divider"><span>أو</span></div>
+
+        <!-- أزرار الإجراءات السريعة -->
+        <div class="actions">
+            <button class="btn-secondary" onclick="checkStatus()">معرفة الرصيد / المتبقي</button>
+            <a href="https://wa.me/201000000000" class="btn-whatsapp" target="_blank">
+                الدعم الفني عبر واتساب
+            </a>
+        </div>
+
+        <!-- أسعار الكروت / الباقات -->
+        <div class="pricing-section">
+            <h3>أسعار كروت الواي فاي</h3>
+            <div class="price-tags">
+                <div class="tag"><span>5 ج.م</span> 1 جيجا / يوم</div>
+                <div class="tag"><span>10 ج.م</span> 3 جيجا / 3 أيام</div>
+                <div class="tag"><span>25 ج.م</span> 10 جيجا / أسبوع</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>جميع الحقوق محفوظة &copy; 2026 Star Online</p>
+        </div>
     </div>
 
-    <script>
-        // تنسيق رقم البطاقة (إضافة مسافة كل 4 أرقام)
-        document.getElementById('cardNumber').addEventListener('input', function (e) {
-            let target = e.target;
-            let value = target.value.replace(/\D/g, ''); // إزالة أي شيء غير رقم
-            let formatted = '';
-            for (let i = 0; i < value.length; i++) {
-                if (i > 0 && i % 4 === 0) formatted += ' ';
-                formatted += value[i];
-            }
-            target.value = formatted;
-        });
-
-        // تنسيق تاريخ الانتهاء (MM/YY)
-        document.getElementById('expDate').addEventListener('input', function (e) {
-            let target = e.target;
-            let value = target.value.replace(/\D/g, '');
-            if (value.length > 2) {
-                target.value = value.substring(0, 2) + '/' + value.substring(2, 4);
-            } else {
-                target.value = value;
-            }
-        });
-
-        // منع إدخال أي حروف في رمز الـ CVC
-        document.getElementById('cvv').addEventListener('input', function (e) {
-            e.target.value = e.target.value.replace(/\D/g, '');
-        });
-
-        // معالجة عند الضغط على زر الدفع
-        document.getElementById('customPaymentForm').addEventListener('submit', function (e) {
-            e.preventDefault(); // إيقاف إعادة تحميل الصفحة
-            
-            // إظهار رسالة النجاح المنبثقة
-            const toast = document.getElementById('toastMessage');
-            toast.classList.add('show');
-            
-            // إخفاء الرسالة بعد 3 ثواني
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-
-            // يمكنك هنا إضافة كود الـ API الخاص بك لربط الواجهة ببوابة الدفع الحقيقية
-        });
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
