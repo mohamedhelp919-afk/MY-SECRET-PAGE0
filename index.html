@@ -45,6 +45,77 @@
             padding-bottom: 30px;
         }
 
+        /* نظام الإشعارات الحديث (Toast) */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 90%;
+            max-width: 400px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: var(--text-white);
+            padding: 12px 18px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--card-border);
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: auto;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .toast.success {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+        }
+
+        .toast.error {
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.25);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger-color);
+        }
+
+        .toast-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
         /* Navbar الفاخر */
         .navbar {
             display: flex;
@@ -398,6 +469,9 @@
 </head>
 <body>
 
+    <!-- حاوية الإشعارات العلوي السريعة -->
+    <div class="toast-container" id="toast-container"></div>
+
     <div class="app-container">
         <!-- Navbar العلوي -->
         <div class="navbar">
@@ -584,6 +658,35 @@
         let selectedPkg = packages[0];
         let orders = [];
 
+        // دالة عرض الإشعارات الشيك (Toast)
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? '✓' : '✕';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div>${message}</div>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (container.contains(toast)) {
+                        container.removeChild(toast);
+                    }
+                }, 300);
+            }, 3500);
+        }
+
         function clearAdminInputs() {
             const userInput = document.getElementById('admin-user');
             const passInput = document.getElementById('admin-pass');
@@ -657,13 +760,13 @@
 
         function copyCashNumber() {
             navigator.clipboard.writeText(cashNumber);
-            alert('تم نسخ رقم كاش: ' + cashNumber);
+            showNotification('تم نسخ رقم كاش بنجاح: ' + cashNumber, 'success');
         }
 
         function processPayment() {
             const phone = document.getElementById('user-phone').value;
             if(!phone || phone.length < 10) {
-                alert('يرجى إدخال رقم المحفظة التي تم التحويل منها أولاً.');
+                showNotification('يرجى إدخال رقم المحفظة التي تم التحويل منها أولاً.', 'error');
                 return;
             }
 
@@ -686,6 +789,7 @@
 
             statusBox.classList.remove('hidden');
             statusText.innerText = "⏳ تم إرسال الطلب بنجاح! جاري مراجعة وصول مبلغ " + selectedPkg.price + " ج من المحفظة (" + phone + "). سيظهر الكرت في صفحة (كروتي) فور تأكيد ملك المجال للتحويل.";
+            showNotification('تم إرسال الطلب بنجاح، بانتظار التأكيد', 'success');
         }
 
         function renderMyCards() {
@@ -757,7 +861,7 @@
                     targetPkg.count = Math.max(0, targetPkg.count - 1);
                 }
 
-                alert("تم تأكيد الدفع وإصدار الكرت للعميل بنجاح!");
+                showNotification('تم تأكيد الدفع وإصدار الكرت للعميل بنجاح!', 'success');
                 renderAdminOrders();
                 renderAdminTable();
             }
@@ -769,9 +873,10 @@
 
             if (userInput === ADMIN_USER && passInput === ADMIN_PASS) {
                 clearAdminInputs();
+                showNotification('أهلاً بك يا ملك المجال 👑', 'success');
                 showPage('admin-dash');
             } else {
-                alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
+                showNotification('اسم المستخدم أو كلمة المرور غير صحيحة!', 'error');
                 clearAdminInputs();
             }
         }
@@ -780,7 +885,7 @@
             const newNum = document.getElementById('admin-cash-input').value;
             if(newNum) {
                 cashNumber = newNum;
-                alert('تم تحديث رقم الكاش إلى: ' + cashNumber);
+                showNotification('تم تحديث رقم الكاش إلى: ' + cashNumber, 'success');
             }
         }
 
@@ -796,9 +901,9 @@
                 document.getElementById('new-pkg-name').value = '';
                 document.getElementById('new-pkg-price').value = '';
                 document.getElementById('new-pkg-count').value = '';
-                alert('تمت إضافة الباقة بنجاح!');
+                showNotification('تمت إضافة الباقة بنجاح!', 'success');
             } else {
-                alert('يرجى ملء جميع بيانات الباقة.');
+                showNotification('يرجى ملء جميع بيانات الباقة.', 'error');
             }
         }
 
@@ -806,6 +911,7 @@
             packages = packages.filter(p => p.id !== id);
             renderAdminTable();
             renderStorePackages();
+            showNotification('تم حذف الباقة بنجاح', 'success');
         }
 
         function renderAdminTable() {
