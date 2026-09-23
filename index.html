@@ -1,933 +1,539 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABO Al-Hassan - ملك المجال 👑</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-main: #09090b;
-            --card-bg: rgba(24, 24, 27, 0.75);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --accent-gold: #f59e0b;
-            --accent-purple: #8b5cf6;
-            --accent-purple-glow: rgba(139, 92, 246, 0.35);
-            --text-white: #f8fafc;
-            --text-muted: #a1a1aa;
-            --success-color: #10b981;
-            --danger-color: #ef4444;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ABO Al-Hassan</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0d; --bg2:#0f0e13;
+  --card:rgba(255,255,255,0.035); --line:rgba(255,255,255,0.09);
+  --gold:#e0a84d; --gold-soft:rgba(224,168,77,0.14);
+  --violet:#7c5cff; --violet-glow:rgba(124,92,255,0.32);
+  --text:#f3f1ec; --muted:#8c8894;
+  --ok:#3fbf83; --bad:#e5606a;
+  --r-sm:12px; --r-md:18px; --r-lg:26px;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Tajawal',sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(at 15% 0%, rgba(124,92,255,0.16) 0, transparent 55%),
+    radial-gradient(at 100% 15%, rgba(224,168,77,0.10) 0, transparent 50%),
+    var(--bg);
+  color:var(--text); min-height:100%; padding:18px 14px 40px;
+  padding-top:calc(18px + env(safe-area-inset-top,0px));
+  padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));
+  display:flex; justify-content:center;
+}
+.app{width:100%; max-width:460px}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Tajawal', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+/* toasts */
+.toasts{position:fixed; top:calc(16px + env(safe-area-inset-top,0px)); left:50%; transform:translateX(-50%);
+  z-index:999; width:90%; max-width:380px; display:flex; flex-direction:column; gap:8px; pointer-events:none}
+.toast{background:#17151d; border:1px solid var(--line); border-radius:14px; padding:12px 16px; font-size:13px;
+  font-weight:700; display:flex; gap:10px; align-items:center; opacity:0; transform:translateY(-14px);
+  transition:.28s cubic-bezier(.4,0,.2,1); box-shadow:0 14px 30px rgba(0,0,0,.5)}
+.toast.show{opacity:1; transform:translateY(0)}
+.toast.ok{border-color:rgba(63,191,131,.4)} .toast.bad{border-color:rgba(229,96,106,.4)}
+.toast .ic{width:24px;height:24px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.toast.ok .ic{background:rgba(63,191,131,.18); color:var(--ok)}
+.toast.bad .ic{background:rgba(229,96,106,.18); color:var(--bad)}
 
-        body {
-            background-color: var(--bg-main);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
-            color: var(--text-white);
-            min-height: 100vh;
-            padding: 20px 15px;
-            display: flex;
-            justify-content: center;
-        }
+/* nav */
+.nav{display:flex; justify-content:space-between; align-items:center; margin-bottom:22px;
+  background:var(--card); backdrop-filter:blur(14px); border:1px solid var(--line);
+  padding:10px 12px; border-radius:20px}
+.brand{display:flex; align-items:center; gap:9px; cursor:pointer}
+.brand-ic{width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,var(--violet),var(--gold)); font-size:16px}
+.brand-name{font-size:15px; font-weight:900; letter-spacing:.3px}
+.navbtns{display:flex; gap:5px}
+.nb{background:transparent; border:1px solid var(--line); padding:7px 10px; border-radius:12px;
+  font-size:11.5px; color:var(--muted); font-weight:700; cursor:pointer; transition:.2s}
+.nb.active, .nb:active{background:rgba(124,92,255,0.18); border-color:var(--violet); color:var(--text)}
 
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            padding-bottom: 30px;
-        }
+/* hero */
+.hero{text-align:right; margin-bottom:20px}
+.eyebrow{display:inline-flex; align-items:center; gap:6px; background:var(--gold-soft); border:1px solid rgba(224,168,77,.3);
+  color:var(--gold); padding:5px 12px; border-radius:50px; font-size:11.5px; font-weight:700; margin-bottom:12px}
+.h1{font-size:29px; font-weight:900; line-height:1.28; margin-bottom:6px}
+.h1 em{font-style:normal; background:linear-gradient(135deg,var(--gold),#f3cf8f); -webkit-background-clip:text; -webkit-text-fill-color:transparent}
+.sub{color:var(--muted); font-size:13.5px}
 
-        /* نظام الإشعارات الحديث (Toast) */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 90%;
-            max-width: 400px;
-            pointer-events: none;
-        }
+/* packages */
+.pkgs{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:18px}
+.pkg{background:var(--card); border:1px solid var(--line); border-radius:var(--r-md); padding:16px 14px;
+  text-align:right; cursor:pointer; transition:.2s}
+.pkg.sel{border-color:var(--violet); background:linear-gradient(160deg, rgba(124,92,255,.16), rgba(255,255,255,.02));
+  box-shadow:0 10px 24px var(--violet-glow)}
+.pkg-name{font-size:14px; font-weight:800}
+.pkg-price{font-size:25px; font-weight:900; margin:5px 0; color:var(--gold)}
+.pkg-price small{font-size:12px; font-weight:600; color:var(--muted)}
+.pkg-meta{font-size:11px; color:var(--muted); font-weight:600}
+.pkg-meta.low{color:var(--bad)}
 
-        .toast {
-            background: rgba(24, 24, 27, 0.95);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            color: var(--text-white);
-            padding: 12px 18px;
-            border-radius: 16px;
-            font-size: 13px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--card-border);
-            opacity: 0;
-            transform: translateY(-20px) scale(0.95);
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            pointer-events: auto;
-        }
+.btn{width:100%; border:none; padding:15px; border-radius:16px; font-size:15px; font-weight:800; cursor:pointer;
+  color:#0a0a0d; background:linear-gradient(135deg,var(--gold),#f0c37a); transition:.2s}
+.btn:active{transform:scale(.98)}
+.btn.violet{background:linear-gradient(135deg,var(--violet),#9a82ff); color:#fff}
+.btn.ok{background:linear-gradient(135deg,var(--ok),#5fd89e); color:#06170f}
+.btn.ghost{background:transparent; border:1px solid var(--line); color:var(--text)}
+.btn:disabled{opacity:.45; cursor:not-allowed}
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+.card{background:var(--card); backdrop-filter:blur(14px); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:20px; margin-top:14px}
+.field{margin-bottom:15px; text-align:right}
+.field label{display:block; font-size:12.5px; font-weight:700; color:var(--muted); margin-bottom:7px}
+.inp, textarea.inp{width:100%; padding:13px; background:rgba(0,0,0,.35); border:1px solid var(--line);
+  border-radius:13px; outline:none; text-align:right; font-size:14.5px; font-weight:600; color:var(--text)}
+textarea.inp{resize:vertical; min-height:90px; font-family:'Tajawal',sans-serif}
+.inp:focus, textarea.inp:focus{border-color:var(--violet); box-shadow:0 0 0 3px rgba(124,92,255,.18)}
 
-        .toast.success {
-            border-color: rgba(16, 185, 129, 0.4);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
-        }
+.copybox{background:rgba(224,168,77,.08); border:1px dashed var(--gold); padding:13px 15px; border-radius:14px;
+  display:flex; justify-content:space-between; align-items:center}
+.copybox b{font-family:monospace; font-size:19px; color:var(--gold); letter-spacing:.5px}
+.copybtn{background:var(--gold); border:none; padding:8px 13px; border-radius:10px; font-size:11.5px; font-weight:800; cursor:pointer; color:#0a0a0d}
 
-        .toast.success .toast-icon {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success-color);
-        }
+.notice{text-align:center; padding:14px; border-radius:14px; font-size:12.5px; font-weight:700; line-height:1.6}
+.notice.pend{background:var(--gold-soft); border:1px solid rgba(224,168,77,.3); color:var(--gold)}
 
-        .toast.error {
-            border-color: rgba(239, 68, 68, 0.4);
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.25);
-        }
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px}
+.stat{background:var(--card); border:1px solid var(--line); padding:14px; border-radius:16px; text-align:center}
+.stat b{display:block; font-size:23px; font-weight:900; color:var(--gold); margin-top:3px}
+.stat span{font-size:11px; color:var(--muted); font-weight:700}
 
-        .toast.error .toast-icon {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger-color);
-        }
+.row{background:rgba(255,255,255,.02); border:1px solid var(--line); padding:14px; border-radius:14px; margin-bottom:10px;
+  display:flex; justify-content:space-between; align-items:center; gap:8px}
+.row .t{font-weight:800; font-size:14px; margin-bottom:3px}
+.row .m{font-size:11px; color:var(--muted)}
+.code{font-family:monospace; font-size:16px; font-weight:900; color:var(--gold); background:rgba(224,168,77,.1);
+  padding:5px 10px; border-radius:9px; border:1px solid rgba(224,168,77,.22); white-space:nowrap}
+.badge{padding:4px 9px; border-radius:8px; font-size:10.5px; font-weight:800}
+.badge.pend{background:var(--gold-soft); color:var(--gold)}
+.badge.ok{background:rgba(63,191,131,.16); color:var(--ok)}
+.badge.open{background:rgba(229,96,106,.16); color:var(--bad)}
+.badge.done{background:rgba(63,191,131,.16); color:var(--ok)}
 
-        .toast-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
+table{width:100%; border-collapse:collapse; margin-top:10px; font-size:11.5px}
+th,td{border:1px solid var(--line); padding:9px 5px; text-align:center}
+th{background:rgba(255,255,255,.04); color:var(--muted); font-weight:700}
+.mini{padding:6px 9px; border-radius:8px; font-weight:800; font-size:11px; border:none; cursor:pointer}
+.mini.g{background:var(--ok); color:#06170f} .mini.r{background:var(--bad); color:#1a0708}
 
-        /* Navbar الفاخر */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            padding: 12px 18px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .brand-icon {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-gold));
-            color: white;
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            font-size: 18px;
-            box-shadow: 0 0 15px var(--accent-purple-glow);
-        }
-
-        .brand-name {
-            font-size: 18px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, #fff 30%, var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 6px;
-        }
-
-        .btn-nav {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--card-border);
-            padding: 8px 12px;
-            border-radius: 14px;
-            font-size: 12px;
-            color: var(--text-white);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-nav:hover, .btn-nav:active {
-            background: var(--accent-purple);
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 12px var(--accent-purple-glow);
-        }
-
-        /* Hero */
-        .hero-section {
-            text-align: right;
-            margin-bottom: 25px;
-        }
-
-        .badge-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: var(--accent-gold);
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .hero-title {
-            font-size: 32px;
-            font-weight: 900;
-            line-height: 1.25;
-            margin-bottom: 8px;
-        }
-
-        .hero-title span {
-            background: linear-gradient(135deg, var(--accent-gold), #fbbf24);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Grid Packages الفاخرة */
-        .packages-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 25px;
-        }
-
-        .pkg-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 18px 16px;
-            text-align: right;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pkg-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
-            opacity: 0;
-            transition: 0.3s;
-        }
-
-        .pkg-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(139, 92, 246, 0.4);
-        }
-
-        .pkg-card.selected {
-            background: linear-gradient(145deg, rgba(139, 92, 246, 0.25), rgba(24, 24, 27, 0.9));
-            border: 2px solid var(--accent-purple);
-            box-shadow: 0 10px 25px var(--accent-purple-glow);
-        }
-
-        .pkg-card.selected::before { opacity: 1; }
-
-        .pkg-size { font-size: 15px; font-weight: 800; color: #fff; }
-        .pkg-price { font-size: 28px; font-weight: 900; margin: 6px 0; color: var(--accent-gold); }
-        .pkg-price span { font-size: 14px; font-weight: 500; color: var(--text-muted); }
-        .pkg-meta { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-
-        /* Buttons & Forms */
-        .btn-submit {
-            width: 100%;
-            background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 18px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px var(--accent-purple-glow);
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(139, 92, 246, 0.5);
-        }
-
-        .btn-submit:active { transform: translateY(0); }
-
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 22px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            margin-top: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-            text-align: right;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--card-border);
-            border-radius: 14px;
-            outline: none;
-            text-align: center;
-            font-size: 16px;
-            font-weight: 700;
-            color: #fff;
-            transition: 0.3s;
-        }
-
-        .form-input:focus {
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 12px var(--accent-purple-glow);
-        }
-
-        .copy-box {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px dashed var(--accent-purple);
-            padding: 14px;
-            border-radius: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .copy-box span {
-            font-family: monospace;
-            font-size: 20px;
-            font-weight: 900;
-            color: var(--accent-gold);
-            letter-spacing: 1px;
-        }
-
-        .btn-copy {
-            background: var(--accent-purple);
-            border: none;
-            padding: 8px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 12px;
-            color: white;
-            font-weight: 800;
-            transition: 0.2s;
-        }
-
-        .btn-copy:hover { background: #7c3aed; }
-
-        /* Stats & Cards History */
-        .stats-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .stat-box {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 16px;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .stat-num { font-size: 26px; font-weight: 900; color: var(--accent-gold); margin-top: 4px; }
-        .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 700; }
-
-        .card-item {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--card-border);
-            padding: 16px;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .code-val {
-            font-family: monospace;
-            font-size: 18px;
-            font-weight: 900;
-            color: var(--accent-gold);
-            background: rgba(245, 158, 11, 0.1);
-            padding: 6px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(245, 158, 11, 0.2);
-        }
-
-        /* Admin Table */
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-            font-size: 12px;
-        }
-
-        .admin-table th, .admin-table td {
-            border: 1px solid var(--card-border);
-            padding: 10px 6px;
-            text-align: center;
-        }
-
-        .admin-table th {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-        }
-
-        .btn-approve {
-            background: var(--success-color);
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 800;
-        }
-
-        .btn-danger {
-            background: var(--danger-color);
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 800;
-        }
-
-        .badge-pending {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--accent-gold);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .badge-approved {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--success-color);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .hidden { display: none; }
-    </style>
+.empty{text-align:center; color:var(--muted); font-size:12.5px; padding:22px 0}
+.hidden{display:none}
+.tabbar{display:flex; gap:7px; margin-bottom:14px}
+.tabbar .nb{flex:1; text-align:center}
+</style>
 </head>
 <body>
+<div class="toasts" id="toasts"></div>
+<div class="app">
 
-    <!-- حاوية الإشعارات العلوي السريعة -->
-    <div class="toast-container" id="toast-container"></div>
+  <div class="nav">
+    <div class="brand" onclick="go('store')">
+      <span class="brand-ic">📶</span>
+      <span class="brand-name">ABO Al-Hassan</span>
+    </div>
+    <div class="navbtns">
+      <button class="nb" id="nb-store" onclick="go('store')">المتجر</button>
+      <button class="nb" id="nb-cards" onclick="go('cards')">كروتي</button>
+      <button class="nb" id="nb-complaints" onclick="go('complaints')">الشكاوى</button>
+      <button class="nb" id="nb-admin" onclick="go('adminlogin')">👑</button>
+    </div>
+  </div>
 
-    <div class="app-container">
-        <!-- Navbar العلوي -->
-        <div class="navbar">
-            <div class="brand" onclick="showPage('store')">
-                <span class="brand-icon">📶</span>
-                <span class="brand-name">ABO Al-Hassan</span>
-            </div>
-            <div class="nav-buttons">
-                <button class="btn-nav" onclick="showPage('store')">المتجر</button>
-                <button class="btn-nav" onclick="showPage('my-cards')">كروتي ✉️</button>
-                <button class="btn-nav" onclick="showPage('admin-login')">ملك المجال 👑</button>
-            </div>
-        </div>
+  <!-- STORE -->
+  <div id="p-store">
+    <div class="hero">
+      <span class="eyebrow">⚡ توصيل تلقائي فور تأكيد التحويل</span>
+      <h1 class="h1">اختر باقتك،<br><em>واتصل بأعلى سرعة.</em></h1>
+      <p class="sub">شبكة ABO Al-Hassan — تغطية أقوى وثبات أعلى.</p>
+    </div>
+    <div class="pkgs" id="pkgs-list"></div>
+    <button class="btn" onclick="toCheckout()">متابعة الشراء ❯</button>
+  </div>
 
-        <!-- 1. صفحة المتجر رئيسية -->
-        <div id="store-page">
-            <div class="hero-section">
-                <span class="badge-tag">⚡ التوصيل آلي ومضمون 100%</span>
-                <h1 class="hero-title">اختر باقتك<br><span>واتصل بالسرعة القصوى.</span></h1>
-                <p class="hero-subtitle">شبكة ABO Al-Hassan - أقوى تغطية وأعلى ثبات.</p>
-            </div>
+  <!-- CHECKOUT -->
+  <div id="p-checkout" class="hidden">
+    <button class="nb" onclick="go('store')" style="margin-bottom:14px">← رجوع للمتجر</button>
+    <div class="card" id="pkg-banner"></div>
+    <div class="card">
+      <div class="field">
+        <label>رقم المحفظة اللي حولت منها</label>
+        <input id="in-phone" class="inp" placeholder="01xxxxxxxxx" maxlength="11" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label>رقم استلام الكاش</label>
+        <div class="copybox"><b id="cash-disp"></b><button class="copybtn" onclick="copyCash()">نسخ 📋</button></div>
+      </div>
+      <div id="pay-notice" class="notice pend hidden" style="margin-bottom:14px"></div>
+      <button class="btn ok" id="btn-pay" onclick="submitPayment()">تأكيد التحويل وإرسال الطلب ⚡</button>
+    </div>
+  </div>
 
-            <div class="packages-grid" id="packages-list"></div>
-            <button class="btn-submit" onclick="goToCheckout()">متابعة الشراء الآن ❯</button>
-        </div>
+  <!-- MY CARDS -->
+  <div id="p-cards" class="hidden">
+    <div class="hero"><h1 class="h1">كروتي<br><em>المحفوظة.</em></h1><p class="sub">كل طلباتك وكروتك في مكان واحد.</p></div>
+    <div class="stats">
+      <div class="stat"><span>إجمالي الطلبات</span><b id="st-total">0</b></div>
+      <div class="stat"><span>حالة الشبكة</span><b style="font-size:14px;color:var(--ok)">مستقرة 📶</b></div>
+    </div>
+    <div id="cards-list" class="card"></div>
+  </div>
 
-        <!-- 2. صفحة الدفع -->
-        <div id="checkout-page" class="hidden">
-            <button class="btn-nav" onclick="showPage('store')" style="margin-bottom: 15px;">← العودة للمتجر</button>
-            
-            <div class="pkg-card selected" style="margin-bottom: 20px;" id="selected-pkg-banner"></div>
+  <!-- COMPLAINTS -->
+  <div id="p-complaints" class="hidden">
+    <div class="hero"><h1 class="h1">مركز<br><em>الشكاوى.</em></h1><p class="sub">واجهت مشكلة في كرت أو تحويل؟ قولنا وهنحلها بسرعة.</p></div>
+    <div class="card">
+      <div class="field">
+        <label>رقم المحفظة أو رقم الطلب (اختياري)</label>
+        <input id="cx-ref" class="inp" placeholder="مثال: 01xxxxxxxxx">
+      </div>
+      <div class="field">
+        <label>تفاصيل الشكوى</label>
+        <textarea id="cx-msg" class="inp" placeholder="اكتب مشكلتك بالتفصيل..."></textarea>
+      </div>
+      <button class="btn violet" onclick="submitComplaint()">إرسال الشكوى 📨</button>
+    </div>
+    <h4 style="margin:18px 0 10px; font-size:14px">شكاويك السابقة</h4>
+    <div id="cx-list" class="card"></div>
+  </div>
 
-            <div class="glass-card">
-                <div class="form-group">
-                    <label>رقم المحفظة التي قمت بالتحويل منها</label>
-                    <input type="text" id="user-phone" class="form-input" placeholder="01xxxxxxxxx">
-                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px; text-align: center;">يتم التحقق من تحويلك تلقائياً قبل إصدار الكرت</p>
-                </div>
+  <!-- ADMIN LOGIN -->
+  <div id="p-adminlogin" class="hidden">
+    <div class="card">
+      <div style="text-align:center; margin-bottom:22px">
+        <div style="font-size:40px; margin-bottom:6px">👑</div>
+        <h3 style="font-size:19px; font-weight:900">لوحة ملك المجال</h3>
+        <p style="font-size:11.5px; color:var(--muted); margin-top:4px">تسجيل الدخول للتحكم بالسيستم</p>
+      </div>
+      <form autocomplete="off" onsubmit="event.preventDefault(); loginAdmin();">
+        <div class="field"><label>البريد الإلكتروني</label><input id="ad-user" type="email" class="inp" autocomplete="off"></div>
+        <div class="field"><label>كلمة المرور</label><input id="ad-pass" type="password" class="inp" autocomplete="current-password"></div>
+        <button class="btn violet" type="submit">دخول 🛡️</button>
+      </form>
+    </div>
+  </div>
 
-                <div class="form-group">
-                    <label>رقم تحويل الكاش المعتمد</label>
-                    <div class="copy-box">
-                        <span id="cash-number-display">01067991520</span>
-                        <button class="btn-copy" onclick="copyCashNumber()">نسخ الرقم 📋</button>
-                    </div>
-                </div>
+  <!-- ADMIN DASH -->
+  <div id="p-admindash" class="hidden">
+    <div class="hero"><h1 class="h1">لوحة ملك المجال 👑</h1><p class="sub">إدارة الطلبات، الباقات، والشكاوى</p></div>
+    <button class="nb" style="margin-bottom:14px" onclick="logoutAdmin()">تسجيل الخروج ⏻</button>
 
-                <div id="verification-status" class="hidden" style="text-align: center; padding: 15px; margin-bottom: 15px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 14px;">
-                    <p id="status-text" style="font-size: 13px; font-weight: 700; color: var(--accent-gold); line-height: 1.5;"></p>
-                </div>
-
-                <button class="btn-submit" id="btn-pay" style="background: linear-gradient(135deg, var(--success-color), #059669);" onclick="processPayment()">تأكيد التحويل وإرسال الطلب ⚡</button>
-            </div>
-        </div>
-
-        <!-- 3. صفحة كروتي المحفوظة -->
-        <div id="my-cards-page" class="hidden">
-            <div class="hero-section">
-                <h1 class="hero-title">كروتي<br><span>المحفوظة.</span></h1>
-                <p class="hero-subtitle">سجل جميع الطلبات والكروت المفعلة الخاصة بك.</p>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-box">
-                    <div class="stat-label">إجمالي الطلبات</div>
-                    <div class="stat-num" id="total-my-cards">0</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">حالة الاتصال</div>
-                    <div class="stat-num" style="font-size: 16px; color: var(--success-color); margin-top: 8px;">مستقر 📶</div>
-                </div>
-            </div>
-
-            <div class="glass-card" id="cards-history-list"></div>
-        </div>
-
-        <!-- 4. صفحة دخول ملك المجال -->
-        <div id="admin-login-page" class="hidden">
-            <div class="glass-card">
-                <div style="text-align: center; margin-bottom: 25px;">
-                    <div style="font-size: 45px; margin-bottom: 8px;">👑</div>
-                    <h3 style="font-size: 22px; font-weight: 900;">لوحة ملك المجال</h3>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">تسجيل الدخول للتحكم بالسيستم</p>
-                </div>
-
-                <form id="admin-form" autocomplete="off" onsubmit="event.preventDefault(); loginAdmin();">
-                    <div class="form-group">
-                        <label>اسم المستخدم</label>
-                        <input type="text" id="admin-user" class="form-input" placeholder="Username" autocomplete="off">
-                    </div>
-
-                    <div class="form-group">
-                        <label>كلمة المرور</label>
-                        <input type="password" id="admin-pass" class="form-input" placeholder="Password" autocomplete="new-password">
-                    </div>
-
-                    <button type="submit" class="btn-submit">دخول ملك المجال 🛡️</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- 5. لوحة التحكم والإعدادات (الملكية) -->
-        <div id="admin-dashboard" class="hidden">
-            <div class="hero-section">
-                <h1 class="hero-title">لوحة ملك المجال 👑</h1>
-                <p class="hero-subtitle">إدارة الطلبات، الباقات، وأرقام التحويل</p>
-            </div>
-
-            <!-- جدول الطلبات المعلقة -->
-            <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="margin-bottom: 12px; font-size: 16px;">طلبات التحويل المعلقة 💸</h4>
-                <div style="overflow-x: auto;">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>المحفظة</th>
-                                <th>الباقة</th>
-                                <th>السعر</th>
-                                <th>الحالة</th>
-                                <th>الإجراء</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-orders-table"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- تعديل رقم الكاش -->
-            <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="font-size: 16px;">تعديل رقم تحويل الكاش</h4>
-                <div class="form-group" style="margin-top: 12px;">
-                    <input type="text" id="admin-cash-input" class="form-input">
-                </div>
-                <button class="btn-submit" onclick="updateCashNumber()">حفظ الرقم الجديد</button>
-            </div>
-
-            <!-- إضافة باقة جديدة -->
-            <div class="glass-card" style="margin-bottom: 15px;">
-                <h4 style="font-size: 16px;">إضافة باقة جديدة للمتجر</h4>
-                <div class="form-group" style="margin-top: 12px;">
-                    <input type="text" id="new-pkg-name" class="form-input" placeholder="اسم الباقة (مثلاً: 4 جيجا)">
-                </div>
-                <div class="form-group">
-                    <input type="number" id="new-pkg-price" class="form-input" placeholder="السعر (مثلاً: 20)">
-                </div>
-                <div class="form-group">
-                    <input type="number" id="new-pkg-count" class="form-input" placeholder="المتاح بالمخزن (مثلاً: 50)">
-                </div>
-                <button class="btn-submit" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="addNewPackage()">إضافة الباقة فوراً ➕</button>
-            </div>
-
-            <!-- التحكم بالباقات الحالية -->
-            <div class="glass-card">
-                <h4 style="margin-bottom: 12px; font-size: 16px;">الباقات الحالية بالمتجر</h4>
-                <div style="overflow-x: auto;">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>الباقة</th>
-                                <th>السعر</th>
-                                <th>المتاح</th>
-                                <th>حذف</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-pkg-table"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="tabbar">
+      <button class="nb active" id="at-orders" onclick="adTab('orders')">الطلبات</button>
+      <button class="nb" id="at-complaints" onclick="adTab('complaints')">الشكاوى</button>
+      <button class="nb" id="at-pkgs" onclick="adTab('pkgs')">الباقات</button>
+      <button class="nb" id="at-settings" onclick="adTab('settings')">الإعدادات</button>
     </div>
 
-    <script>
-        let cashNumber = "01067991520";
-        const ADMIN_PASS = "5515879462";
-        const ADMIN_USER = "ABO Al-Hassan";
+    <div id="ad-orders">
+      <div class="card">
+        <h4 style="font-size:14px; margin-bottom:8px">طلبات التحويل</h4>
+        <div style="overflow-x:auto"><table><thead><tr><th>المحفظة</th><th>الباقة</th><th>السعر</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody id="tb-orders"></tbody></table></div>
+      </div>
+    </div>
 
-        let packages = [
-            { id: 1, name: "4 جيجا", price: 20, count: 50 },
-            { id: 2, name: "5 جيجا", price: 25, count: 31 },
-            { id: 3, name: "10 جيجا", price: 50, count: 58 },
-            { id: 4, name: "15 جيجا", price: 65, count: 89 },
-            { id: 5, name: "30 جيجا", price: 110, count: 90 }
-        ];
-        let selectedPkg = packages[0];
-        let orders = [];
+    <div id="ad-complaints" class="hidden">
+      <div class="card">
+        <h4 style="font-size:14px; margin-bottom:8px">الشكاوى الواردة</h4>
+        <div id="ad-cx-list"></div>
+      </div>
+    </div>
 
-        // دالة عرض الإشعارات الشيك (Toast)
-        function showNotification(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            const icon = type === 'success' ? '✓' : '✕';
-            
-            toast.innerHTML = `
-                <div class="toast-icon">${icon}</div>
-                <div>${message}</div>
-            `;
-            
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 10);
+    <div id="ad-pkgs" class="hidden">
+      <div class="card">
+        <h4 style="font-size:14px">إضافة باقة جديدة</h4>
+        <div class="field" style="margin-top:12px"><input id="np-name" class="inp" placeholder="اسم الباقة"></div>
+        <div class="field"><input id="np-price" type="number" class="inp" placeholder="السعر"></div>
+        <div class="field"><input id="np-count" type="number" class="inp" placeholder="الكمية المتاحة"></div>
+        <button class="btn violet" onclick="addPkg()">إضافة ➕</button>
+      </div>
+      <div class="card">
+        <h4 style="font-size:14px; margin-bottom:8px">الباقات الحالية</h4>
+        <div style="overflow-x:auto"><table><thead><tr><th>الباقة</th><th>السعر</th><th>المتاح</th><th>حذف</th></tr></thead><tbody id="tb-pkgs"></tbody></table></div>
+      </div>
+    </div>
 
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    if (container.contains(toast)) {
-                        container.removeChild(toast);
-                    }
-                }, 300);
-            }, 3500);
-        }
+    <div id="ad-settings" class="hidden">
+      <div class="card">
+        <h4 style="font-size:14px">رقم استلام الكاش</h4>
+        <div class="field" style="margin-top:12px"><input id="ad-cash" class="inp"></div>
+        <button class="btn violet" onclick="saveCash()">حفظ</button>
+      </div>
+    </div>
+  </div>
 
-        function clearAdminInputs() {
-            const userInput = document.getElementById('admin-user');
-            const passInput = document.getElementById('admin-pass');
-            if (userInput) userInput.value = '';
-            if (passInput) passInput.value = '';
-        }
+</div>
 
-        window.addEventListener('pageshow', clearAdminInputs);
-        window.addEventListener('pagehide', clearAdminInputs);
-        window.addEventListener('beforeunload', clearAdminInputs);
-        document.addEventListener("DOMContentLoaded", function() {
-            clearAdminInputs();
-            renderStorePackages();
-        });
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script>
+/* ==== حط بيانات مشروعك هنا (من Firebase Console → Project Settings) ==== */
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY_HERE",
+  authDomain: "PASTE_AUTH_DOMAIN_HERE",
+  databaseURL: "https://wifi5515-default-rtdb.firebaseio.com",
+  projectId: "PASTE_PROJECT_ID_HERE",
+  storageBucket: "PASTE_STORAGE_BUCKET_HERE",
+  messagingSenderId: "PASTE_SENDER_ID_HERE",
+  appId: "PASTE_APP_ID_HERE"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-        function showPage(pageId) {
-            const pages = ['store-page', 'checkout-page', 'my-cards-page', 'admin-login-page', 'admin-dashboard'];
-            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
-            
-            if(pageId === 'store') {
-                renderStorePackages();
-                document.getElementById('store-page').classList.remove('hidden');
-            } else if(pageId === 'checkout') {
-                document.getElementById('checkout-page').classList.remove('hidden');
-            } else if(pageId === 'my-cards') {
-                renderMyCards();
-                document.getElementById('my-cards-page').classList.remove('hidden');
-            } else if(pageId === 'admin-login') {
-                clearAdminInputs();
-                document.getElementById('admin-login-page').classList.remove('hidden');
-            } else if(pageId === 'admin-dash') {
-                renderAdminOrders();
-                renderAdminTable();
-                document.getElementById('admin-cash-input').value = cashNumber;
-                document.getElementById('admin-dashboard').classList.remove('hidden');
-            }
-        }
+/* ==== Firebase Realtime Database (REST API, no SDK needed) ==== */
+const FIREBASE_BASE = "https://wifi5515-default-rtdb.firebaseio.com";
+const FIREBASE_PATH = "aboh_data"; // node inside the database
+const FIREBASE_URL = `${FIREBASE_BASE}/${FIREBASE_PATH}.json`;
 
-        function renderStorePackages() {
-            const container = document.getElementById('packages-list');
-            container.innerHTML = '';
-            packages.forEach(pkg => {
-                const isSel = selectedPkg && selectedPkg.id === pkg.id ? 'selected' : '';
-                container.innerHTML += `
-                    <div class="pkg-card ${isSel}" onclick="selectPackage(${pkg.id})">
-                        <div class="pkg-size">${pkg.name}</div>
-                        <div class="pkg-price">${pkg.price} <span>ج</span></div>
-                        <div class="pkg-meta">المتاح: ${pkg.count} كرت</div>
-                    </div>
-                `;
-            });
-        }
+let packages = [
+  {id:1,name:"4 جيجا",price:20,count:50},
+  {id:2,name:"5 جيجا",price:25,count:31},
+  {id:3,name:"10 جيجا",price:50,count:58},
+  {id:4,name:"15 جيجا",price:65,count:89},
+  {id:5,name:"30 جيجا",price:110,count:90},
+];
+let orders = [];
+let complaints = [];
+let cashNumber = "01067991520";
+let selectedPkg = packages[0];
+let saveTimer = null;
 
-        function selectPackage(id) {
-            selectedPkg = packages.find(p => p.id === id);
-            renderStorePackages();
-        }
+// يحمّل البيانات من فايربيز أول ما الصفحة تفتح
+async function loadFromFirebase(){
+  try{
+    const res = await fetch(FIREBASE_URL);
+    if(!res.ok) throw new Error('read failed');
+    const data = await res.json();
+    if(data){
+      if(Array.isArray(data.packages) && data.packages.length) packages = data.packages;
+      if(Array.isArray(data.orders)) orders = data.orders;
+      if(Array.isArray(data.complaints)) complaints = data.complaints;
+      if(data.cashNumber) cashNumber = data.cashNumber;
+      selectedPkg = packages[0];
+    }
+  }catch(e){
+    toast('تعذر الاتصال بقاعدة البيانات، شغال محلي مؤقتاً','bad');
+  }
+}
 
-        function goToCheckout() {
-            if(!selectedPkg) return;
-            document.getElementById('selected-pkg-banner').innerHTML = `
-                <div class="pkg-size" style="font-size:18px;">باقتك المختارة: ${selectedPkg.name}</div>
-                <div class="pkg-price" style="font-size:32px;">${selectedPkg.price} <span>جنيه</span></div>
-                <div class="pkg-meta" style="color:var(--text-white);">يرجى تحويل المبلغ الموضح إلى الرقم بالأسفل</div>
-            `;
-            document.getElementById('cash-number-display').innerText = cashNumber;
-            document.getElementById('verification-status').classList.add('hidden');
-            document.getElementById('btn-pay').style.display = 'block';
-            showPage('checkout');
-        }
+// يحفظ كل البيانات في فايربيز (PUT بيستبدل المحتوى بالكامل)
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async ()=>{
+    try{
+      const res = await fetch(FIREBASE_URL, {
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({packages,orders,complaints,cashNumber})
+      });
+      if(!res.ok) throw new Error('write failed');
+    }catch(e){
+      toast('فشل حفظ البيانات على السيرفر','bad');
+    }
+  }, 300);
+}
 
-        function copyCashNumber() {
-            navigator.clipboard.writeText(cashNumber);
-            showNotification('تم نسخ رقم كاش بنجاح: ' + cashNumber, 'success');
-        }
+function toast(msg,type='ok'){
+  const c=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className='toast '+type;
+  t.innerHTML=`<div class="ic">${type==='ok'?'✓':'✕'}</div><div>${msg}</div>`;
+  c.appendChild(t);
+  setTimeout(()=>t.classList.add('show'),10);
+  setTimeout(()=>{t.classList.remove('show'); setTimeout(()=>t.remove(),300);},3200);
+}
 
-        function processPayment() {
-            const phone = document.getElementById('user-phone').value;
-            if(!phone || phone.length < 10) {
-                showNotification('يرجى إدخال رقم المحفظة التي تم التحويل منها أولاً.', 'error');
-                return;
-            }
+const PAGES=['store','checkout','cards','complaints','adminlogin','admindash'];
+function go(p){
+  PAGES.forEach(x=>document.getElementById('p-'+x).classList.add('hidden'));
+  ['store','cards','complaints','admin'].forEach(n=>document.getElementById('nb-'+n)?.classList.remove('active'));
+  document.getElementById('p-'+p).classList.remove('hidden');
+  if(p==='store'){renderPkgs(); document.getElementById('nb-store').classList.add('active');}
+  if(p==='cards'){renderCards(); document.getElementById('nb-cards').classList.add('active');}
+  if(p==='complaints'){renderComplaints(); document.getElementById('nb-complaints').classList.add('active');}
+  if(p==='adminlogin'){document.getElementById('ad-user').value='';document.getElementById('ad-pass').value=''; document.getElementById('nb-admin').classList.add('active');}
+  if(p==='admindash'){renderAdOrders(); renderAdPkgs(); renderAdComplaints(); document.getElementById('ad-cash').value=cashNumber; document.getElementById('nb-admin').classList.add('active');}
+}
 
-            const newOrder = {
-                id: Date.now(),
-                phone: phone,
-                pkgId: selectedPkg.id,
-                pkgName: selectedPkg.name,
-                price: selectedPkg.price,
-                status: 'pending',
-                cardCode: null,
-                date: new Date().toLocaleDateString('ar-EG')
-            };
+function renderPkgs(){
+  const el=document.getElementById('pkgs-list'); el.innerHTML='';
+  packages.forEach(pk=>{
+    const low = pk.count<=5;
+    el.innerHTML+=`<div class="pkg ${selectedPkg?.id===pk.id?'sel':''}" onclick="selectPkg(${pk.id})">
+      <div class="pkg-name">${pk.name}</div>
+      <div class="pkg-price">${pk.price}<small> ج</small></div>
+      <div class="pkg-meta ${low?'low':''}">${pk.count>0?'متاح: '+pk.count:'نفدت الكمية'}</div>
+    </div>`;
+  });
+}
+function selectPkg(id){ selectedPkg=packages.find(p=>p.id===id); renderPkgs(); }
 
-            orders.unshift(newOrder);
+function toCheckout(){
+  if(!selectedPkg || selectedPkg.count<=0){ toast('الباقة غير متاحة حالياً','bad'); return; }
+  document.getElementById('pkg-banner').innerHTML=`
+    <div style="font-size:15px;font-weight:800">باقتك: ${selectedPkg.name}</div>
+    <div style="font-size:29px;font-weight:900;color:var(--gold);margin:6px 0">${selectedPkg.price} جنيه</div>
+    <div style="font-size:12px;color:var(--muted)">حوّل المبلغ للرقم بالأسفل ثم أكّد الطلب</div>`;
+  document.getElementById('cash-disp').innerText=cashNumber;
+  document.getElementById('pay-notice').classList.add('hidden');
+  document.getElementById('btn-pay').style.display='block';
+  document.getElementById('in-phone').value='';
+  go('checkout');
+}
+function copyCash(){ navigator.clipboard?.writeText(cashNumber); toast('تم نسخ الرقم: '+cashNumber); }
 
-            document.getElementById('btn-pay').style.display = 'none';
-            const statusBox = document.getElementById('verification-status');
-            const statusText = document.getElementById('status-text');
+function submitPayment(){
+  const phone=document.getElementById('in-phone').value.trim();
+  if(!/^01[0-9]{9}$/.test(phone)){ toast('ادخل رقم محفظة صحيح (11 رقم)','bad'); return; }
+  orders.unshift({id:Date.now(), phone, pkgId:selectedPkg.id, pkgName:selectedPkg.name, price:selectedPkg.price,
+    status:'pending', code:null, date:new Date().toLocaleDateString('ar-EG')});
+  save();
+  document.getElementById('btn-pay').style.display='none';
+  const n=document.getElementById('pay-notice');
+  n.classList.remove('hidden');
+  n.innerText=`⏳ استلمنا طلبك، وجاري مراجعة تحويل ${selectedPkg.price} ج من (${phone}). هيظهر الكرت في «كروتي» فور التأكيد.`;
+  toast('تم إرسال الطلب، بانتظار التأكيد');
+}
 
-            statusBox.classList.remove('hidden');
-            statusText.innerText = "⏳ تم إرسال الطلب بنجاح! جاري مراجعة وصول مبلغ " + selectedPkg.price + " ج من المحفظة (" + phone + "). سيظهر الكرت في صفحة (كروتي) فور تأكيد ملك المجال للتحويل.";
-            showNotification('تم إرسال الطلب بنجاح، بانتظار التأكيد', 'success');
-        }
+function renderCards(){
+  document.getElementById('st-total').innerText=orders.length;
+  const el=document.getElementById('cards-list');
+  if(!orders.length){ el.innerHTML='<div class="empty">لا توجد طلبات بعد.</div>'; return; }
+  el.innerHTML='';
+  orders.forEach(o=>{
+    if(o.status==='approved'){
+      el.innerHTML+=`<div class="row"><div><div class="t">${o.pkgName} (${o.price} ج)</div><span class="badge ok">تم التأكيد ✅</span></div><div class="code">${o.code}</div></div>`;
+    }else{
+      el.innerHTML+=`<div class="row"><div><div class="t">${o.pkgName} (${o.price} ج)</div><div class="m">محفظة: ${o.phone}</div></div><span class="badge pend">بانتظار التأكيد ⏳</span></div>`;
+    }
+  });
+}
 
-        function renderMyCards() {
-            document.getElementById('total-my-cards').innerText = orders.length;
-            const container = document.getElementById('cards-history-list');
-            if (orders.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px; padding: 10px 0;">لا توجد كروت أو طلبات مسجلة حتى الآن.</p>';
-                return;
-            }
-            container.innerHTML = '';
-            orders.forEach(ord => {
-                if(ord.status === 'approved') {
-                    container.innerHTML += `
-                        <div class="card-item">
-                            <div>
-                                <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
-                                <span class="badge-approved">تم التأكيد ✅</span>
-                            </div>
-                            <div class="code-val">${ord.cardCode}</div>
-                        </div>
-                    `;
-                } else {
-                    container.innerHTML += `
-                        <div class="card-item">
-                            <div>
-                                <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${ord.pkgName} (${ord.price} ج)</div>
-                                <div style="font-size:11px; color:var(--text-muted);">رقم المحفظة: ${ord.phone}</div>
-                            </div>
-                            <span class="badge-pending">بانتظار موافقة ملك المجال... ⏳</span>
-                        </div>
-                    `;
-                }
-            });
-        }
+function submitComplaint(){
+  const ref=document.getElementById('cx-ref').value.trim();
+  const msg=document.getElementById('cx-msg').value.trim();
+  if(msg.length<5){ toast('اكتب تفاصيل الشكوى أولاً','bad'); return; }
+  complaints.unshift({id:Date.now(), ref: ref||'—', msg, status:'open', reply:null, date:new Date().toLocaleDateString('ar-EG')});
+  save();
+  document.getElementById('cx-ref').value=''; document.getElementById('cx-msg').value='';
+  renderComplaints();
+  toast('تم إرسال شكواك، هنرد عليك في أقرب وقت');
+}
+function renderComplaints(){
+  const el=document.getElementById('cx-list');
+  if(!complaints.length){ el.innerHTML='<div class="empty">لا توجد شكاوى مسجلة.</div>'; return; }
+  el.innerHTML='';
+  complaints.forEach(c=>{
+    el.innerHTML+=`<div class="row" style="align-items:flex-start">
+      <div><div class="t">${c.msg}</div><div class="m">${c.ref!=='—'?'مرجع: '+c.ref+' • ':''}${c.date}${c.reply?'<br>رد الإدارة: '+c.reply:''}</div></div>
+      <span class="badge ${c.status==='open'?'open':'done'}">${c.status==='open'?'قيد المراجعة':'تم الحل'}</span>
+    </div>`;
+  });
+}
 
-        function renderAdminOrders() {
-            const tbody = document.getElementById('admin-orders-table');
-            tbody.innerHTML = '';
-            if(orders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted);">لا توجد طلبات معلقة</td></tr>';
-                return;
-            }
+async function loginAdmin(){
+  const email=document.getElementById('ad-user').value.trim();
+  const pass=document.getElementById('ad-pass').value;
+  document.getElementById('ad-pass').value='';
+  if(!email || !pass){ toast('ادخل البريد وكلمة المرور','bad'); return; }
+  try{
+    await auth.signInWithEmailAndPassword(email, pass);
+    toast('أهلاً يا ملك المجال 👑');
+    go('admindash'); adTab('orders');
+  }catch(e){
+    toast('بيانات الدخول غير صحيحة','bad');
+  }
+}
 
-            orders.forEach(ord => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${ord.phone}</td>
-                        <td>${ord.pkgName}</td>
-                        <td>${ord.price} ج</td>
-                        <td>${ord.status === 'approved' ? '<span class="badge-approved">مقبول</span>' : '<span class="badge-pending">معلق</span>'}</td>
-                        <td>
-                            ${ord.status === 'pending' 
-                                ? `<button class="btn-approve" onclick="approveOrder(${ord.id})">تأكيد 🟢</button>` 
-                                : `<strong style="color:var(--accent-gold);">${ord.cardCode}</strong>`}
-                        </td>
-                    </tr>
-                `;
-            });
-        }
+function logoutAdmin(){
+  auth.signOut();
+  toast('تم تسجيل الخروج');
+  go('store');
+}
 
-        function approveOrder(orderId) {
-            const order = orders.find(o => o.id === orderId);
-            if(order) {
-                order.status = 'approved';
-                order.cardCode = "MN3-" + Math.floor(100000 + Math.random() * 900000);
-                
-                const targetPkg = packages.find(p => p.id === order.pkgId);
-                if(targetPkg) {
-                    targetPkg.count = Math.max(0, targetPkg.count - 1);
-                }
+// يحمي لوحة التحكم: لو حد فتح admindash من غير تسجيل دخول يترجّعله لصفحة الدخول
+auth.onAuthStateChanged(user=>{
+  const dash = document.getElementById('p-admindash');
+  if(!user && dash && !dash.classList.contains('hidden')){
+    go('adminlogin');
+    toast('لازم تسجل دخول الأول','bad');
+  }
+});
 
-                showNotification('تم تأكيد الدفع وإصدار الكرت للعميل بنجاح!', 'success');
-                renderAdminOrders();
-                renderAdminTable();
-            }
-        }
+function adTab(name){
+  ['orders','complaints','pkgs','settings'].forEach(n=>{
+    document.getElementById('ad-'+n).classList.toggle('hidden', n!==name);
+    document.getElementById('at-'+n).classList.toggle('active', n===name);
+  });
+}
 
-        function loginAdmin() {
-            const userInput = document.getElementById('admin-user').value;
-            const passInput = document.getElementById('admin-pass').value;
+function renderAdOrders(){
+  const tb=document.getElementById('tb-orders'); tb.innerHTML='';
+  if(!orders.length){ tb.innerHTML='<tr><td colspan="5" style="color:var(--muted)">لا توجد طلبات</td></tr>'; return; }
+  orders.forEach(o=>{
+    tb.innerHTML+=`<tr><td>${o.phone}</td><td>${o.pkgName}</td><td>${o.price} ج</td>
+      <td>${o.status==='approved'?'<span class="badge ok">مقبول</span>':'<span class="badge pend">معلق</span>'}</td>
+      <td>${o.status==='pending'?`<button class="mini g" onclick="approveOrder(${o.id})">تأكيد</button>`:`<b style="color:var(--gold)">${o.code}</b>`}</td></tr>`;
+  });
+}
+function approveOrder(id){
+  const o=orders.find(x=>x.id===id); if(!o) return;
+  o.status='approved'; o.code='MN3-'+Math.floor(100000+Math.random()*900000);
+  const pk=packages.find(p=>p.id===o.pkgId); if(pk) pk.count=Math.max(0,pk.count-1);
+  save(); renderAdOrders(); renderAdPkgs(); toast('تم إصدار الكرت للعميل');
+}
 
-            if (userInput === ADMIN_USER && passInput === ADMIN_PASS) {
-                clearAdminInputs();
-                showNotification('أهلاً بك يا ملك المجال 👑', 'success');
-                showPage('admin-dash');
-            } else {
-                showNotification('اسم المستخدم أو كلمة المرور غير صحيحة!', 'error');
-                clearAdminInputs();
-            }
-        }
+function renderAdComplaints(){
+  const el=document.getElementById('ad-cx-list');
+  if(!complaints.length){ el.innerHTML='<div class="empty">لا توجد شكاوى</div>'; return; }
+  el.innerHTML='';
+  complaints.forEach(c=>{
+    el.innerHTML+=`<div class="row" style="align-items:flex-start; flex-direction:column; gap:8px">
+      <div style="width:100%"><div class="t">${c.msg}</div><div class="m">${c.ref!=='—'?'مرجع: '+c.ref+' • ':''}${c.date}</div></div>
+      ${c.status==='open'?`<button class="mini g" style="width:100%" onclick="resolveComplaint(${c.id})">تعليم كمحلولة ✅</button>`:`<span class="badge done">تم الحل</span>`}
+    </div>`;
+  });
+}
+function resolveComplaint(id){
+  const c=complaints.find(x=>x.id===id); if(!c) return;
+  c.status='done'; c.reply='تم حل المشكلة، شكراً لتواصلك.';
+  save(); renderAdComplaints(); toast('تم تحديث حالة الشكوى');
+}
 
-        function updateCashNumber() {
-            const newNum = document.getElementById('admin-cash-input').value;
-            if(newNum) {
-                cashNumber = newNum;
-                showNotification('تم تحديث رقم الكاش إلى: ' + cashNumber, 'success');
-            }
-        }
+function renderAdPkgs(){
+  const tb=document.getElementById('tb-pkgs'); tb.innerHTML='';
+  packages.forEach(p=>{
+    tb.innerHTML+=`<tr><td>${p.name}</td><td>${p.price} ج</td><td>${p.count}</td>
+      <td><button class="mini r" onclick="delPkg(${p.id})">حذف</button></td></tr>`;
+  });
+}
+function addPkg(){
+  const name=document.getElementById('np-name').value.trim();
+  const price=parseFloat(document.getElementById('np-price').value);
+  const count=parseInt(document.getElementById('np-count').value);
+  if(!name||!price||!count){ toast('املأ كل بيانات الباقة','bad'); return; }
+  packages.push({id:Date.now(),name,price,count});
+  save(); renderAdPkgs(); renderPkgs();
+  document.getElementById('np-name').value=''; document.getElementById('np-price').value=''; document.getElementById('np-count').value='';
+  toast('تمت إضافة الباقة');
+}
+function delPkg(id){ packages=packages.filter(p=>p.id!==id); save(); renderAdPkgs(); renderPkgs(); toast('تم حذف الباقة'); }
 
-        function addNewPackage() {
-            const name = document.getElementById('new-pkg-name').value;
-            const price = parseFloat(document.getElementById('new-pkg-price').value);
-            const count = parseInt(document.getElementById('new-pkg-count').value);
+function saveCash(){
+  const v=document.getElementById('ad-cash').value.trim();
+  if(!v){ toast('ادخل رقم صحيح','bad'); return; }
+  cashNumber=v; save(); toast('تم تحديث رقم الكاش');
+}
 
-            if (name && price && count) {
-                packages.push({ id: Date.now(), name, price, count });
-                renderAdminTable();
-                renderStorePackages();
-                document.getElementById('new-pkg-name').value = '';
-                document.getElementById('new-pkg-price').value = '';
-                document.getElementById('new-pkg-count').value = '';
-                showNotification('تمت إضافة الباقة بنجاح!', 'success');
-            } else {
-                showNotification('يرجى ملء جميع بيانات الباقة.', 'error');
-            }
-        }
-
-        function deletePackage(id) {
-            packages = packages.filter(p => p.id !== id);
-            renderAdminTable();
-            renderStorePackages();
-            showNotification('تم حذف الباقة بنجاح', 'success');
-        }
-
-        function renderAdminTable() {
-            const tbody = document.getElementById('admin-pkg-table');
-            tbody.innerHTML = '';
-            packages.forEach(pkg => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${pkg.name}</td>
-                        <td>${pkg.price} ج</td>
-                        <td>${pkg.count}</td>
-                        <td><button class="btn-danger" onclick="deletePackage(${pkg.id})">حذف</button></td>
-                    </tr>
-                `;
-            });
-        }
-    </script>
+document.addEventListener('DOMContentLoaded', async ()=>{
+  await loadFromFirebase();
+  go('store');
+});
+</script>
 </body>
 </html>
