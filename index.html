@@ -277,6 +277,19 @@
         }
         .whatsapp-trigger-btn:hover { transform: scale(1.05); box-shadow: 0 12px 25px rgba(37, 211, 102, 0.5); }
 
+        /* مشغل الفيديو */
+        .video-card {
+            background: rgba(15, 3, 6, 0.5); border-radius: 28px; padding: 20px;
+            margin: 25px 0; border: 1px solid var(--glass-border); text-align: center;
+        }
+        .video-wrapper {
+            width: 100%; max-width: 600px; margin: 0 auto; border-radius: 20px; overflow: hidden;
+            border: 1px solid var(--accent-gold); box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+        .video-wrapper video {
+            width: 100%; display: block; border-radius: 20px; outline: none;
+        }
+
         /* الألبوم */
         .carousel-container { position: relative; width: 100%; overflow: hidden; border-radius: 28px; margin: 25px 0; border: 1px solid var(--glass-border); }
         .carousel-track { display: flex; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
@@ -494,6 +507,23 @@
             <div class="stat-card">
                 <div class="num" id="breath-count">0</div>
                 <div class="label">تنفسنا العشق سوا 🌬️</div>
+            </div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <!-- قسم مقطع الفيديو المميز (1.mp4) -->
+        <div class="section-header">
+            <i class="fa-solid fa-film"></i>
+            <h3>فيديو ذكرياتنا الخاصة 🎬</h3>
+        </div>
+        <div class="video-card">
+            <p style="font-size: 14px; color: var(--text-muted); margin-top: 0; margin-bottom: 15px;">مقطع قصير يعبر عن أجمل لحظاتنا سوا يا بسملة ✨</p>
+            <div class="video-wrapper">
+                <video controls playsinline preload="metadata">
+                    <source src="1.mp4" type="video/mp4">
+                    متصفحك لا يدعم تشغيل الفيديو.
+                </video>
             </div>
         </div>
 
