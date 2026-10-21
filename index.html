@@ -1,539 +1,1200 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ABO Al-Hassan</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0a0a0d; --bg2:#0f0e13;
-  --card:rgba(255,255,255,0.035); --line:rgba(255,255,255,0.09);
-  --gold:#e0a84d; --gold-soft:rgba(224,168,77,0.14);
-  --violet:#7c5cff; --violet-glow:rgba(124,92,255,0.32);
-  --text:#f3f1ec; --muted:#8c8894;
-  --ok:#3fbf83; --bad:#e5606a;
-  --r-sm:12px; --r-md:18px; --r-lg:26px;
-}
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Tajawal',sans-serif;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
-body{
-  background:
-    radial-gradient(at 15% 0%, rgba(124,92,255,0.16) 0, transparent 55%),
-    radial-gradient(at 100% 15%, rgba(224,168,77,0.10) 0, transparent 50%),
-    var(--bg);
-  color:var(--text); min-height:100%; padding:18px 14px 40px;
-  padding-top:calc(18px + env(safe-area-inset-top,0px));
-  padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));
-  display:flex; justify-content:center;
-}
-.app{width:100%; max-width:460px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عالم بسملة الخاص | Basmala's Universe 💎✨</title>
+    
+    <!-- المكتبات الخارجية والخطوط -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           1. ثيم البرجندي الدافئ والفاخر (Deep Burgundy & Soft Rose Gold Theme)
+           ========================================================================== */
+        :root { 
+            --accent: #e63946; 
+            --accent-gold: #e0a96d;
+            --primary: #800f2f; 
+            --secondary: #590d22;
+            --burgundy-deep: #2b0910;
+            --burgundy-card: rgba(45, 12, 22, 0.82);
+            --accent-glow: rgba(224, 169, 109, 0.35);
+            --glass-border: rgba(224, 169, 109, 0.25);
+            --shadow: rgba(0, 0, 0, 0.4);
+            --text-color: #f8f9fa;
+            --text-muted: #d3b8bd;
+            --font-main: 'Cairo', sans-serif;
+            --font-poetic: 'Amiri', serif;
+            --font-title: 'Aref Ruqaa', serif;
+            --font-en: 'Playfair Display', serif;
+        }
 
-/* toasts */
-.toasts{position:fixed; top:calc(16px + env(safe-area-inset-top,0px)); left:50%; transform:translateX(-50%);
-  z-index:999; width:90%; max-width:380px; display:flex; flex-direction:column; gap:8px; pointer-events:none}
-.toast{background:#17151d; border:1px solid var(--line); border-radius:14px; padding:12px 16px; font-size:13px;
-  font-weight:700; display:flex; gap:10px; align-items:center; opacity:0; transform:translateY(-14px);
-  transition:.28s cubic-bezier(.4,0,.2,1); box-shadow:0 14px 30px rgba(0,0,0,.5)}
-.toast.show{opacity:1; transform:translateY(0)}
-.toast.ok{border-color:rgba(63,191,131,.4)} .toast.bad{border-color:rgba(229,96,106,.4)}
-.toast .ic{width:24px;height:24px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.toast.ok .ic{background:rgba(63,191,131,.18); color:var(--ok)}
-.toast.bad .ic{background:rgba(229,96,106,.18); color:var(--bad)}
+        * { 
+            box-sizing: border-box; 
+            transition: background 0.4s ease, border-color 0.4s ease, color 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-/* nav */
-.nav{display:flex; justify-content:space-between; align-items:center; margin-bottom:22px;
-  background:var(--card); backdrop-filter:blur(14px); border:1px solid var(--line);
-  padding:10px 12px; border-radius:20px}
-.brand{display:flex; align-items:center; gap:9px; cursor:pointer}
-.brand-ic{width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center;
-  background:linear-gradient(135deg,var(--violet),var(--gold)); font-size:16px}
-.brand-name{font-size:15px; font-weight:900; letter-spacing:.3px}
-.navbtns{display:flex; gap:5px}
-.nb{background:transparent; border:1px solid var(--line); padding:7px 10px; border-radius:12px;
-  font-size:11.5px; color:var(--muted); font-weight:700; cursor:pointer; transition:.2s}
-.nb.active, .nb:active{background:rgba(124,92,255,0.18); border-color:var(--violet); color:var(--text)}
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--burgundy-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; border: 1px solid var(--accent-gold); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
 
-/* hero */
-.hero{text-align:right; margin-bottom:20px}
-.eyebrow{display:inline-flex; align-items:center; gap:6px; background:var(--gold-soft); border:1px solid rgba(224,168,77,.3);
-  color:var(--gold); padding:5px 12px; border-radius:50px; font-size:11.5px; font-weight:700; margin-bottom:12px}
-.h1{font-size:29px; font-weight:900; line-height:1.28; margin-bottom:6px}
-.h1 em{font-style:normal; background:linear-gradient(135deg,var(--gold),#f3cf8f); -webkit-background-clip:text; -webkit-text-fill-color:transparent}
-.sub{color:var(--muted); font-size:13.5px}
+        body { 
+            background: radial-gradient(circle at center, #420a17 0%, #1a0409 100%); 
+            color: var(--text-color); 
+            font-family: var(--font-main); 
+            margin: 0; padding: 0; 
+            min-height: 100vh; 
+            display: flex; flex-direction: column; align-items: center; 
+            overflow-x: hidden; position: relative;
+        }
 
-/* packages */
-.pkgs{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:18px}
-.pkg{background:var(--card); border:1px solid var(--line); border-radius:var(--r-md); padding:16px 14px;
-  text-align:right; cursor:pointer; transition:.2s}
-.pkg.sel{border-color:var(--violet); background:linear-gradient(160deg, rgba(124,92,255,.16), rgba(255,255,255,.02));
-  box-shadow:0 10px 24px var(--violet-glow)}
-.pkg-name{font-size:14px; font-weight:800}
-.pkg-price{font-size:25px; font-weight:900; margin:5px 0; color:var(--gold)}
-.pkg-price small{font-size:12px; font-weight:600; color:var(--muted)}
-.pkg-meta{font-size:11px; color:var(--muted); font-weight:600}
-.pkg-meta.low{color:var(--bad)}
+        #particle-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
 
-.btn{width:100%; border:none; padding:15px; border-radius:16px; font-size:15px; font-weight:800; cursor:pointer;
-  color:#0a0a0d; background:linear-gradient(135deg,var(--gold),#f0c37a); transition:.2s}
-.btn:active{transform:scale(.98)}
-.btn.violet{background:linear-gradient(135deg,var(--violet),#9a82ff); color:#fff}
-.btn.ok{background:linear-gradient(135deg,var(--ok),#5fd89e); color:#06170f}
-.btn.ghost{background:transparent; border:1px solid var(--line); color:var(--text)}
-.btn:disabled{opacity:.45; cursor:not-allowed}
+        #progress-bar {
+            position: fixed; top: 0; left: 0; height: 4px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent), var(--accent-gold));
+            z-index: 99999; width: 0%; transition: width 0.1s linear;
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
 
-.card{background:var(--card); backdrop-filter:blur(14px); border:1px solid var(--line); border-radius:var(--r-lg);
-  padding:20px; margin-top:14px}
-.field{margin-bottom:15px; text-align:right}
-.field label{display:block; font-size:12.5px; font-weight:700; color:var(--muted); margin-bottom:7px}
-.inp, textarea.inp{width:100%; padding:13px; background:rgba(0,0,0,.35); border:1px solid var(--line);
-  border-radius:13px; outline:none; text-align:right; font-size:14.5px; font-weight:600; color:var(--text)}
-textarea.inp{resize:vertical; min-height:90px; font-family:'Tajawal',sans-serif}
-.inp:focus, textarea.inp:focus{border-color:var(--violet); box-shadow:0 0 0 3px rgba(124,92,255,.18)}
+        /* ==========================================================================
+           2. شريط التنقل العلوي الفاخر
+           ========================================================================== */
+        .navbar {
+            position: fixed; top: 15px; width: 92%; max-width: 850px;
+            background: var(--burgundy-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 50px; padding: 10px 24px;
+            display: none; justify-content: space-between; align-items: center;
+            z-index: 3000; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+            animation: fadeInDown 0.8s ease;
+        }
 
-.copybox{background:rgba(224,168,77,.08); border:1px dashed var(--gold); padding:13px 15px; border-radius:14px;
-  display:flex; justify-content:space-between; align-items:center}
-.copybox b{font-family:monospace; font-size:19px; color:var(--gold); letter-spacing:.5px}
-.copybtn{background:var(--gold); border:none; padding:8px 13px; border-radius:10px; font-size:11.5px; font-weight:800; cursor:pointer; color:#0a0a0d}
+        .nav-logo { 
+            font-family: var(--font-en); font-weight: bold; font-size: 22px; color: var(--accent-gold); 
+            display: flex; align-items: center; gap: 10px; letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(224, 169, 109, 0.4);
+        }
 
-.notice{text-align:center; padding:14px; border-radius:14px; font-size:12.5px; font-weight:700; line-height:1.6}
-.notice.pend{background:var(--gold-soft); border:1px solid rgba(224,168,77,.3); color:var(--gold)}
+        .nav-tools { display: flex; gap: 10px; align-items: center; }
 
-.stats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px}
-.stat{background:var(--card); border:1px solid var(--line); padding:14px; border-radius:16px; text-align:center}
-.stat b{display:block; font-size:23px; font-weight:900; color:var(--gold); margin-top:3px}
-.stat span{font-size:11px; color:var(--muted); font-weight:700}
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--accent-gold);
+            color: var(--accent-gold); width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s; font-size: 15px;
+        }
+        .icon-btn:hover { transform: scale(1.1) rotate(10deg); background: var(--accent-gold); color: var(--burgundy-deep); box-shadow: 0 0 15px var(--accent-glow); }
 
-.row{background:rgba(255,255,255,.02); border:1px solid var(--line); padding:14px; border-radius:14px; margin-bottom:10px;
-  display:flex; justify-content:space-between; align-items:center; gap:8px}
-.row .t{font-weight:800; font-size:14px; margin-bottom:3px}
-.row .m{font-size:11px; color:var(--muted)}
-.code{font-family:monospace; font-size:16px; font-weight:900; color:var(--gold); background:rgba(224,168,77,.1);
-  padding:5px 10px; border-radius:9px; border:1px solid rgba(224,168,77,.22); white-space:nowrap}
-.badge{padding:4px 9px; border-radius:8px; font-size:10.5px; font-weight:800}
-.badge.pend{background:var(--gold-soft); color:var(--gold)}
-.badge.ok{background:rgba(63,191,131,.16); color:var(--ok)}
-.badge.open{background:rgba(229,96,106,.16); color:var(--bad)}
-.badge.done{background:rgba(63,191,131,.16); color:var(--ok)}
+        /* ==========================================================================
+           3. التأثيرات المتساقطة الدافئة
+           ========================================================================== */
+        .heart { position: fixed; color: var(--accent-gold); pointer-events: none; animation: fall linear forwards; z-index: 1; opacity: 0.7; }
+        @keyframes fall { 
+            0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg) scale(1.2); opacity: 0; } 
+        }
 
-table{width:100%; border-collapse:collapse; margin-top:10px; font-size:11.5px}
-th,td{border:1px solid var(--line); padding:9px 5px; text-align:center}
-th{background:rgba(255,255,255,.04); color:var(--muted); font-weight:700}
-.mini{padding:6px 9px; border-radius:8px; font-weight:800; font-size:11px; border:none; cursor:pointer}
-.mini.g{background:var(--ok); color:#06170f} .mini.r{background:var(--bad); color:#1a0708}
+        .sparkle-heart { position: fixed; pointer-events: none; font-size: 18px; animation: fadeOut 1.2s forwards; z-index: 9999; }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: scale(0.5) translateY(0); }
+            100% { opacity: 0; transform: scale(1.8) translateY(-40px); }
+        }
 
-.empty{text-align:center; color:var(--muted); font-size:12.5px; padding:22px 0}
-.hidden{display:none}
-.tabbar{display:flex; gap:7px; margin-bottom:14px}
-.tabbar .nb{flex:1; text-align:center}
-</style>
+        /* ==========================================================================
+           4. شاشة الترحيب ومدخل الباسورد
+           ========================================================================== */
+        #welcome-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(15, 3, 6, 0.75), rgba(15, 3, 6, 0.9)), url('20.jpg');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 5000; text-align: center; padding: 20px;
+        }
+
+        .welcome-box {
+            background: rgba(35, 8, 16, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 45px 32px; border-radius: 35px; border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8); max-width: 580px; width: 100%;
+            animation: zoomIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .welcome-title {
+            font-family: var(--font-title); color: #ffffff; font-size: 36px; font-weight: bold; 
+            text-shadow: 0 4px 20px rgba(224, 169, 109, 0.5); margin-bottom: 15px; line-height: 1.4;
+        }
+
+        .welcome-sub {
+            color: var(--text-muted); font-size: 16px; max-width: 480px; margin: 0 auto 30px auto; line-height: 1.8;
+            font-family: var(--font-poetic);
+        }
+
+        .welcome-btn { 
+            background: linear-gradient(135deg, var(--accent-gold), #b8860b); color: #1a0409; border: none; padding: 16px 50px; 
+            border-radius: 50px; font-size: 19px; font-weight: bold; cursor: pointer; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.4s;
+            display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-main);
+        }
+        .welcome-btn:hover { transform: scale(1.05) translateY(-3px); box-shadow: 0 15px 35px var(--accent-glow); background: linear-gradient(135deg, #f3c68f, var(--accent-gold)); }
+
+        /* ==========================================================================
+           5. البطاقات والحاويات الكريستالية الداكنة
+           ========================================================================== */
+        .container { 
+            display: none; flex-direction: column; align-items: center; width: 95%; max-width: 850px; 
+            padding-top: 100px; padding-bottom: 180px; z-index: 10;
+        }
+        
+        .main-card { 
+            width: 100%; background: var(--burgundy-card); border: 1px solid var(--glass-border); 
+            border-radius: 35px; padding: 35px 25px; backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); text-align: center; margin-bottom: 35px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; overflow: hidden;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .main-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+        }
+
+        .section-header {
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            margin-bottom: 25px; border-bottom: 1px dashed var(--glass-border); padding-bottom: 15px;
+        }
+        .section-header h3 { color: var(--accent-gold); font-family: var(--font-title); font-size: 26px; margin: 0; }
+        .section-header i { font-size: 22px; color: var(--accent-gold); }
+
+        /* العداد */
+        .timer-container { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 25px 0; }
+        .timer-box { 
+            background: rgba(15, 3, 6, 0.6); padding: 12px 4px; border-radius: 20px; 
+            border: 1px solid var(--glass-border); box-shadow: 0 6px 18px rgba(0,0,0,0.4); 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .timer-box span { display: block; font-size: 22px; font-weight: 900; color: var(--accent-gold); font-family: 'Courier New', monospace; }
+        .timer-box small { color: var(--text-muted); font-weight: 600; font-size: 11px; margin-top: 4px; }
+
+        .cosmic-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
+        .stat-card {
+            background: rgba(15, 3, 6, 0.5); padding: 15px; border-radius: 20px;
+            border: 1px solid var(--glass-border); text-align: center;
+        }
+        .stat-card .num { font-size: 20px; font-weight: bold; color: var(--accent-gold); margin-bottom: 5px; }
+        .stat-card .label { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+
+        /* مشغل الموسيقى */
+        #music-player-bar {
+            position: fixed; bottom: 20px; width: 92%; max-width: 500px;
+            background: var(--burgundy-card); border-radius: 35px; padding: 14px 24px; 
+            display: none; flex-direction: column; gap: 10px; z-index: 4000; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8); backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px); border: 1px solid var(--glass-border);
+            animation: fadeInUp 0.8s ease;
+        }
+        .player-info { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: bold; color: var(--accent-gold); }
+        .player-controls { display: flex; align-items: center; justify-content: center; gap: 18px; direction: ltr; }
+        .player-btn {
+            background: linear-gradient(135deg, var(--accent-gold), #b8860b); color: #1a0409; border: none; 
+            width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 16px; 
+            display: flex; align-items: center; justify-content: center; transition: 0.3s;
+        }
+        .player-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--accent-glow); }
+        .player-btn.skip-btn { width: 36px; height: 36px; background: rgba(224, 169, 109, 0.15); color: var(--accent-gold); font-size: 12px; font-weight: bold; }
+        .seek-slider { width: 100%; height: 5px; border-radius: 10px; background: rgba(255,255,255,0.1); appearance: none; outline: none; cursor: pointer; }
+        .seek-slider::-webkit-slider-thumb { appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold); }
+
+        .ambient-selector { display: flex; justify-content: center; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
+        .ambient-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); padding: 4px 12px; 
+            border-radius: 15px; font-size: 11px; cursor: pointer; color: var(--text-color); font-weight: 600; transition: 0.2s;
+        }
+        .ambient-btn.active { background: var(--accent-gold); color: #1a0409; border-color: var(--accent-gold); }
+
+        /* البطاقات الشبكية */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 14px; margin: 20px 0; }
+        .gift-card { 
+            background: rgba(15, 3, 6, 0.5); border-radius: 22px; border: 1px solid var(--glass-border); min-height: 95px; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; 
+            color: var(--accent-gold); transition: 0.4s; padding: 14px; text-align: center; position: relative;
+        }
+        .gift-card:hover { transform: translateY(-4px); border-color: var(--accent-gold); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .gift-card.revealed { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-color: var(--accent-gold); }
+        .msg-overlay { display: none; }
+        .gift-card.revealed .msg-overlay { display: block; font-size: 13px; line-height: 1.5; font-weight: 600; animation: fadeIn 0.4s; }
+        .gift-card.revealed span { display: none; }
+
+        /* الألبوم */
+        .carousel-container { position: relative; width: 100%; overflow: hidden; border-radius: 28px; margin: 25px 0; border: 1px solid var(--glass-border); }
+        .carousel-track { display: flex; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .carousel-slide { min-width: 100%; box-sizing: border-box; }
+        .carousel-slide img { width: 100%; height: 380px; object-fit: cover; border-radius: 28px; cursor: pointer; }
+        .carousel-nav { position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; transform: translateY(-50%); padding: 0 15px; pointer-events: none; }
+        .c-btn { pointer-events: auto; background: rgba(15, 3, 6, 0.7); border: 1px solid var(--glass-border); border-radius: 50%; width: 42px; height: 42px; font-weight: bold; cursor: pointer; color: var(--accent-gold); font-size: 18px; transition: 0.3s; }
+        .c-btn:hover { transform: scale(1.1); background: var(--accent-gold); color: #1a0409; }
+
+        .photo-card { background: rgba(15, 3, 6, 0.5); border-radius: 28px; padding: 20px; margin-bottom: 30px; text-align: right; border: 1px solid var(--glass-border); }
+        .photo-card img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 22px; display: block; margin-bottom: 15px; cursor: pointer; transition: 0.3s; }
+        .photo-card img:hover { transform: scale(1.02); }
+        .photo-card p { margin: 8px 0; color: var(--text-color); font-size: 16px; line-height: 1.8; font-family: var(--font-poetic); font-weight: 600; }
+
+        /* Timeline */
+        .timeline { position: relative; padding-right: 30px; text-align: right; border-right: 2px dashed var(--accent-gold); margin: 30px 15px; }
+        .timeline-item { position: relative; margin-bottom: 30px; }
+        .timeline-item::after { content: '✨'; position: absolute; right: -40px; top: 0; background: var(--burgundy-deep); border-radius: 50%; font-size: 16px; padding: 2px; border: 1px solid var(--accent-gold); }
+        .timeline-date { font-weight: bold; color: var(--accent-gold); font-size: 16px; font-family: var(--font-title); }
+        .timeline-text { background: rgba(15, 3, 6, 0.5); padding: 15px 20px; border-radius: 20px; margin-top: 8px; font-size: 15px; line-height: 1.7; border: 1px solid var(--glass-border); }
+
+        /* الذكاء الاصطناعي */
+        .ai-box { background: rgba(15, 3, 6, 0.5); border-radius: 25px; padding: 22px; border: 1px solid var(--glass-border); text-align: right; margin: 25px 0; }
+        .ai-mood-btns { display: flex; gap: 8px; flex-wrap: wrap; margin: 15px 0; }
+        .mood-btn { background: rgba(224, 169, 109, 0.1); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; color: var(--accent-gold); font-size: 13px; transition: 0.3s; }
+        .mood-btn:hover, .mood-btn.active { background: var(--accent-gold); color: #1a0409; }
+        .ai-response { background: rgba(255, 255, 255, 0.03); border-radius: 18px; padding: 15px; font-size: 15px; line-height: 1.7; color: var(--text-color); margin-top: 15px; border-right: 3px solid var(--accent-gold); display: none; animation: fadeIn 0.5s; }
+
+        /* البيانو */
+        .piano-container { display: flex; justify-content: center; gap: 6px; margin: 20px 0; direction: ltr; }
+        .piano-key { width: 45px; height: 130px; background: rgba(255,255,255,0.9); border: 1px solid var(--glass-border); border-radius: 0 0 12px 12px; cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 10px; font-weight: bold; color: var(--primary); transition: 0.1s; }
+        .piano-key:active, .piano-key.active { background: var(--accent-gold); color: #1a0409; transform: translateY(4px); }
+
+        /* ==========================================================================
+           6. اللعبة الجديدة 2: لعبة تطابق ذاكرة بسملة (Basmala's Memory Match Game)
+           ========================================================================== */
+        .memory-game-box {
+            background: rgba(15, 3, 6, 0.6); border-radius: 25px; padding: 22px; border: 1px solid var(--glass-border);
+            display: none; flex-direction: column; align-items: center; margin: 20px 0;
+        }
+        .memory-stats { display: flex; justify-content: space-between; width: 100%; color: var(--accent-gold); font-weight: bold; margin-bottom: 15px; font-size: 14px; }
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 400px; }
+        .memory-card {
+            aspect-ratio: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
+            border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px;
+            cursor: pointer; transition: 0.3s; transform-style: preserve-3d;
+        }
+        .memory-card.flipped { background: var(--primary); border-color: var(--accent-gold); transform: rotateY(180deg); }
+        .memory-card.matched { background: rgba(224, 169, 109, 0.2); border-color: var(--accent-gold); cursor: default; }
+
+        /* لعبة المزرعة */
+        .garden-game-wrapper { position: relative; width: 100%; background: rgba(15, 3, 6, 0.6); border-radius: 25px; border: 1px solid var(--glass-border); margin: 20px 0; padding: 20px; display: none; flex-direction: column; align-items: center; }
+        .garden-status-bar { display: flex; justify-content: space-between; width: 100%; font-weight: bold; color: var(--accent-gold); font-size: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 10px 20px; border-radius: 18px; border: 1px solid var(--glass-border); }
+        .garden-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 420px; }
+        .garden-slot { aspect-ratio: 1; background: rgba(255,255,255,0.03); border: 1px dashed var(--glass-border); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; transition: 0.2s; }
+        .garden-slot.active { background: rgba(224, 169, 109, 0.15); border-color: var(--accent-gold); }
+        .garden-msg { margin-top: 15px; font-weight: bold; color: var(--accent-gold); font-size: 14px; text-align: center; font-family: var(--font-poetic); }
+
+        .constellation-box { width: 100%; height: 240px; background: rgba(10, 2, 4, 0.8); border-radius: 25px; margin: 20px 0; position: relative; overflow: hidden; border: 1px solid var(--glass-border); }
+        #constellation-canvas { width: 100%; height: 100%; }
+
+        input[type="password"] { 
+            width: 85%; padding: 16px; border-radius: 30px; border: 1px solid var(--accent-gold); 
+            background: rgba(0,0,0,0.4); color: white; margin-bottom: 22px; outline: none; text-align: center; font-size: 20px; 
+            font-family: inherit;
+        }
+        input[type="password"]:focus { box-shadow: 0 0 20px var(--accent-glow); }
+
+        .final-btn { 
+            background: linear-gradient(135deg, var(--accent-gold), #b8860b); color: #1a0409; border: none; 
+            padding: 16px 30px; border-radius: 50px; width: 100%; font-weight: bold; cursor: pointer; 
+            font-size: 17px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-main);
+        }
+        .final-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--accent-glow); }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 6000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: var(--burgundy-deep); border-radius: 35px; padding: 30px; width: 100%; max-width: 550px; text-align: center; border: 1px solid var(--glass-border); box-shadow: 0 25px 60px rgba(0,0,0,0.9); }
+
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9000; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        #lightbox img { max-width: 90%; max-height: 85vh; border-radius: 20px; border: 1px solid var(--accent-gold); }
+
+        .notes-box { background: rgba(15, 3, 6, 0.5); border-radius: 25px; padding: 22px; margin: 20px 0; text-align: right; border: 1px solid var(--glass-border); }
+        .notes-box textarea { width: 100%; height: 100px; border-radius: 18px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; padding: 14px; font-family: inherit; resize: none; outline: none; margin-bottom: 12px; font-size: 15px; }
+
+        .quiz-container { background: rgba(15, 3, 6, 0.5); border-radius: 25px; padding: 22px; margin: 20px 0; border: 1px solid var(--glass-border); text-align: right; }
+        .quiz-option { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 18px; padding: 14px 20px; margin: 12px 0; cursor: pointer; transition: 0.3s; font-weight: bold; color: var(--text-color); display: flex; justify-content: space-between; align-items: center; }
+        .quiz-option:hover { background: var(--accent-gold); color: #1a0409; }
+
+        .wheel-box { background: rgba(15, 3, 6, 0.5); border-radius: 25px; padding: 22px; margin: 20px 0; border: 1px dashed var(--accent-gold); text-align: center; }
+        .wheel-result { font-size: 18px; font-weight: bold; color: var(--accent-gold); margin-top: 15px; min-height: 35px; font-family: var(--font-poetic); }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 600px) {
+            .timer-container { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+            .carousel-slide img { height: 280px; }
+            .welcome-title { font-size: 28px; }
+            .main-card { padding: 22px 15px; }
+            .piano-key { width: 32px; height: 100px; font-size: 11px; }
+            .garden-grid, .memory-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        }
+    </style>
 </head>
 <body>
-<div class="toasts" id="toasts"></div>
-<div class="app">
 
-  <div class="nav">
-    <div class="brand" onclick="go('store')">
-      <span class="brand-ic">📶</span>
-      <span class="brand-name">ABO Al-Hassan</span>
+<canvas id="particle-canvas"></canvas>
+<div id="progress-bar"></div>
+
+<audio id="music" loop><source src="LOVE.mp3" type="audio/mpeg"></audio>
+<audio id="ambient-rain" loop><source src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3" type="audio/mpeg"></audio>
+
+<div class="navbar" id="navbar">
+    <div class="nav-logo"><i class="fa-solid fa-crown"></i> Basmala's Realm ✨</div>
+    <div class="nav-tools">
+        <button class="icon-btn" onclick="toggleMusic()" title="تشغيل/إيقاف الموسيقى"><i class="fa-solid fa-music"></i></button>
+        <button class="icon-btn" onclick="scrollToTop()" title="للأعلى"><i class="fa-solid fa-arrow-up"></i></button>
     </div>
-    <div class="navbtns">
-      <button class="nb" id="nb-store" onclick="go('store')">المتجر</button>
-      <button class="nb" id="nb-cards" onclick="go('cards')">كروتي</button>
-      <button class="nb" id="nb-complaints" onclick="go('complaints')">الشكاوى</button>
-      <button class="nb" id="nb-admin" onclick="go('adminlogin')">👑</button>
-    </div>
-  </div>
-
-  <!-- STORE -->
-  <div id="p-store">
-    <div class="hero">
-      <span class="eyebrow">⚡ توصيل تلقائي فور تأكيد التحويل</span>
-      <h1 class="h1">اختر باقتك،<br><em>واتصل بأعلى سرعة.</em></h1>
-      <p class="sub">شبكة ABO Al-Hassan — تغطية أقوى وثبات أعلى.</p>
-    </div>
-    <div class="pkgs" id="pkgs-list"></div>
-    <button class="btn" onclick="toCheckout()">متابعة الشراء ❯</button>
-  </div>
-
-  <!-- CHECKOUT -->
-  <div id="p-checkout" class="hidden">
-    <button class="nb" onclick="go('store')" style="margin-bottom:14px">← رجوع للمتجر</button>
-    <div class="card" id="pkg-banner"></div>
-    <div class="card">
-      <div class="field">
-        <label>رقم المحفظة اللي حولت منها</label>
-        <input id="in-phone" class="inp" placeholder="01xxxxxxxxx" maxlength="11" inputmode="numeric">
-      </div>
-      <div class="field">
-        <label>رقم استلام الكاش</label>
-        <div class="copybox"><b id="cash-disp"></b><button class="copybtn" onclick="copyCash()">نسخ 📋</button></div>
-      </div>
-      <div id="pay-notice" class="notice pend hidden" style="margin-bottom:14px"></div>
-      <button class="btn ok" id="btn-pay" onclick="submitPayment()">تأكيد التحويل وإرسال الطلب ⚡</button>
-    </div>
-  </div>
-
-  <!-- MY CARDS -->
-  <div id="p-cards" class="hidden">
-    <div class="hero"><h1 class="h1">كروتي<br><em>المحفوظة.</em></h1><p class="sub">كل طلباتك وكروتك في مكان واحد.</p></div>
-    <div class="stats">
-      <div class="stat"><span>إجمالي الطلبات</span><b id="st-total">0</b></div>
-      <div class="stat"><span>حالة الشبكة</span><b style="font-size:14px;color:var(--ok)">مستقرة 📶</b></div>
-    </div>
-    <div id="cards-list" class="card"></div>
-  </div>
-
-  <!-- COMPLAINTS -->
-  <div id="p-complaints" class="hidden">
-    <div class="hero"><h1 class="h1">مركز<br><em>الشكاوى.</em></h1><p class="sub">واجهت مشكلة في كرت أو تحويل؟ قولنا وهنحلها بسرعة.</p></div>
-    <div class="card">
-      <div class="field">
-        <label>رقم المحفظة أو رقم الطلب (اختياري)</label>
-        <input id="cx-ref" class="inp" placeholder="مثال: 01xxxxxxxxx">
-      </div>
-      <div class="field">
-        <label>تفاصيل الشكوى</label>
-        <textarea id="cx-msg" class="inp" placeholder="اكتب مشكلتك بالتفصيل..."></textarea>
-      </div>
-      <button class="btn violet" onclick="submitComplaint()">إرسال الشكوى 📨</button>
-    </div>
-    <h4 style="margin:18px 0 10px; font-size:14px">شكاويك السابقة</h4>
-    <div id="cx-list" class="card"></div>
-  </div>
-
-  <!-- ADMIN LOGIN -->
-  <div id="p-adminlogin" class="hidden">
-    <div class="card">
-      <div style="text-align:center; margin-bottom:22px">
-        <div style="font-size:40px; margin-bottom:6px">👑</div>
-        <h3 style="font-size:19px; font-weight:900">لوحة ملك المجال</h3>
-        <p style="font-size:11.5px; color:var(--muted); margin-top:4px">تسجيل الدخول للتحكم بالسيستم</p>
-      </div>
-      <form autocomplete="off" onsubmit="event.preventDefault(); loginAdmin();">
-        <div class="field"><label>البريد الإلكتروني</label><input id="ad-user" type="email" class="inp" autocomplete="off"></div>
-        <div class="field"><label>كلمة المرور</label><input id="ad-pass" type="password" class="inp" autocomplete="current-password"></div>
-        <button class="btn violet" type="submit">دخول 🛡️</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- ADMIN DASH -->
-  <div id="p-admindash" class="hidden">
-    <div class="hero"><h1 class="h1">لوحة ملك المجال 👑</h1><p class="sub">إدارة الطلبات، الباقات، والشكاوى</p></div>
-    <button class="nb" style="margin-bottom:14px" onclick="logoutAdmin()">تسجيل الخروج ⏻</button>
-
-    <div class="tabbar">
-      <button class="nb active" id="at-orders" onclick="adTab('orders')">الطلبات</button>
-      <button class="nb" id="at-complaints" onclick="adTab('complaints')">الشكاوى</button>
-      <button class="nb" id="at-pkgs" onclick="adTab('pkgs')">الباقات</button>
-      <button class="nb" id="at-settings" onclick="adTab('settings')">الإعدادات</button>
-    </div>
-
-    <div id="ad-orders">
-      <div class="card">
-        <h4 style="font-size:14px; margin-bottom:8px">طلبات التحويل</h4>
-        <div style="overflow-x:auto"><table><thead><tr><th>المحفظة</th><th>الباقة</th><th>السعر</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody id="tb-orders"></tbody></table></div>
-      </div>
-    </div>
-
-    <div id="ad-complaints" class="hidden">
-      <div class="card">
-        <h4 style="font-size:14px; margin-bottom:8px">الشكاوى الواردة</h4>
-        <div id="ad-cx-list"></div>
-      </div>
-    </div>
-
-    <div id="ad-pkgs" class="hidden">
-      <div class="card">
-        <h4 style="font-size:14px">إضافة باقة جديدة</h4>
-        <div class="field" style="margin-top:12px"><input id="np-name" class="inp" placeholder="اسم الباقة"></div>
-        <div class="field"><input id="np-price" type="number" class="inp" placeholder="السعر"></div>
-        <div class="field"><input id="np-count" type="number" class="inp" placeholder="الكمية المتاحة"></div>
-        <button class="btn violet" onclick="addPkg()">إضافة ➕</button>
-      </div>
-      <div class="card">
-        <h4 style="font-size:14px; margin-bottom:8px">الباقات الحالية</h4>
-        <div style="overflow-x:auto"><table><thead><tr><th>الباقة</th><th>السعر</th><th>المتاح</th><th>حذف</th></tr></thead><tbody id="tb-pkgs"></tbody></table></div>
-      </div>
-    </div>
-
-    <div id="ad-settings" class="hidden">
-      <div class="card">
-        <h4 style="font-size:14px">رقم استلام الكاش</h4>
-        <div class="field" style="margin-top:12px"><input id="ad-cash" class="inp"></div>
-        <button class="btn violet" onclick="saveCash()">حفظ</button>
-      </div>
-    </div>
-  </div>
-
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<div id="music-player-bar">
+    <div class="player-info">
+        <span><i class="fa-solid fa-heart-pulse"></i> أغنية بسملة الخاصة 🎵</span>
+        <span id="music-time">00:00</span>
+    </div>
+    <input type="range" id="seek-bar" class="seek-slider" value="0" min="0" max="100" oninput="seekAudio()">
+    <div class="player-controls">
+        <button class="player-btn skip-btn" onclick="skipAudio(-10)">-10s</button>
+        <button class="player-btn" onclick="toggleMusic()" id="play-pause-btn"><i class="fa-solid fa-pause"></i></button>
+        <button class="player-btn skip-btn" onclick="skipAudio(10)">+10s</button>
+    </div>
+    <div class="ambient-selector">
+        <span style="font-size: 11px; color: var(--text-muted); align-self: center;">الأجواء:</span>
+        <button class="ambient-btn" id="btn-rain" onclick="toggleAmbient('rain')">🌧️ مطر دافئ</button>
+        <button class="ambient-btn" onclick="playPianoTone(440)">🎹 نغمة هادئة</button>
+    </div>
+</div>
+
+<div id="welcome-screen">
+    <div class="welcome-box">
+        <div class="welcome-title">🤍 عالم بسملة الخاص | Basmala 👑</div>
+        <div class="welcome-sub">مرحباً بكِ يا أجمل بسملة في دنيتي.. مكان صُمم خصيصاً ليعبر عن مدى حبي وشغفي بكِ.</div>
+        <button class="welcome-btn" onclick="showLogin()"><i class="fa-solid fa-key"></i> ادخلي يا عمري ✨</button>
+    </div>
+</div>
+
+<div class="container" id="main-container">
+    <div class="main-card" id="login-card">
+        <div style="font-size: 55px; margin-bottom: 15px; color: var(--accent-gold);">🔒</div>
+        <h2 style="color: var(--accent-gold); margin-bottom: 8px; font-family: var(--font-title); font-size: 30px;">جاهزة يا بسملة (Basmala)؟</h2>
+        <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 25px;">ادخلي الرمز السري الخاص برحلتنا الأبدية سوياً</p>
+        <input type="password" id="pass" placeholder="اكتبي الباسورد الخاص بنا">
+        <button class="welcome-btn" onclick="start()" style="width: 100%; justify-content: center;">فتح مفاجأة Basmala الكبرى ❤️</button>
+    </div>
+
+    <div class="main-card" id="dashboard" style="display:none;">
+        <p style="color: var(--accent-gold); font-weight: bold; font-size: 24px; margin-top: 0; font-family: var(--font-title);">✨ نورتي عالمكِ الخاص يا بسملة ✨</p>
+        <p style="color: var(--text-muted); font-weight: bold; font-size: 17px; font-family: var(--font-en); letter-spacing: 1px;">Basmala, You Are My Entire World ❤️</p>
+
+        <div class="section-header">
+            <i class="fa-solid fa-hourglass-start"></i>
+            <h3>عداد حب Basmala والوقت الكوني</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">الوقت الذي مضى منذ أول لحظة جمعتنا سوا بالثواني والأجزاء:</p>
+        
+        <div class="timer-container">
+            <div class="timer-box"><span id="timer-years">0</span><small>سنة</small></div>
+            <div class="timer-box"><span id="timer-days">0</span><small>يوم</small></div>
+            <div class="timer-box"><span id="timer-hours">0</span><small>ساعة</small></div>
+            <div class="timer-box"><span id="timer-minutes">0</span><small>دقيقة</small></div>
+            <div class="timer-box"><span id="timer-seconds">0</span><small>ثانية</small></div>
+            <div class="timer-box" style="border-color: var(--accent-gold);"><span id="timer-ms" style="color: var(--accent-gold);">00</span><small>جزء</small></div>
+        </div>
+
+        <div class="cosmic-stats">
+            <div class="stat-card">
+                <div class="num" id="heartbeats-count">0</div>
+                <div class="label">نبضة قلب بحبك يا بسملة 💓</div>
+            </div>
+            <div class="stat-card">
+                <div class="num" id="smiles-count">0</div>
+                <div class="label">ابتسامة بسببي 🌸</div>
+            </div>
+            <div class="stat-card">
+                <div class="num" id="breath-count">0</div>
+                <div class="label">تنفسنا العشق سوا 🌬️</div>
+            </div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-star"></i>
+            <h3>كوكبة نجوم بسملة في السماء</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">حركي الماوس أو المس الشاشة لربط نجوم حبنا ببعضها:</p>
+        <div class="constellation-box">
+            <canvas id="constellation-canvas"></canvas>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-robot"></i>
+            <h3>مستشار Basmala للقلوب</h3>
+        </div>
+        <div class="ai-box">
+            <p style="font-weight: bold; color: var(--accent-gold); margin-top: 0;">حاسة بأيه دلوقتي يا بسملة؟ اختاري شعورك وسأخبرك بما في قلبي:</p>
+            <div class="ai-mood-btns">
+                <button class="mood-btn" onclick="getAiResponse('sad')">مضغوطة / زعلانة 🥺</button>
+                <button class="mood-btn" onclick="getAiResponse('miss')">مشتاقة ليك 💖</button>
+                <button class="mood-btn" onclick="getAiResponse('happy')">مبسوطة وفرحانة ✨</button>
+                <button class="mood-btn" onclick="getAiResponse('tired')">تعبانة وعاوزة أرتاح 🌸</button>
+            </div>
+            <div class="ai-response" id="ai-response-text"></div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <!-- اللعبة الأولى: مزرعة القلوب -->
+        <div class="section-header">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <h3>لعبة مزرعة الورد والقلوب 🌸🎮</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">اجمعي الورد والقلوب المبهجة بسرعة واكتشفي مفاجآت الحب يا بسملة!</p>
+        <button class="welcome-btn" onclick="toggleGardenGame()" style="font-size: 15px; padding: 10px 25px; margin-bottom: 10px;"><i class="fa-solid fa-gamepad"></i> ابدئي لعبة المزرعة 🌷</button>
+        
+        <div class="garden-game-wrapper" id="garden-game-box">
+            <div class="garden-status-bar">
+                <span>الورود والقلوب 🌷: <span id="garden-score">0</span></span>
+                <span>المستوى ✨: <span id="garden-level">1</span></span>
+            </div>
+            <div class="garden-grid" id="garden-grid"></div>
+            <div class="garden-msg" id="garden-message">اضغطي على الورود والقلوب فور ظهورها! 💖</div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <!-- اللعبة الثانية الجديدة: لعبة تطابق الذاكرة -->
+        <div class="section-header">
+            <i class="fa-solid fa-brain"></i>
+            <h3>لعبة تطابق الذاكرة السحرية ✨🧠</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">اكتشفي الرموز المتطابقة الخاصة بـ Basmala بأقل عدد حركات:</p>
+        <button class="welcome-btn" onclick="toggleMemoryGame()" style="font-size: 15px; padding: 10px 25px; margin-bottom: 10px;"><i class="fa-solid fa-clone"></i> العبي لعبة التطابق السحرية 💎</button>
+        
+        <div class="memory-game-box" id="memory-game-box">
+            <div class="memory-stats">
+                <span>الحركات 🎯: <span id="memory-moves">0</span></span>
+                <span>الأزواج المتطابقة ✨: <span id="memory-matches">0 / 6</span></span>
+            </div>
+            <div class="memory-grid" id="memory-grid"></div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-music"></i>
+            <h3>بيانو نغمات بسملة</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">اعزفي نغمات حبنا الخاصة باختيار الأزرار التالية:</p>
+        <div class="piano-container">
+            <div class="piano-key" onclick="playPianoTone(261.63)">Do 💗</div>
+            <div class="piano-key" onclick="playPianoTone(293.66)">Re 💓</div>
+            <div class="piano-key" onclick="playPianoTone(329.63)">Mi 💕</div>
+            <div class="piano-key" onclick="playPianoTone(349.23)">Fa 💞</div>
+            <div class="piano-key" onclick="playPianoTone(392.00)">Sol 💖</div>
+            <div class="piano-key" onclick="playPianoTone(440.00)">La 💘</div>
+            <div class="piano-key" onclick="playPianoTone(493.88)">Si 👑</div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-route"></i>
+            <h3>محطات في رحلتنا مع Basmala</h3>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">أول يوم اتكلمنا فيه 💬</div>
+                <div class="timeline-text">بداية أجمل حكاية في حياتي، اليوم اللي نورتي فيه دنيتي يا بسملة وغيرتي كل مفاهيم السعادة عندي.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">أول مرة اعترفتلك بحبي ❤️</div>
+                <div class="timeline-text">قلبي كان بيدق بسرعة جداً، لكن كنت متأكد إنك أنتي العوض السعيد والهدية اللي ربنا بعتهالي.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">أول ضحكة من قلبك سوا 🌟</div>
+                <div class="timeline-text">صوت ضحكتك كان ولا يزال أحلى نغمة سمعتها أذني، ومن ساعتها وأنا بحاول أسعدك بكل طاقتي.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">واليوم وكل يوم ✨</div>
+                <div class="timeline-text">حبك بيزيد في قلبي أكتر من الأول ألف مرة، وكل يوم بتأكد إنك ملكة قلبي الأولى والأخيرة.</div>
+            </div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-boxes-packing"></i>
+            <h3>لماذا بسملة هي الدنيا كلها؟ (اكتشفي)</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">اضغطي على كل كارت لاكتشاف السر المخبأ تحته:</p>
+        <div class="grid" id="reasons-grid"></div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-images"></i>
+            <h3>ألبوم ذكريات Basmala السريع</h3>
+        </div>
+        <div class="carousel-container">
+            <div class="carousel-track" id="track">
+                <div class="carousel-slide"><img src="1.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="2.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="3.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="4.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="5.jpg" onclick="openLightbox(this.src)"></div>
+            </div>
+            <div class="carousel-nav">
+                <button class="c-btn" onclick="moveSlide(-1)">❮</button>
+                <button class="c-btn" onclick="moveSlide(1)">❯</button>
+            </div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-book-open-reader"></i>
+            <h3>رسائل تفصيلية مع صورنا</h3>
+        </div>
+        
+        <div class="photo-card">
+            <img src="1.jpg" onclick="openLightbox(this.src)">
+            <p>لو كانت عيناكي محيطاً لغمرت نفسي فيه دون ترددٍ يا بسملة.. مخاطرة الغرق في حبك حلم كل يوم 🥺♥️♥️♥️♥️</p>
+        </div>
+        <div class="photo-card">
+            <img src="2.jpg" onclick="openLightbox(this.src)">
+            <p>يا أغلى من روحي يا Basmala ✨.. كل تفصيلة فيكي بتخليني أعشقك أكتر من اليوم اللي قبله.</p>
+        </div>
+        <div class="photo-card">
+            <img src="3.jpg" onclick="openLightbox(this.src)">
+            <p>كل يوم معاكي هو عيد ليا 🎁 ووجودك جنبي بالدنيا وما فيها يا أحلى بسملة.</p>
+        </div>
+        <div class="photo-card">
+            <img src="4.jpg" onclick="openLightbox(this.src)">
+            <p>وعينيك خمرا بلا كؤووس تسكرو<br>ماكنت أؤمن بلعيون وفعلها<br>حتى دهتني في الهوا عيناكي<br>سود لؤلؤتاها تشع نورا<br>كقمرا فوق ليلي يعتلي♥️♥️♥️♥️❤️❤️❤️🥺🥺</p>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-heart-circle-check"></i>
+            <h3>اختبار التوافق العميق</h3>
+        </div>
+        <div class="quiz-container">
+            <div id="quiz-step-1">
+                <p style="font-weight: bold; color: var(--accent-gold);" id="quiz-question">السؤال 1: مين أكتر حد بيحب بسملة ويخاف عليها في الدنيا دي كلها؟</p>
+                <div class="quiz-option" onclick="nextQuiz(1, true)">أنا (اللي عمل الموقع ده بحبه كله) ❤️ <span><i class="fa-solid fa-check"></i></span></div>
+                <div class="quiz-option" onclick="nextQuiz(1, false)">حد تاني 😜 <span><i class="fa-solid fa-xmark"></i></span></div>
+            </div>
+            <div id="quiz-step-2" style="display:none;">
+                <p style="font-weight: bold; color: var(--accent-gold);">السؤال 2: تفتكري يا Basmala ممكن أستغنى عنك في يوم من الأيام؟</p>
+                <div class="quiz-option" onclick="nextQuiz(2, true)">مستحيل طبعاً اختيارك للأبد 👑</div>
+                <div class="quiz-option" onclick="nextQuiz(2, false)">ممكن لما العصافير تطير بدون جنحة 😂</div>
+            </div>
+            <div id="quiz-result" style="display:none; text-align: center;">
+                <h4 style="color: var(--accent-gold); font-size: 22px; font-family: var(--font-title);">نتيجة التوافق الأبدي: 1000% 💖</h4>
+                <p style="color: var(--text-muted); font-size: 15px;">مفيش أي إمكانية للشك، قلبي ملكك للأبد يا بسملة ومفيش منافس ليكي في قلبي!</p>
+            </div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-dharmachakra"></i>
+            <h3>عجلة حب Basmala والأنشطة</h3>
+        </div>
+        <div class="wheel-box">
+            <p style="color: var(--text-muted); font-size: 14px;">محتارة نعمل إيه سوا؟ ادوسي وسيب الاختيار لعجلة الحب:</p>
+            <button class="final-btn" style="width: auto; padding: 12px 30px; margin: 0 auto;" onclick="spinLoveWheel()"><i class="fa-solid fa-dice"></i> اختاري نشاط اليوم 🎲</button>
+            <div class="wheel-result" id="wheel-result"></div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <div class="section-header">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <h3>دفتر مذكرات بسملة المحفوظ</h3>
+        </div>
+        <div class="notes-box">
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">اكتبي كلمة حلوة أو أمنية هنا يا Basmala، وستبقى محفوظة داخل جهازك للأبد:</p>
+            <textarea id="journal-input" placeholder="اكتبي ما يخطر ببالك هنا يا بسملة..."></textarea>
+            <button class="final-btn" style="padding: 12px; font-size: 15px;" onclick="saveNote()"><i class="fa-solid fa-floppy-disk"></i> حفظ المذكرة السرية</button>
+            <div id="saved-note-status" style="font-size: 12px; color: var(--accent-gold); margin-top: 8px; text-align: center;"></div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <button class="final-btn" onclick="openModal()"><i class="fa-solid fa-paper-plane"></i> خلصتي كل حاجة؟ لسه في رسالة خاصة جداً لبسملة هنا ✨</button>
+    </div>
+</div>
+
+<div class="modal" id="msgModal">
+    <div class="modal-content">
+        <h2 style="color: var(--accent-gold); margin-top: 0; font-family: var(--font-title); font-size: 28px;"><i class="fa-solid fa-envelope-open-text"></i> رسالة لقلب بسملة 💌</h2>
+        <p id="typing-text" style="line-height: 2; font-size: 17px; color: var(--text-color); min-height: 140px; text-align: right; word-break: break-word; font-family: var(--font-poetic);"></p>
+        <button class="final-btn" onclick="closeModal()">إغلاق النافذة ×</button>
+    </div>
+</div>
+
+<div id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Full view">
+</div>
+
 <script>
-/* ==== حط بيانات مشروعك هنا (من Firebase Console → Project Settings) ==== */
-const firebaseConfig = {
-  apiKey: "PASTE_API_KEY_HERE",
-  authDomain: "PASTE_AUTH_DOMAIN_HERE",
-  databaseURL: "https://wifi5515-default-rtdb.firebaseio.com",
-  projectId: "PASTE_PROJECT_ID_HERE",
-  storageBucket: "PASTE_STORAGE_BUCKET_HERE",
-  messagingSenderId: "PASTE_SENDER_ID_HERE",
-  appId: "PASTE_APP_ID_HERE"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+    // كلمة السر المحدثة لبسملة
+    const P = "17120042012006";
+    const longMessageText = "يا بسملة (Basmala)، انتي مش بس حبيبتي، انتي الدنيا كلها في عيني.. من يوم ما عرفتك وحياتي نورت، هفضل أحبك لآخر نفس في عمري، وعد عليا هفضل جنبك ومعاكي وسندك، ربنا يخليكي ليا يا أجمل ملكة في الدنيا. ❤️👑 كل ثانية معاكي هي بداية لعهد جديد من الحب والأمان المطلق.";
+    
+    const audio = document.getElementById('music');
+    const ambientRain = document.getElementById('ambient-rain');
+    const seekBar = document.getElementById('seek-bar');
+    const playBtn = document.getElementById('play-pause-btn');
 
-/* ==== Firebase Realtime Database (REST API, no SDK needed) ==== */
-const FIREBASE_BASE = "https://wifi5515-default-rtdb.firebaseio.com";
-const FIREBASE_PATH = "aboh_data"; // node inside the database
-const FIREBASE_URL = `${FIREBASE_BASE}/${FIREBASE_PATH}.json`;
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
 
-let packages = [
-  {id:1,name:"4 جيجا",price:20,count:50},
-  {id:2,name:"5 جيجا",price:25,count:31},
-  {id:3,name:"10 جيجا",price:50,count:58},
-  {id:4,name:"15 جيجا",price:65,count:89},
-  {id:5,name:"30 جيجا",price:110,count:90},
-];
-let orders = [];
-let complaints = [];
-let cashNumber = "01067991520";
-let selectedPkg = packages[0];
-let saveTimer = null;
-
-// يحمّل البيانات من فايربيز أول ما الصفحة تفتح
-async function loadFromFirebase(){
-  try{
-    const res = await fetch(FIREBASE_URL);
-    if(!res.ok) throw new Error('read failed');
-    const data = await res.json();
-    if(data){
-      if(Array.isArray(data.packages) && data.packages.length) packages = data.packages;
-      if(Array.isArray(data.orders)) orders = data.orders;
-      if(Array.isArray(data.complaints)) complaints = data.complaints;
-      if(data.cashNumber) cashNumber = data.cashNumber;
-      selectedPkg = packages[0];
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     }
-  }catch(e){
-    toast('تعذر الاتصال بقاعدة البيانات، شغال محلي مؤقتاً','bad');
-  }
-}
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-// يحفظ كل البيانات في فايربيز (PUT بيستبدل المحتوى بالكامل)
-function save(){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(async ()=>{
-    try{
-      const res = await fetch(FIREBASE_URL, {
-        method:'PUT',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({packages,orders,complaints,cashNumber})
-      });
-      if(!res.ok) throw new Error('write failed');
-    }catch(e){
-      toast('فشل حفظ البيانات على السيرفر','bad');
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2.5 + 1;
+            this.speedX = Math.random() * 0.8 - 0.4;
+            this.speedY = Math.random() * 0.8 - 0.4;
+            this.color = ['#e0a96d', '#800f2f', '#ffffff', '#e63946'][Math.floor(Math.random() * 4)];
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
     }
-  }, 300);
-}
 
-function toast(msg,type='ok'){
-  const c=document.getElementById('toasts');
-  const t=document.createElement('div');
-  t.className='toast '+type;
-  t.innerHTML=`<div class="ic">${type==='ok'?'✓':'✕'}</div><div>${msg}</div>`;
-  c.appendChild(t);
-  setTimeout(()=>t.classList.add('show'),10);
-  setTimeout(()=>{t.classList.remove('show'); setTimeout(()=>t.remove(),300);},3200);
-}
-
-const PAGES=['store','checkout','cards','complaints','adminlogin','admindash'];
-function go(p){
-  PAGES.forEach(x=>document.getElementById('p-'+x).classList.add('hidden'));
-  ['store','cards','complaints','admin'].forEach(n=>document.getElementById('nb-'+n)?.classList.remove('active'));
-  document.getElementById('p-'+p).classList.remove('hidden');
-  if(p==='store'){renderPkgs(); document.getElementById('nb-store').classList.add('active');}
-  if(p==='cards'){renderCards(); document.getElementById('nb-cards').classList.add('active');}
-  if(p==='complaints'){renderComplaints(); document.getElementById('nb-complaints').classList.add('active');}
-  if(p==='adminlogin'){document.getElementById('ad-user').value='';document.getElementById('ad-pass').value=''; document.getElementById('nb-admin').classList.add('active');}
-  if(p==='admindash'){renderAdOrders(); renderAdPkgs(); renderAdComplaints(); document.getElementById('ad-cash').value=cashNumber; document.getElementById('nb-admin').classList.add('active');}
-}
-
-function renderPkgs(){
-  const el=document.getElementById('pkgs-list'); el.innerHTML='';
-  packages.forEach(pk=>{
-    const low = pk.count<=5;
-    el.innerHTML+=`<div class="pkg ${selectedPkg?.id===pk.id?'sel':''}" onclick="selectPkg(${pk.id})">
-      <div class="pkg-name">${pk.name}</div>
-      <div class="pkg-price">${pk.price}<small> ج</small></div>
-      <div class="pkg-meta ${low?'low':''}">${pk.count>0?'متاح: '+pk.count:'نفدت الكمية'}</div>
-    </div>`;
-  });
-}
-function selectPkg(id){ selectedPkg=packages.find(p=>p.id===id); renderPkgs(); }
-
-function toCheckout(){
-  if(!selectedPkg || selectedPkg.count<=0){ toast('الباقة غير متاحة حالياً','bad'); return; }
-  document.getElementById('pkg-banner').innerHTML=`
-    <div style="font-size:15px;font-weight:800">باقتك: ${selectedPkg.name}</div>
-    <div style="font-size:29px;font-weight:900;color:var(--gold);margin:6px 0">${selectedPkg.price} جنيه</div>
-    <div style="font-size:12px;color:var(--muted)">حوّل المبلغ للرقم بالأسفل ثم أكّد الطلب</div>`;
-  document.getElementById('cash-disp').innerText=cashNumber;
-  document.getElementById('pay-notice').classList.add('hidden');
-  document.getElementById('btn-pay').style.display='block';
-  document.getElementById('in-phone').value='';
-  go('checkout');
-}
-function copyCash(){ navigator.clipboard?.writeText(cashNumber); toast('تم نسخ الرقم: '+cashNumber); }
-
-function submitPayment(){
-  const phone=document.getElementById('in-phone').value.trim();
-  if(!/^01[0-9]{9}$/.test(phone)){ toast('ادخل رقم محفظة صحيح (11 رقم)','bad'); return; }
-  orders.unshift({id:Date.now(), phone, pkgId:selectedPkg.id, pkgName:selectedPkg.name, price:selectedPkg.price,
-    status:'pending', code:null, date:new Date().toLocaleDateString('ar-EG')});
-  save();
-  document.getElementById('btn-pay').style.display='none';
-  const n=document.getElementById('pay-notice');
-  n.classList.remove('hidden');
-  n.innerText=`⏳ استلمنا طلبك، وجاري مراجعة تحويل ${selectedPkg.price} ج من (${phone}). هيظهر الكرت في «كروتي» فور التأكيد.`;
-  toast('تم إرسال الطلب، بانتظار التأكيد');
-}
-
-function renderCards(){
-  document.getElementById('st-total').innerText=orders.length;
-  const el=document.getElementById('cards-list');
-  if(!orders.length){ el.innerHTML='<div class="empty">لا توجد طلبات بعد.</div>'; return; }
-  el.innerHTML='';
-  orders.forEach(o=>{
-    if(o.status==='approved'){
-      el.innerHTML+=`<div class="row"><div><div class="t">${o.pkgName} (${o.price} ج)</div><span class="badge ok">تم التأكيد ✅</span></div><div class="code">${o.code}</div></div>`;
-    }else{
-      el.innerHTML+=`<div class="row"><div><div class="t">${o.pkgName} (${o.price} ج)</div><div class="m">محفظة: ${o.phone}</div></div><span class="badge pend">بانتظار التأكيد ⏳</span></div>`;
+    function initParticles() {
+        particles = [];
+        for (let i = 0; i < 55; i++) particles.push(new Particle());
     }
-  });
-}
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animateParticles);
+    }
+    initParticles();
+    animateParticles();
 
-function submitComplaint(){
-  const ref=document.getElementById('cx-ref').value.trim();
-  const msg=document.getElementById('cx-msg').value.trim();
-  if(msg.length<5){ toast('اكتب تفاصيل الشكوى أولاً','bad'); return; }
-  complaints.unshift({id:Date.now(), ref: ref||'—', msg, status:'open', reply:null, date:new Date().toLocaleDateString('ar-EG')});
-  save();
-  document.getElementById('cx-ref').value=''; document.getElementById('cx-msg').value='';
-  renderComplaints();
-  toast('تم إرسال شكواك، هنرد عليك في أقرب وقت');
-}
-function renderComplaints(){
-  const el=document.getElementById('cx-list');
-  if(!complaints.length){ el.innerHTML='<div class="empty">لا توجد شكاوى مسجلة.</div>'; return; }
-  el.innerHTML='';
-  complaints.forEach(c=>{
-    el.innerHTML+=`<div class="row" style="align-items:flex-start">
-      <div><div class="t">${c.msg}</div><div class="m">${c.ref!=='—'?'مرجع: '+c.ref+' • ':''}${c.date}${c.reply?'<br>رد الإدارة: '+c.reply:''}</div></div>
-      <span class="badge ${c.status==='open'?'open':'done'}">${c.status==='open'?'قيد المراجعة':'تم الحل'}</span>
-    </div>`;
-  });
-}
+    const startDate = new Date(2026, 2, 14);
 
-async function loginAdmin(){
-  const email=document.getElementById('ad-user').value.trim();
-  const pass=document.getElementById('ad-pass').value;
-  document.getElementById('ad-pass').value='';
-  if(!email || !pass){ toast('ادخل البريد وكلمة المرور','bad'); return; }
-  try{
-    await auth.signInWithEmailAndPassword(email, pass);
-    toast('أهلاً يا ملك المجال 👑');
-    go('admindash'); adTab('orders');
-  }catch(e){
-    toast('بيانات الدخول غير صحيحة','bad');
-  }
-}
+    function updateTimer() {
+        const now = new Date();
+        const diff = now - startDate;
 
-function logoutAdmin(){
-  auth.signOut();
-  toast('تم تسجيل الخروج');
-  go('store');
-}
+        const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+        const days = Math.floor((diff / (1000 * 60 * 60 * 24)) % 365.25);
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        const ms = Math.floor((diff % 1000) / 10);
 
-// يحمي لوحة التحكم: لو حد فتح admindash من غير تسجيل دخول يترجّعله لصفحة الدخول
-auth.onAuthStateChanged(user=>{
-  const dash = document.getElementById('p-admindash');
-  if(!user && dash && !dash.classList.contains('hidden')){
-    go('adminlogin');
-    toast('لازم تسجل دخول الأول','bad');
-  }
-});
+        document.getElementById('timer-years').innerText = years;
+        document.getElementById('timer-days').innerText = days;
+        document.getElementById('timer-hours').innerText = hours;
+        document.getElementById('timer-minutes').innerText = minutes;
+        document.getElementById('timer-seconds').innerText = seconds;
+        document.getElementById('timer-ms').innerText = ms < 10 ? '0' + ms : ms;
 
-function adTab(name){
-  ['orders','complaints','pkgs','settings'].forEach(n=>{
-    document.getElementById('ad-'+n).classList.toggle('hidden', n!==name);
-    document.getElementById('at-'+n).classList.toggle('active', n===name);
-  });
-}
+        const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+        document.getElementById('heartbeats-count').innerText = (totalDays * 115000 + hours * 4800).toLocaleString();
+        document.getElementById('smiles-count').innerText = (totalDays * 45 + hours * 2).toLocaleString();
+        document.getElementById('breath-count').innerText = (totalDays * 23000 + hours * 950).toLocaleString();
+    }
 
-function renderAdOrders(){
-  const tb=document.getElementById('tb-orders'); tb.innerHTML='';
-  if(!orders.length){ tb.innerHTML='<tr><td colspan="5" style="color:var(--muted)">لا توجد طلبات</td></tr>'; return; }
-  orders.forEach(o=>{
-    tb.innerHTML+=`<tr><td>${o.phone}</td><td>${o.pkgName}</td><td>${o.price} ج</td>
-      <td>${o.status==='approved'?'<span class="badge ok">مقبول</span>':'<span class="badge pend">معلق</span>'}</td>
-      <td>${o.status==='pending'?`<button class="mini g" onclick="approveOrder(${o.id})">تأكيد</button>`:`<b style="color:var(--gold)">${o.code}</b>`}</td></tr>`;
-  });
-}
-function approveOrder(id){
-  const o=orders.find(x=>x.id===id); if(!o) return;
-  o.status='approved'; o.code='MN3-'+Math.floor(100000+Math.random()*900000);
-  const pk=packages.find(p=>p.id===o.pkgId); if(pk) pk.count=Math.max(0,pk.count-1);
-  save(); renderAdOrders(); renderAdPkgs(); toast('تم إصدار الكرت للعميل');
-}
+    window.onscroll = function() {
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById("progress-bar").style.width = scrolled + "%";
+    };
 
-function renderAdComplaints(){
-  const el=document.getElementById('ad-cx-list');
-  if(!complaints.length){ el.innerHTML='<div class="empty">لا توجد شكاوى</div>'; return; }
-  el.innerHTML='';
-  complaints.forEach(c=>{
-    el.innerHTML+=`<div class="row" style="align-items:flex-start; flex-direction:column; gap:8px">
-      <div style="width:100%"><div class="t">${c.msg}</div><div class="m">${c.ref!=='—'?'مرجع: '+c.ref+' • ':''}${c.date}</div></div>
-      ${c.status==='open'?`<button class="mini g" style="width:100%" onclick="resolveComplaint(${c.id})">تعليم كمحلولة ✅</button>`:`<span class="badge done">تم الحل</span>`}
-    </div>`;
-  });
-}
-function resolveComplaint(id){
-  const c=complaints.find(x=>x.id===id); if(!c) return;
-  c.status='done'; c.reply='تم حل المشكلة، شكراً لتواصلك.';
-  save(); renderAdComplaints(); toast('تم تحديث حالة الشكوى');
-}
+    function showLogin() { 
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('main-container').style.display = 'flex';
+        spawnHearts();
+    }
 
-function renderAdPkgs(){
-  const tb=document.getElementById('tb-pkgs'); tb.innerHTML='';
-  packages.forEach(p=>{
-    tb.innerHTML+=`<tr><td>${p.name}</td><td>${p.price} ج</td><td>${p.count}</td>
-      <td><button class="mini r" onclick="delPkg(${p.id})">حذف</button></td></tr>`;
-  });
-}
-function addPkg(){
-  const name=document.getElementById('np-name').value.trim();
-  const price=parseFloat(document.getElementById('np-price').value);
-  const count=parseInt(document.getElementById('np-count').value);
-  if(!name||!price||!count){ toast('املأ كل بيانات الباقة','bad'); return; }
-  packages.push({id:Date.now(),name,price,count});
-  save(); renderAdPkgs(); renderPkgs();
-  document.getElementById('np-name').value=''; document.getElementById('np-price').value=''; document.getElementById('np-count').value='';
-  toast('تمت إضافة الباقة');
-}
-function delPkg(id){ packages=packages.filter(p=>p.id!==id); save(); renderAdPkgs(); renderPkgs(); toast('تم حذف الباقة'); }
+    function start() {
+        if(document.getElementById('pass').value === P) {
+            audio.play().catch(e => console.log("Audio ready"));
+            document.getElementById('music-player-bar').style.display = 'flex';
+            document.getElementById('navbar').style.display = 'flex';
+            document.getElementById('login-card').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            setInterval(updateTimer, 30);
+            loadSavedNote();
+            generateReasonsGrid();
+            initConstellation();
 
-function saveCash(){
-  const v=document.getElementById('ad-cash').value.trim();
-  if(!v){ toast('ادخل رقم صحيح','bad'); return; }
-  cashNumber=v; save(); toast('تم تحديث رقم الكاش');
-}
+            if(typeof confetti === 'function') {
+                confetti({ particleCount: 180, spread: 100, origin: { y: 0.6 } });
+            }
+        } else { 
+            alert("الباسورد غير صحيح يا بسملة! 😉 ركزي واكتبي الرقم صح!"); 
+        }
+    }
 
-document.addEventListener('DOMContentLoaded', async ()=>{
-  await loadFromFirebase();
-  go('store');
-});
+    function toggleMusic() {
+        if (audio.paused) {
+            audio.play();
+            playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        } else {
+            audio.pause();
+            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        }
+    }
+
+    function skipAudio(seconds) {
+        audio.currentTime = Math.min(Math.max(audio.currentTime + seconds, 0), audio.duration || 0);
+    }
+
+    audio.ontimeupdate = function() {
+        if (audio.duration) {
+            seekBar.value = (audio.currentTime / audio.duration) * 100;
+            let mins = Math.floor(audio.currentTime / 60);
+            let secs = Math.floor(audio.currentTime % 60);
+            if(secs < 10) secs = '0' + secs;
+            document.getElementById('music-time').innerText = mins + ":" + secs;
+        }
+    };
+
+    function seekAudio() {
+        if (audio.duration) {
+            audio.currentTime = (seekBar.value / 100) * audio.duration;
+        }
+    }
+
+    function toggleAmbient(type) {
+        const btn = document.getElementById('btn-rain');
+        if(type === 'rain') {
+            if(ambientRain.paused) {
+                ambientRain.play();
+                btn.classList.add('active');
+            } else {
+                ambientRain.pause();
+                btn.classList.remove('active');
+            }
+        }
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playPianoTone(freq) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1.2);
+        createSparkle(window.innerWidth / 2, window.innerHeight / 2);
+    }
+
+    const reasonsList = [
+        "محبتش ولا هحب حد زي ما حبيتك يا بسملة ❤️", "ضحكتك بتنور دنيتي المظلمة 🌟", "صوتك هو أماني الوحيد والهدوء 🎶",
+        "انتي العوض عن كل حاجة وحشة شفتها 💍", "مفيش زيك في الدنيا دي كُلها بجمالك 👑", "بتفهميني من غير ما أتكلم نقطة قوّتي 💖",
+        "وجودك بيخليني شخص أصلح وأفضل ✨", "عنيكي فيها سحر بياخدني لعالم تاني 🥺", "حنيتك عليا بتنسيني أي تعب أو هم 🌸",
+        "لأنك أميرتي وبنوتي الحلوة Basmala 👑", "بتتحملي طفولة ورقة مش عند حد تانى 🎀", "علشان انتي كل أهلي وصحابي ودنيتي 🤍",
+        "بتستحملي عصبيتي وبتحتويها بحب 🌸", "كل تفصيلة صغيرة فيكي بتعجبني 💍", "معاكي بحس إني ملكت العالم كله 🌍",
+        "دعواتك ليا بتفتحلي أبواب الخير ✨", "لأنك السند الحقيقي وقت الشدة 💖", "أسلوبك العسل وطريقتك في الكلام 🍯",
+        "لأن طيبتك ملهاش حدود في الدنيا 🕊️", "عيونك أصفى وأجمل حاجة شفتها 👁️", "ضحكتك بتخليني أنسى كل همومي 🌸",
+        "بتشاركيني كل أفراحي وأحزاني 💖", "طيبة قلبك النادرة اللي ملهاش مثيل 🌟", "لأنك بتشجعيني دايماً أحقق أحلامي 🚀",
+        "علشان بحس بالأمان معاكي من كل حاجة 🛡️", "طريقتك في الاهتمام بيا بتسعدني 🥺", "جمال روحك قبل جمالك الخارجي ✨",
+        "علشان بتبتسمي لما بتشوفيني مبسوط 🌸", "حضورك المميز في أي مكان بتكوني فيه 👑", "لأنك نصفي الثاني المكمل ليا يا بسملة 🧩"
+    ];
+
+    function generateReasonsGrid() {
+        const container = document.getElementById('reasons-grid');
+        container.innerHTML = '';
+        reasonsList.forEach((reason, index) => {
+            const card = document.createElement('div');
+            card.className = 'gift-card';
+            card.onclick = function() { this.classList.toggle('revealed'); };
+            card.innerHTML = `<span>السبب ${index + 1} 💖</span><div class="msg-overlay">${reason}</div>`;
+            container.appendChild(card);
+        });
+    }
+
+    const aiResponses = {
+        sad: "لو الدنـيـا كلها جت عليكِ يا بسملة، افتكري إن قلبي هو بيتك وأمانك الدايم. اتنفّسي عميق يا عمري، وزعلك ده على راسي وهعمل أي حاجة عشان أشوف ضحكتك دي تاني! 🥺❤️",
+        miss: "وأنا بتموت فيكي ومشتاق لعيونك وصوتك يا Basmala أكتر مما تتخيلي بمليون مرة! أنتي دايماً في بالي وفي قلبي كل ثانية. 💖✨",
+        happy: "يدوم عليكي الفرحة يا ملاكي الجميل! سعادتك دي هي كل طالبتي من الدنيا، وضحكتك بتنور قلبي ودنيتي كلها. 🌸👑",
+        tired: "سلامة قلبك وجسمك يا بسملة.. ارتاحي خالص وغمضي عينيكي، وافتكري إن في حد يدعيلك وبيحبك ومستعد يشيل عنك أي تعب. 🤍☁️"
+    };
+
+    function getAiResponse(mood) {
+        const el = document.getElementById('ai-response-text');
+        el.innerText = aiResponses[mood];
+        el.style.display = 'block';
+        if(typeof confetti === 'function') confetti({ particleCount: 40 });
+    }
+
+    /* اللعبة 1: مزرعة القلوب */
+    let gardenScore = 0;
+    let gardenLevel = 1;
+    let gardenInterval;
+    const flowerTypes = ['🌹', '🌸', '🌺', '🌷', '🌻', '💐', '💖', '✨', '👑', '🎁'];
+    const gardenMessages = [
+        "قطفتِ أول وردة يا بسملة! 🌸",
+        "يا سلام على السرعة! شاطرة جداً ✨",
+        "ورد الجوري طالع علشان خاطرك 🌹",
+        "انتي الملكة وأحلى وردة في المزرعة 👑",
+        "مستوى جديد! حبنا بيزدهر أكتر 💖",
+        "مفيش حد بيعرف يجمع ورد بالجمال ده غيرك! 💖"
+    ];
+
+    function toggleGardenGame() {
+        const gameBox = document.getElementById('garden-game-box');
+        if(gameBox.style.display === 'flex') {
+            gameBox.style.display = 'none';
+            clearInterval(gardenInterval);
+        } else {
+            gameBox.style.display = 'flex';
+            initGardenGame();
+        }
+    }
+
+    function initGardenGame() {
+        const grid = document.getElementById('garden-grid');
+        grid.innerHTML = '';
+        gardenScore = 0;
+        gardenLevel = 1;
+        document.getElementById('garden-score').innerText = gardenScore;
+        document.getElementById('garden-level').innerText = gardenLevel;
+
+        for(let i = 0; i < 12; i++) {
+            const slot = document.createElement('div');
+            slot.className = 'garden-slot';
+            slot.onclick = () => catchFlower(slot);
+            grid.appendChild(slot);
+        }
+
+        clearInterval(gardenInterval);
+        startGardenLoop();
+    }
+
+    function startGardenLoop() {
+        let speed = Math.max(1200 - (gardenLevel * 100), 500);
+        gardenInterval = setInterval(() => {
+            clearGardenSlots();
+            const slots = document.querySelectorAll('.garden-slot');
+            const randomSlot = slots[Math.floor(Math.random() * slots.length)];
+            const randomFlower = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+            
+            randomSlot.innerHTML = randomFlower;
+            randomSlot.classList.add('active');
+        }, speed);
+    }
+
+    function clearGardenSlots() {
+        const slots = document.querySelectorAll('.garden-slot');
+        slots.forEach(s => { s.innerHTML = ''; s.classList.remove('active'); });
+    }
+
+    function catchFlower(slot) {
+        if(slot.classList.contains('active')) {
+            gardenScore += 10;
+            document.getElementById('garden-score').innerText = gardenScore;
+            slot.classList.remove('active');
+            slot.innerHTML = '✨';
+
+            if(gardenScore % 50 === 0) {
+                gardenLevel++;
+                document.getElementById('garden-level').innerText = gardenLevel;
+                if(typeof confetti === 'function') confetti({ particleCount: 50 });
+                clearInterval(gardenInterval);
+                startGardenLoop();
+            }
+
+            const msgIdx = Math.min(Math.floor(gardenScore / 30), gardenMessages.length - 1);
+            document.getElementById('garden-message').innerText = gardenMessages[msgIdx];
+        }
+    }
+
+    /* اللعبة 2 الجديدة: تطابق الذاكرة لبسملة */
+    const memoryIcons = ['👑', '💍', '💖', '🌸', '✨', '🎁'];
+    let memoryCards = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let movesCount = 0;
+
+    function toggleMemoryGame() {
+        const box = document.getElementById('memory-game-box');
+        if(box.style.display === 'flex') {
+            box.style.display = 'none';
+        } else {
+            box.style.display = 'flex';
+            initMemoryGame();
+        }
+    }
+
+    function initMemoryGame() {
+        const grid = document.getElementById('memory-grid');
+        grid.innerHTML = '';
+        flippedCards = [];
+        matchedPairs = 0;
+        movesCount = 0;
+        document.getElementById('memory-moves').innerText = movesCount;
+        document.getElementById('memory-matches').innerText = '0 / 6';
+
+        memoryCards = [...memoryIcons, ...memoryIcons].sort(() => Math.random() - 0.5);
+
+        memoryCards.forEach((icon, index) => {
+            const card = document.createElement('div');
+            card.className = 'memory-card';
+            card.dataset.icon = icon;
+            card.dataset.index = index;
+            card.onclick = () => flipMemoryCard(card);
+            grid.appendChild(card);
+        });
+    }
+
+    function flipMemoryCard(card) {
+        if (flippedCards.length < 2 && !card.classList.contains('flipped') && !card.classList.contains('matched')) {
+            card.classList.add('flipped');
+            card.innerText = card.dataset.icon;
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                movesCount++;
+                document.getElementById('memory-moves').innerText = movesCount;
+                checkMemoryMatch();
+            }
+        }
+    }
+
+    function checkMemoryMatch() {
+        const [card1, card2] = flippedCards;
+        if (card1.dataset.icon === card2.dataset.icon) {
+            card1.classList.add('matched');
+            card2.classList.add('matched');
+            matchedPairs++;
+            document.getElementById('memory-matches').innerText = `${matchedPairs} / 6`;
+            flippedCards = [];
+
+            if (matchedPairs === 6) {
+                setTimeout(() => {
+                    alert("عاش يا أحلى بسملة! فزتي في لعبة التطابق الرمزية ✨💖");
+                    if(typeof confetti === 'function') confetti({ particleCount: 100 });
+                }, 300);
+            }
+        } else {
+            setTimeout(() => {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.innerText = '';
+                card2.innerText = '';
+                flippedCards = [];
+            }, 800);
+        }
+    }
+
+    function initConstellation() {
+        const cCanvas = document.getElementById('constellation-canvas');
+        const cCtx = cCanvas.getContext('2d');
+        cCanvas.width = cCanvas.parentElement.clientWidth;
+        cCanvas.height = cCanvas.parentElement.clientHeight;
+
+        let nodes = [];
+        for(let i=0; i<25; i++) {
+            nodes.push({
+                x: Math.random() * cCanvas.width,
+                y: Math.random() * cCanvas.height,
+                vx: (Math.random() - 0.5) * 0.7,
+                vy: (Math.random() - 0.5) * 0.7
+            });
+        }
+
+        function drawConstellation() {
+            cCtx.clearRect(0,0,cCanvas.width, cCanvas.height);
+            cCtx.fillStyle = '#e0a96d';
+            cCtx.strokeStyle = 'rgba(224, 169, 109, 0.2)';
+
+            for(let i=0; i<nodes.length; i++) {
+                nodes[i].x += nodes[i].vx;
+                nodes[i].y += nodes[i].vy;
+                if(nodes[i].x < 0 || nodes[i].x > cCanvas.width) nodes[i].vx *= -1;
+                if(nodes[i].y < 0 || nodes[i].y > cCanvas.height) nodes[i].vy *= -1;
+
+                cCtx.beginPath();
+                cCtx.arc(nodes[i].x, nodes[i].y, 2.5, 0, Math.PI*2);
+                cCtx.fill();
+
+                for(let j=i+1; j<nodes.length; j++) {
+                    let dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+                    if(dist < 90) {
+                        cCtx.beginPath();
+                        cCtx.moveTo(nodes[i].x, nodes[i].y);
+                        cCtx.lineTo(nodes[j].x, nodes[j].y);
+                        cCtx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(drawConstellation);
+        }
+        drawConstellation();
+    }
+
+    function spawnHearts() {
+        setInterval(() => {
+            const h = document.createElement('div');
+            h.className = 'heart'; 
+            h.innerHTML = ['❤️', '💖', '✨', '🌸', '👑', '💎'][Math.floor(Math.random() * 6)];
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.fontSize = (Math.random() * 18 + 12) + 'px';
+            h.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 6000);
+        }, 350);
+    }
+
+    document.addEventListener('touchmove', function(e) { createSparkle(e.touches[0].clientX, e.touches[0].clientY); });
+    document.addEventListener('mousemove', function(e) { createSparkle(e.clientX, e.clientY); });
+
+    function createSparkle(x, y) {
+        if(Math.random() > 0.3) return;
+        const el = document.createElement('div');
+        el.className = 'sparkle-heart';
+        el.innerHTML = '✨';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1200);
+    }
+
+    let charIdx = 0;
+    function typeWriter() {
+        if (charIdx < longMessageText.length) {
+            document.getElementById("typing-text").innerHTML += longMessageText.charAt(charIdx);
+            charIdx++; 
+            setTimeout(typeWriter, 35);
+        }
+    }
+
+    function openModal() { 
+        document.getElementById('msgModal').style.display = 'flex';
+        document.getElementById("typing-text").innerHTML = ""; 
+        charIdx = 0; 
+        typeWriter();
+        if(typeof confetti === 'function') {
+            confetti({ particleCount: 150, spread: 90 });
+        }
+    }
+    
+    function closeModal() { 
+        document.getElementById('msgModal').style.display = 'none'; 
+    }
+
+    let currentSlide = 0;
+    function moveSlide(direction) {
+        const track = document.getElementById('track');
+        const slides = document.querySelectorAll('.carousel-slide');
+        currentSlide = (currentSlide + direction + slides.length) % slides.length;
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').style.display = 'flex';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').style.display = 'none';
+    }
+
+    function nextQuiz(step, isCorrect) {
+        if(step === 1) {
+            if(isCorrect) {
+                document.getElementById('quiz-step-1').style.display = 'none';
+                document.getElementById('quiz-step-2').style.display = 'block';
+            } else {
+                alert("غلط طبعاً! فكري تاني مين اللي عمل الصفحة دي كلها علشانك؟ 😜");
+            }
+        } else if(step === 2) {
+            document.getElementById('quiz-step-2').style.display = 'none';
+            document.getElementById('quiz-result').style.display = 'block';
+            if(typeof confetti === 'function') confetti();
+        }
+    }
+
+    const loveActivities = [
+        "🎬 نتفرج على فيلم سوا ونطلب أكل بنحبه يا بسملة!",
+        "🍦 نخرج ناكل أيس كريم ونتمشى تحت النجوم!",
+        "☕ نعمل كباية شاي/قهوة ونقعد نتكلم بالساعات بدون توقف!",
+        "📸 نطلع نعمل سيشن صور جديد ونلتقط ذكريات جميلة سوا!",
+        "🎧 نسمع أغانينا المفضلة سوا ونسترخي!"
+    ];
+
+    function spinLoveWheel() {
+        const resultDiv = document.getElementById('wheel-result');
+        resultDiv.innerHTML = "جاري الاختيار لـ Basmala... 🎲";
+        setTimeout(() => {
+            const random = loveActivities[Math.floor(Math.random() * loveActivities.length)];
+            resultDiv.innerText = random;
+            if(typeof confetti === 'function') confetti({ particleCount: 60 });
+        }, 800);
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function saveNote() {
+        const val = document.getElementById('journal-input').value;
+        if(val.trim() !== '') {
+            localStorage.setItem('basmala_journal_note', val);
+            const status = document.getElementById('saved-note-status');
+            status.innerText = "تم حفظ مذكرتك السرية بنجاح يا بسملة 💖";
+            setTimeout(() => status.innerText = "", 3000);
+        }
+    }
+
+    function loadSavedNote() {
+        const saved = localStorage.getItem('basmala_journal_note');
+        if(saved) {
+            document.getElementById('journal-input').value = saved;
+        }
+    }
 </script>
 </body>
 </html>
