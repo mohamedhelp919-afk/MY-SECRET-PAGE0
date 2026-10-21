@@ -14,7 +14,7 @@
     
     <style>
         /* ==========================================================================
-           1. ثيم البرجندي الدافئ والفاخر (Deep Burgundy & Soft Rose Gold Theme)
+           1. ثيم البرجندي والذهبي الوردي الفاخر (Deep Burgundy & Rose Gold)
            ========================================================================== */
         :root { 
             --accent: #e63946; 
@@ -22,10 +22,10 @@
             --primary: #800f2f; 
             --secondary: #590d22;
             --burgundy-deep: #2b0910;
-            --burgundy-card: rgba(45, 12, 22, 0.82);
+            --burgundy-card: rgba(45, 12, 22, 0.85);
             --accent-glow: rgba(224, 169, 109, 0.35);
             --glass-border: rgba(224, 169, 109, 0.25);
-            --shadow: rgba(0, 0, 0, 0.4);
+            --shadow: rgba(0, 0, 0, 0.5);
             --text-color: #f8f9fa;
             --text-muted: #d3b8bd;
             --font-main: 'Cairo', sans-serif;
@@ -96,9 +96,6 @@
         }
         .icon-btn:hover { transform: scale(1.1) rotate(10deg); background: var(--accent-gold); color: var(--burgundy-deep); box-shadow: 0 0 15px var(--accent-glow); }
 
-        /* ==========================================================================
-           3. التأثيرات المتساقطة الدافئة
-           ========================================================================== */
         .heart { position: fixed; color: var(--accent-gold); pointer-events: none; animation: fall linear forwards; z-index: 1; opacity: 0.7; }
         @keyframes fall { 
             0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 1; }
@@ -112,7 +109,7 @@
         }
 
         /* ==========================================================================
-           4. شاشة الترحيب ومدخل الباسورد
+           3. شاشة الترحيب ومدخل الباسورد
            ========================================================================== */
         #welcome-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -147,9 +144,6 @@
         }
         .welcome-btn:hover { transform: scale(1.05) translateY(-3px); box-shadow: 0 15px 35px var(--accent-glow); background: linear-gradient(135deg, #f3c68f, var(--accent-gold)); }
 
-        /* ==========================================================================
-           5. البطاقات والحاويات الكريستالية الداكنة
-           ========================================================================== */
         .container { 
             display: none; flex-direction: column; align-items: center; width: 95%; max-width: 850px; 
             padding-top: 100px; padding-bottom: 180px; z-index: 10;
@@ -175,7 +169,27 @@
         .section-header h3 { color: var(--accent-gold); font-family: var(--font-title); font-size: 26px; margin: 0; }
         .section-header i { font-size: 22px; color: var(--accent-gold); }
 
-        /* العداد */
+        /* ==========================================================================
+           4. شريط ستوريات الصور التفاعلي (Instagram Stories Style)
+           ========================================================================== */
+        .stories-wrapper {
+            display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; margin: 15px 0 25px 0;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .stories-wrapper::-webkit-scrollbar { display: none; }
+        .story-item {
+            display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0;
+        }
+        .story-ring {
+            width: 72px; height: 72px; border-radius: 50%; padding: 3px;
+            background: linear-gradient(45deg, var(--accent-gold), #b8860b, var(--accent));
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s;
+        }
+        .story-item:hover .story-ring { transform: scale(1.08); box-shadow: 0 0 20px var(--accent-glow); }
+        .story-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--burgundy-deep); }
+        .story-label { font-size: 11px; font-weight: bold; color: var(--text-muted); }
+
+        /* العدادات */
         .timer-container { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 25px 0; }
         .timer-box { 
             background: rgba(15, 3, 6, 0.6); padding: 12px 4px; border-radius: 20px; 
@@ -193,7 +207,7 @@
         .stat-card .num { font-size: 20px; font-weight: bold; color: var(--accent-gold); margin-bottom: 5px; }
         .stat-card .label { font-size: 13px; color: var(--text-muted); font-weight: 600; }
 
-        /* مشغل الموسيقى */
+        /* مشغل الموسيقى (أغنية واحدة) */
         #music-player-bar {
             position: fixed; bottom: 20px; width: 92%; max-width: 500px;
             background: var(--burgundy-card); border-radius: 35px; padding: 14px 24px; 
@@ -206,7 +220,7 @@
         .player-controls { display: flex; align-items: center; justify-content: center; gap: 18px; direction: ltr; }
         .player-btn {
             background: linear-gradient(135deg, var(--accent-gold), #b8860b); color: #1a0409; border: none; 
-            width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 16px; 
+            width: 46px; height: 46px; border-radius: 50%; cursor: pointer; font-size: 18px; 
             display: flex; align-items: center; justify-content: center; transition: 0.3s;
         }
         .player-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--accent-glow); }
@@ -221,18 +235,50 @@
         }
         .ambient-btn.active { background: var(--accent-gold); color: #1a0409; border-color: var(--accent-gold); }
 
-        /* البطاقات الشبكية */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 14px; margin: 20px 0; }
-        .gift-card { 
-            background: rgba(15, 3, 6, 0.5); border-radius: 22px; border: 1px solid var(--glass-border); min-height: 95px; 
-            display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; 
-            color: var(--accent-gold); transition: 0.4s; padding: 14px; text-align: center; position: relative;
+        /* الأسباب الـ 10 المقسمة بصورة فريدة */
+        .reasons-grid-10 {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin: 25px 0;
         }
-        .gift-card:hover { transform: translateY(-4px); border-color: var(--accent-gold); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .gift-card.revealed { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-color: var(--accent-gold); }
-        .msg-overlay { display: none; }
-        .gift-card.revealed .msg-overlay { display: block; font-size: 13px; line-height: 1.5; font-weight: 600; animation: fadeIn 0.4s; }
-        .gift-card.revealed span { display: none; }
+        .reason-card-10 {
+            background: rgba(15, 3, 6, 0.5); border-radius: 22px; border: 1px solid var(--glass-border);
+            padding: 18px 15px; text-align: center; cursor: pointer; transition: 0.4s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 110px;
+        }
+        .reason-card-10:hover { transform: translateY(-5px); border-color: var(--accent-gold); box-shadow: 0 10px 25px rgba(0,0,0,0.6); }
+        .reason-card-10.revealed { background: linear-gradient(135deg, var(--primary), var(--secondary)); border-color: var(--accent-gold); }
+        .reason-card-10 .badge { font-size: 12px; font-weight: bold; color: var(--accent-gold); margin-bottom: 8px; }
+        .reason-card-10 .text { display: none; font-size: 14px; line-height: 1.6; font-weight: 600; color: #ffffff; }
+        .reason-card-10.revealed .text { display: block; animation: fadeIn 0.4s; }
+        .reason-card-10.revealed .holder { display: none; }
+
+        /* ==========================================================================
+           5. الصناديق التفاعلية الجديدة (السر اليومي والكابسولة والواتساب)
+           ========================================================================== */
+        .daily-quote-box {
+            background: rgba(15, 3, 6, 0.5); border: 1px solid var(--glass-border);
+            border-radius: 25px; padding: 22px; margin: 25px 0; text-align: center; position: relative;
+        }
+        .daily-quote-text {
+            font-family: var(--font-poetic); font-size: 19px; color: var(--accent-gold);
+            line-height: 1.8; margin-top: 10px; font-weight: bold;
+        }
+
+        .fortune-box {
+            background: rgba(15, 3, 6, 0.5); border: 1px dashed var(--accent-gold);
+            border-radius: 25px; padding: 22px; margin: 25px 0; text-align: center;
+        }
+        .fortune-result {
+            font-size: 16px; font-weight: bold; color: var(--text-color); margin-top: 15px;
+            min-height: 40px; font-family: var(--font-poetic); display: none; line-height: 1.7;
+        }
+
+        .whatsapp-trigger-btn {
+            background: #25d366; color: white; border: none; padding: 14px 28px;
+            border-radius: 50px; font-weight: bold; font-size: 15px; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+            transition: 0.3s; margin: 15px 0;
+        }
+        .whatsapp-trigger-btn:hover { transform: scale(1.05); box-shadow: 0 12px 25px rgba(37, 211, 102, 0.5); }
 
         /* الألبوم */
         .carousel-container { position: relative; width: 100%; overflow: hidden; border-radius: 28px; margin: 25px 0; border: 1px solid var(--glass-border); }
@@ -267,33 +313,18 @@
         .piano-key { width: 45px; height: 130px; background: rgba(255,255,255,0.9); border: 1px solid var(--glass-border); border-radius: 0 0 12px 12px; cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 10px; font-weight: bold; color: var(--primary); transition: 0.1s; }
         .piano-key:active, .piano-key.active { background: var(--accent-gold); color: #1a0409; transform: translateY(4px); }
 
-        /* ==========================================================================
-           6. اللعبة الجديدة 2: لعبة تطابق ذاكرة بسملة (Basmala's Memory Match Game)
-           ========================================================================== */
-        .memory-game-box {
-            background: rgba(15, 3, 6, 0.6); border-radius: 25px; padding: 22px; border: 1px solid var(--glass-border);
-            display: none; flex-direction: column; align-items: center; margin: 20px 0;
-        }
-        .memory-stats { display: flex; justify-content: space-between; width: 100%; color: var(--accent-gold); font-weight: bold; margin-bottom: 15px; font-size: 14px; }
-        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 400px; }
-        .memory-card {
-            aspect-ratio: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
-            border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px;
-            cursor: pointer; transition: 0.3s; transform-style: preserve-3d;
-        }
-        .memory-card.flipped { background: var(--primary); border-color: var(--accent-gold); transform: rotateY(180deg); }
-        .memory-card.matched { background: rgba(224, 169, 109, 0.2); border-color: var(--accent-gold); cursor: default; }
-
-        /* لعبة المزرعة */
-        .garden-game-wrapper { position: relative; width: 100%; background: rgba(15, 3, 6, 0.6); border-radius: 25px; border: 1px solid var(--glass-border); margin: 20px 0; padding: 20px; display: none; flex-direction: column; align-items: center; }
-        .garden-status-bar { display: flex; justify-content: space-between; width: 100%; font-weight: bold; color: var(--accent-gold); font-size: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 10px 20px; border-radius: 18px; border: 1px solid var(--glass-border); }
-        .garden-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 420px; }
-        .garden-slot { aspect-ratio: 1; background: rgba(255,255,255,0.03); border: 1px dashed var(--glass-border); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; transition: 0.2s; }
-        .garden-slot.active { background: rgba(224, 169, 109, 0.15); border-color: var(--accent-gold); }
-        .garden-msg { margin-top: 15px; font-weight: bold; color: var(--accent-gold); font-size: 14px; text-align: center; font-family: var(--font-poetic); }
-
         .constellation-box { width: 100%; height: 240px; background: rgba(10, 2, 4, 0.8); border-radius: 25px; margin: 20px 0; position: relative; overflow: hidden; border: 1px solid var(--glass-border); }
         #constellation-canvas { width: 100%; height: 100%; }
+
+        /* ==========================================================================
+           6. وضع النوم والاسترخاء الهادئ (Deep Chill Night Overlay)
+           ========================================================================== */
+        #chill-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #080205; z-index: 8000; flex-direction: column; align-items: center;
+            justify-content: center; text-align: center; padding: 30px; animation: fadeIn 1s;
+        }
+        .chill-title { font-family: var(--font-poetic); font-size: 26px; color: var(--accent-gold); margin-bottom: 15px; line-height: 1.8; }
 
         input[type="password"] { 
             width: 85%; padding: 16px; border-radius: 30px; border: 1px solid var(--accent-gold); 
@@ -337,7 +368,7 @@
             .welcome-title { font-size: 28px; }
             .main-card { padding: 22px 15px; }
             .piano-key { width: 32px; height: 100px; font-size: 11px; }
-            .garden-grid, .memory-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+            .reasons-grid-10 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -346,12 +377,14 @@
 <canvas id="particle-canvas"></canvas>
 <div id="progress-bar"></div>
 
+<!-- أغنية واحدة فقط -->
 <audio id="music" loop><source src="LOVE.mp3" type="audio/mpeg"></audio>
 <audio id="ambient-rain" loop><source src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3" type="audio/mpeg"></audio>
 
 <div class="navbar" id="navbar">
     <div class="nav-logo"><i class="fa-solid fa-crown"></i> Basmala's Realm ✨</div>
     <div class="nav-tools">
+        <button class="icon-btn" onclick="toggleChillMode()" title="وضع النوم والاسترخاء الهادئ 🌙"><i class="fa-solid fa-moon"></i></button>
         <button class="icon-btn" onclick="toggleMusic()" title="تشغيل/إيقاف الموسيقى"><i class="fa-solid fa-music"></i></button>
         <button class="icon-btn" onclick="scrollToTop()" title="للأعلى"><i class="fa-solid fa-arrow-up"></i></button>
     </div>
@@ -359,7 +392,7 @@
 
 <div id="music-player-bar">
     <div class="player-info">
-        <span><i class="fa-solid fa-heart-pulse"></i> أغنية بسملة الخاصة 🎵</span>
+        <span><i class="fa-solid fa-heart-pulse"></i> أغنية بسملة المفضلة 🎵</span>
         <span id="music-time">00:00</span>
     </div>
     <input type="range" id="seek-bar" class="seek-slider" value="0" min="0" max="100" oninput="seekAudio()">
@@ -396,6 +429,41 @@
         <p style="color: var(--accent-gold); font-weight: bold; font-size: 24px; margin-top: 0; font-family: var(--font-title);">✨ نورتي عالمكِ الخاص يا بسملة ✨</p>
         <p style="color: var(--text-muted); font-weight: bold; font-size: 17px; font-family: var(--font-en); letter-spacing: 1px;">Basmala, You Are My Entire World ❤️</p>
 
+        <!-- ستوريات تفاعلية علوية -->
+        <div class="stories-wrapper">
+            <div class="story-item" onclick="openLightbox('1.jpg')">
+                <div class="story-ring"><img src="1.jpg" alt="Story 1"></div>
+                <span class="story-label">عيونك 🥺</span>
+            </div>
+            <div class="story-item" onclick="openLightbox('2.jpg')">
+                <div class="story-ring"><img src="2.jpg" alt="Story 2"></div>
+                <span class="story-label">ضحكتك ✨</span>
+            </div>
+            <div class="story-item" onclick="openLightbox('3.jpg')">
+                <div class="story-ring"><img src="3.jpg" alt="Story 3"></div>
+                <span class="story-label">حبي ليكي ❤️</span>
+            </div>
+            <div class="story-item" onclick="openLightbox('4.jpg')">
+                <div class="story-ring"><img src="4.jpg" alt="Story 4"></div>
+                <span class="story-label">أميرتي 👑</span>
+            </div>
+            <div class="story-item" onclick="openLightbox('5.jpg')">
+                <div class="story-ring"><img src="5.jpg" alt="Story 5"></div>
+                <span class="story-label">العوض 🌸</span>
+            </div>
+        </div>
+
+        <!-- زر إرسال قلب للواتساب مباشرة -->
+        <button class="whatsapp-trigger-btn" onclick="sendHeartToWhatsApp()">
+            <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> طمني قلبي.. أنا جوه الموقع وبفكر فيك دلوقتي 💖
+        </button>
+
+        <!-- رسالة السر اليومية المتغيرة -->
+        <div class="daily-quote-box">
+            <span style="font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase;">🔒 رسالة السر اليومية المخصصة لكِ اليوم</span>
+            <div class="daily-quote-text" id="daily-quote">"كل يوم يدخل فيه اسمكِ في يومي، يصبح يوماً استثنائياً وجميلاً جداً يا بسملة."</div>
+        </div>
+
         <div class="section-header">
             <i class="fa-solid fa-hourglass-start"></i>
             <h3>عداد حب Basmala والوقت الكوني</h3>
@@ -428,6 +496,45 @@
 
         <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
 
+        <!-- عداد المناسبة القادمة -->
+        <div class="section-header">
+            <i class="fa-solid fa-calendar-check"></i>
+            <h3>العداد التنازلي للحظتنا المميزة القادمة ✨</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">الأيام المتبقية لمناسبتنا السعيدة القادمة بإذن الله:</p>
+        <div class="timer-container" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="timer-box"><span id="next-days">0</span><small>يوم</small></div>
+            <div class="timer-box"><span id="next-hours">0</span><small>ساعة</small></div>
+            <div class="timer-box"><span id="next-mins">0</span><small>دقيقة</small></div>
+            <div class="timer-box"><span id="next-secs">0</span><small>ثانية</small></div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <!-- الأسباب الـ 10 الأساسية المخصصة -->
+        <div class="section-header">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <h3>10 أسباب تجعل بسملة سر سعادتي (اضغطي للاكتشاف)</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">اضغطي على كل سبب لاكتشاف الحقيقة المخبأة تحته:</p>
+        
+        <div class="reasons-grid-10" id="reasons-10-container"></div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
+        <!-- كبسولة حظ بسملة اليومية -->
+        <div class="section-header">
+            <i class="fa-solid fa-gift"></i>
+            <h3>كبسولة حظ بسملة اليومية 🎁</h3>
+        </div>
+        <div class="fortune-box">
+            <p style="color: var(--text-muted); font-size: 14px; margin-top: 0;">اضغطي لاكتشاف هديتك المعنوية أو بطاقة حظك للنهاردة يا بسملة:</p>
+            <button class="welcome-btn" style="padding: 10px 25px; font-size: 15px;" onclick="openFortuneCookie()"><i class="fa-solid fa-cookie-bite"></i> افتحي كبسولة حظ اليوم ✨</button>
+            <div class="fortune-result" id="fortune-result"></div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
+
         <div class="section-header">
             <i class="fa-solid fa-star"></i>
             <h3>كوكبة نجوم بسملة في السماء</h3>
@@ -452,43 +559,6 @@
                 <button class="mood-btn" onclick="getAiResponse('tired')">تعبانة وعاوزة أرتاح 🌸</button>
             </div>
             <div class="ai-response" id="ai-response-text"></div>
-        </div>
-
-        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
-
-        <!-- اللعبة الأولى: مزرعة القلوب -->
-        <div class="section-header">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            <h3>لعبة مزرعة الورد والقلوب 🌸🎮</h3>
-        </div>
-        <p style="font-size: 13px; color: var(--text-muted);">اجمعي الورد والقلوب المبهجة بسرعة واكتشفي مفاجآت الحب يا بسملة!</p>
-        <button class="welcome-btn" onclick="toggleGardenGame()" style="font-size: 15px; padding: 10px 25px; margin-bottom: 10px;"><i class="fa-solid fa-gamepad"></i> ابدئي لعبة المزرعة 🌷</button>
-        
-        <div class="garden-game-wrapper" id="garden-game-box">
-            <div class="garden-status-bar">
-                <span>الورود والقلوب 🌷: <span id="garden-score">0</span></span>
-                <span>المستوى ✨: <span id="garden-level">1</span></span>
-            </div>
-            <div class="garden-grid" id="garden-grid"></div>
-            <div class="garden-msg" id="garden-message">اضغطي على الورود والقلوب فور ظهورها! 💖</div>
-        </div>
-
-        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
-
-        <!-- اللعبة الثانية الجديدة: لعبة تطابق الذاكرة -->
-        <div class="section-header">
-            <i class="fa-solid fa-brain"></i>
-            <h3>لعبة تطابق الذاكرة السحرية ✨🧠</h3>
-        </div>
-        <p style="font-size: 13px; color: var(--text-muted);">اكتشفي الرموز المتطابقة الخاصة بـ Basmala بأقل عدد حركات:</p>
-        <button class="welcome-btn" onclick="toggleMemoryGame()" style="font-size: 15px; padding: 10px 25px; margin-bottom: 10px;"><i class="fa-solid fa-clone"></i> العبي لعبة التطابق السحرية 💎</button>
-        
-        <div class="memory-game-box" id="memory-game-box">
-            <div class="memory-stats">
-                <span>الحركات 🎯: <span id="memory-moves">0</span></span>
-                <span>الأزواج المتطابقة ✨: <span id="memory-matches">0 / 6</span></span>
-            </div>
-            <div class="memory-grid" id="memory-grid"></div>
         </div>
 
         <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
@@ -532,15 +602,6 @@
                 <div class="timeline-text">حبك بيزيد في قلبي أكتر من الأول ألف مرة، وكل يوم بتأكد إنك ملكة قلبي الأولى والأخيرة.</div>
             </div>
         </div>
-
-        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
-
-        <div class="section-header">
-            <i class="fa-solid fa-boxes-packing"></i>
-            <h3>لماذا بسملة هي الدنيا كلها؟ (اكتشفي)</h3>
-        </div>
-        <p style="font-size: 13px; color: var(--text-muted);">اضغطي على كل كارت لاكتشاف السر المخبأ تحته:</p>
-        <div class="grid" id="reasons-grid"></div>
 
         <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
 
@@ -640,6 +701,12 @@
     </div>
 </div>
 
+<!-- وضع الاسترخاء والنوم -->
+<div id="chill-overlay">
+    <div class="chill-title">تصبحي على خير وسعادة يا أجمل بسملة في الدنيا ☁️✨<br>استرخي مع صوت المطر والنجوم الهادئة...</div>
+    <button class="welcome-btn" style="padding: 10px 25px; font-size: 14px; margin-top: 20px;" onclick="toggleChillMode()">العودة للموقع 🌸</button>
+</div>
+
 <div class="modal" id="msgModal">
     <div class="modal-content">
         <h2 style="color: var(--accent-gold); margin-top: 0; font-family: var(--font-title); font-size: 28px;"><i class="fa-solid fa-envelope-open-text"></i> رسالة لقلب بسملة 💌</h2>
@@ -653,10 +720,88 @@
 </div>
 
 <script>
-    // كلمة السر المحدثة لبسملة
     const P = "17120042012006";
     const longMessageText = "يا بسملة (Basmala)، انتي مش بس حبيبتي، انتي الدنيا كلها في عيني.. من يوم ما عرفتك وحياتي نورت، هفضل أحبك لآخر نفس في عمري، وعد عليا هفضل جنبك ومعاكي وسندك، ربنا يخليكي ليا يا أجمل ملكة في الدنيا. ❤️👑 كل ثانية معاكي هي بداية لعهد جديد من الحب والأمان المطلق.";
     
+    // الأسباب الـ 10 المختارة بعناية لبسملة
+    const reasons10List = [
+        "1. لأن ضحكتك بتنور أغمق أيام حياتي وتخليني أسعد إنسان 🌟",
+        "2. لأن صوتك ونبرة كلامك فيها هدوء وأمان مش عند حد في الدنيا 🎶",
+        "3. لأنك أطيب وأرق قلب قابلته في حياتي يا بسملة 🌸",
+        "4. لأنك بتفهميني من غير ما أتكلم بمجرد ما تبصي لي 🥺",
+        "5. لأن وجودك جنبي بيخليني أتمنى أكون شخص أفضل كل يوم ✨",
+        "6. لأن طيبة قلبك وحنيتك بتنسيني أي تعب أو هم 🤍",
+        "7. لأنك أجمل بنوتي وأميرة بعيني ومفيش منافس ليكي 👑",
+        "8. لأنك السند والحاضن الحقيقي في كل أوقاتي الصعبة 🛡️",
+        "9. لأنك بتشاركيني كل حلم وطموح وتشجعيني أحققه 🚀",
+        "10. لأنك بختصار: العوض الجميل ونصف الثواني والأيام التي أعيشها ❤️"
+    ];
+
+    function generate10ReasonsGrid() {
+        const container = document.getElementById('reasons-10-container');
+        container.innerHTML = '';
+        reasons10List.forEach((reasonText, idx) => {
+            const card = document.createElement('div');
+            card.className = 'reason-card-10';
+            card.onclick = function() { this.classList.toggle('revealed'); };
+            card.innerHTML = `
+                <div class="badge">السبب #${idx + 1} 💎</div>
+                <div class="holder" style="color: var(--accent-gold); font-size: 13px;">اضغطي لاكتشاف السبب ✨</div>
+                <div class="text">${reasonText}</div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // رسائل السر اليومية المتغيرة بناءً على تاريخ اليوم
+    const dailyQuotes = [
+        "كل يوم يدخل فيه اسمكِ في يومي، يصبح يوماً استثنائياً وجميلاً جداً يا بسملة. ❤️",
+        "ابتسامتكِ اليوم قادرة على جعل العالم مكانًا أكثر دفئًا وأمانًا. ✨",
+        "مهما كانت الأيام مشغولة، مكانكِ ثابت في قلبي وفي أول أفكاري دائماً يا Basmala. 👑",
+        "أن يحبكِ شخص مثلي، يعني أن يكون لديه أمنية واحدة فقط: أن يراكِ سعيدة ومطمئنة. 🌸",
+        "وجودكِ معي ليس مجرد جزء من الحياة، بل هو الحياة نفسها. 🤍"
+    ];
+
+    function setDailyQuote() {
+        const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+        const idx = dayOfYear % dailyQuotes.length;
+        document.getElementById('daily-quote').innerText = dailyQuotes[idx];
+    }
+
+    // كبسولة الحظ اليومية
+    const fortuneList = [
+        "🎁 بطاقة حظك اليوم: طلبك مجاب النهاردة ومسموح لكِ بالدلال الكامل!",
+        "🤍 حقيقة اليوم: أنتِ أجمل ما حدث في هذا العالم بالنسبة لي.",
+        "🌹 وعد اليوم: لكِ حضن دافئ كبير وتفهم كامل في أول لقاء بيننا!",
+        "✨ نصيحة اليوم: خذي نفساً عميقاً، وابتسمي لأن هناك من يحبكِ جداً الآن.",
+        "👑 بطاقة الملكة: يحق لكِ الابتسام طوال اليوم وبدون أي سبب!"
+    ];
+
+    function openFortuneCookie() {
+        const res = document.getElementById('fortune-result');
+        res.style.display = 'block';
+        const random = fortuneList[Math.floor(Math.random() * fortuneList.length)];
+        res.innerText = random;
+        if(typeof confetti === 'function') confetti({ particleCount: 50 });
+    }
+
+    // إرسال قلب على الواتساب
+    function sendHeartToWhatsApp() {
+        const text = encodeURIComponent("طمني قلبي يا حبيبي.. أنا جوه موقعنا الخاص دلوقتي وبفكر فيك جداً! 💖✨");
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+
+    // وضع الاسترخاء للنوم
+    function toggleChillMode() {
+        const overlay = document.getElementById('chill-overlay');
+        if(overlay.style.display === 'flex') {
+            overlay.style.display = 'none';
+        } else {
+            overlay.style.display = 'flex';
+            if(ambientRain.paused) toggleAmbient('rain');
+        }
+    }
+
     const audio = document.getElementById('music');
     const ambientRain = document.getElementById('ambient-rain');
     const seekBar = document.getElementById('seek-bar');
@@ -713,6 +858,7 @@
     animateParticles();
 
     const startDate = new Date(2026, 2, 14);
+    const nextSpecialDate = new Date(2026, 11, 31); // تاريخ المناسبة السعيدة القادمة
 
     function updateTimer() {
         const now = new Date();
@@ -736,6 +882,13 @@
         document.getElementById('heartbeats-count').innerText = (totalDays * 115000 + hours * 4800).toLocaleString();
         document.getElementById('smiles-count').innerText = (totalDays * 45 + hours * 2).toLocaleString();
         document.getElementById('breath-count').innerText = (totalDays * 23000 + hours * 950).toLocaleString();
+
+        // العداد التنازلي القادم
+        const nextDiff = Math.max(0, nextSpecialDate - now);
+        document.getElementById('next-days').innerText = Math.floor(nextDiff / (1000 * 60 * 60 * 24));
+        document.getElementById('next-hours').innerText = Math.floor((nextDiff / (1000 * 60 * 60)) % 24);
+        document.getElementById('next-mins').innerText = Math.floor((nextDiff / (1000 * 60)) % 60);
+        document.getElementById('next-secs').innerText = Math.floor((nextDiff / 1000) % 60);
     }
 
     window.onscroll = function() {
@@ -761,7 +914,8 @@
             
             setInterval(updateTimer, 30);
             loadSavedNote();
-            generateReasonsGrid();
+            generate10ReasonsGrid();
+            setDailyQuote();
             initConstellation();
 
             if(typeof confetti === 'function') {
@@ -831,31 +985,6 @@
         createSparkle(window.innerWidth / 2, window.innerHeight / 2);
     }
 
-    const reasonsList = [
-        "محبتش ولا هحب حد زي ما حبيتك يا بسملة ❤️", "ضحكتك بتنور دنيتي المظلمة 🌟", "صوتك هو أماني الوحيد والهدوء 🎶",
-        "انتي العوض عن كل حاجة وحشة شفتها 💍", "مفيش زيك في الدنيا دي كُلها بجمالك 👑", "بتفهميني من غير ما أتكلم نقطة قوّتي 💖",
-        "وجودك بيخليني شخص أصلح وأفضل ✨", "عنيكي فيها سحر بياخدني لعالم تاني 🥺", "حنيتك عليا بتنسيني أي تعب أو هم 🌸",
-        "لأنك أميرتي وبنوتي الحلوة Basmala 👑", "بتتحملي طفولة ورقة مش عند حد تانى 🎀", "علشان انتي كل أهلي وصحابي ودنيتي 🤍",
-        "بتستحملي عصبيتي وبتحتويها بحب 🌸", "كل تفصيلة صغيرة فيكي بتعجبني 💍", "معاكي بحس إني ملكت العالم كله 🌍",
-        "دعواتك ليا بتفتحلي أبواب الخير ✨", "لأنك السند الحقيقي وقت الشدة 💖", "أسلوبك العسل وطريقتك في الكلام 🍯",
-        "لأن طيبتك ملهاش حدود في الدنيا 🕊️", "عيونك أصفى وأجمل حاجة شفتها 👁️", "ضحكتك بتخليني أنسى كل همومي 🌸",
-        "بتشاركيني كل أفراحي وأحزاني 💖", "طيبة قلبك النادرة اللي ملهاش مثيل 🌟", "لأنك بتشجعيني دايماً أحقق أحلامي 🚀",
-        "علشان بحس بالأمان معاكي من كل حاجة 🛡️", "طريقتك في الاهتمام بيا بتسعدني 🥺", "جمال روحك قبل جمالك الخارجي ✨",
-        "علشان بتبتسمي لما بتشوفيني مبسوط 🌸", "حضورك المميز في أي مكان بتكوني فيه 👑", "لأنك نصفي الثاني المكمل ليا يا بسملة 🧩"
-    ];
-
-    function generateReasonsGrid() {
-        const container = document.getElementById('reasons-grid');
-        container.innerHTML = '';
-        reasonsList.forEach((reason, index) => {
-            const card = document.createElement('div');
-            card.className = 'gift-card';
-            card.onclick = function() { this.classList.toggle('revealed'); };
-            card.innerHTML = `<span>السبب ${index + 1} 💖</span><div class="msg-overlay">${reason}</div>`;
-            container.appendChild(card);
-        });
-    }
-
     const aiResponses = {
         sad: "لو الدنـيـا كلها جت عليكِ يا بسملة، افتكري إن قلبي هو بيتك وأمانك الدايم. اتنفّسي عميق يا عمري، وزعلك ده على راسي وهعمل أي حاجة عشان أشوف ضحكتك دي تاني! 🥺❤️",
         miss: "وأنا بتموت فيكي ومشتاق لعيونك وصوتك يا Basmala أكتر مما تتخيلي بمليون مرة! أنتي دايماً في بالي وفي قلبي كل ثانية. 💖✨",
@@ -868,166 +997,6 @@
         el.innerText = aiResponses[mood];
         el.style.display = 'block';
         if(typeof confetti === 'function') confetti({ particleCount: 40 });
-    }
-
-    /* اللعبة 1: مزرعة القلوب */
-    let gardenScore = 0;
-    let gardenLevel = 1;
-    let gardenInterval;
-    const flowerTypes = ['🌹', '🌸', '🌺', '🌷', '🌻', '💐', '💖', '✨', '👑', '🎁'];
-    const gardenMessages = [
-        "قطفتِ أول وردة يا بسملة! 🌸",
-        "يا سلام على السرعة! شاطرة جداً ✨",
-        "ورد الجوري طالع علشان خاطرك 🌹",
-        "انتي الملكة وأحلى وردة في المزرعة 👑",
-        "مستوى جديد! حبنا بيزدهر أكتر 💖",
-        "مفيش حد بيعرف يجمع ورد بالجمال ده غيرك! 💖"
-    ];
-
-    function toggleGardenGame() {
-        const gameBox = document.getElementById('garden-game-box');
-        if(gameBox.style.display === 'flex') {
-            gameBox.style.display = 'none';
-            clearInterval(gardenInterval);
-        } else {
-            gameBox.style.display = 'flex';
-            initGardenGame();
-        }
-    }
-
-    function initGardenGame() {
-        const grid = document.getElementById('garden-grid');
-        grid.innerHTML = '';
-        gardenScore = 0;
-        gardenLevel = 1;
-        document.getElementById('garden-score').innerText = gardenScore;
-        document.getElementById('garden-level').innerText = gardenLevel;
-
-        for(let i = 0; i < 12; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'garden-slot';
-            slot.onclick = () => catchFlower(slot);
-            grid.appendChild(slot);
-        }
-
-        clearInterval(gardenInterval);
-        startGardenLoop();
-    }
-
-    function startGardenLoop() {
-        let speed = Math.max(1200 - (gardenLevel * 100), 500);
-        gardenInterval = setInterval(() => {
-            clearGardenSlots();
-            const slots = document.querySelectorAll('.garden-slot');
-            const randomSlot = slots[Math.floor(Math.random() * slots.length)];
-            const randomFlower = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
-            
-            randomSlot.innerHTML = randomFlower;
-            randomSlot.classList.add('active');
-        }, speed);
-    }
-
-    function clearGardenSlots() {
-        const slots = document.querySelectorAll('.garden-slot');
-        slots.forEach(s => { s.innerHTML = ''; s.classList.remove('active'); });
-    }
-
-    function catchFlower(slot) {
-        if(slot.classList.contains('active')) {
-            gardenScore += 10;
-            document.getElementById('garden-score').innerText = gardenScore;
-            slot.classList.remove('active');
-            slot.innerHTML = '✨';
-
-            if(gardenScore % 50 === 0) {
-                gardenLevel++;
-                document.getElementById('garden-level').innerText = gardenLevel;
-                if(typeof confetti === 'function') confetti({ particleCount: 50 });
-                clearInterval(gardenInterval);
-                startGardenLoop();
-            }
-
-            const msgIdx = Math.min(Math.floor(gardenScore / 30), gardenMessages.length - 1);
-            document.getElementById('garden-message').innerText = gardenMessages[msgIdx];
-        }
-    }
-
-    /* اللعبة 2 الجديدة: تطابق الذاكرة لبسملة */
-    const memoryIcons = ['👑', '💍', '💖', '🌸', '✨', '🎁'];
-    let memoryCards = [];
-    let flippedCards = [];
-    let matchedPairs = 0;
-    let movesCount = 0;
-
-    function toggleMemoryGame() {
-        const box = document.getElementById('memory-game-box');
-        if(box.style.display === 'flex') {
-            box.style.display = 'none';
-        } else {
-            box.style.display = 'flex';
-            initMemoryGame();
-        }
-    }
-
-    function initMemoryGame() {
-        const grid = document.getElementById('memory-grid');
-        grid.innerHTML = '';
-        flippedCards = [];
-        matchedPairs = 0;
-        movesCount = 0;
-        document.getElementById('memory-moves').innerText = movesCount;
-        document.getElementById('memory-matches').innerText = '0 / 6';
-
-        memoryCards = [...memoryIcons, ...memoryIcons].sort(() => Math.random() - 0.5);
-
-        memoryCards.forEach((icon, index) => {
-            const card = document.createElement('div');
-            card.className = 'memory-card';
-            card.dataset.icon = icon;
-            card.dataset.index = index;
-            card.onclick = () => flipMemoryCard(card);
-            grid.appendChild(card);
-        });
-    }
-
-    function flipMemoryCard(card) {
-        if (flippedCards.length < 2 && !card.classList.contains('flipped') && !card.classList.contains('matched')) {
-            card.classList.add('flipped');
-            card.innerText = card.dataset.icon;
-            flippedCards.push(card);
-
-            if (flippedCards.length === 2) {
-                movesCount++;
-                document.getElementById('memory-moves').innerText = movesCount;
-                checkMemoryMatch();
-            }
-        }
-    }
-
-    function checkMemoryMatch() {
-        const [card1, card2] = flippedCards;
-        if (card1.dataset.icon === card2.dataset.icon) {
-            card1.classList.add('matched');
-            card2.classList.add('matched');
-            matchedPairs++;
-            document.getElementById('memory-matches').innerText = `${matchedPairs} / 6`;
-            flippedCards = [];
-
-            if (matchedPairs === 6) {
-                setTimeout(() => {
-                    alert("عاش يا أحلى بسملة! فزتي في لعبة التطابق الرمزية ✨💖");
-                    if(typeof confetti === 'function') confetti({ particleCount: 100 });
-                }, 300);
-            }
-        } else {
-            setTimeout(() => {
-                card1.classList.remove('flipped');
-                card2.classList.remove('flipped');
-                card1.innerText = '';
-                card2.innerText = '';
-                flippedCards = [];
-            }, 800);
-        }
     }
 
     function initConstellation() {
