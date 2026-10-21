@@ -207,7 +207,7 @@
         .stat-card .num { font-size: 20px; font-weight: bold; color: var(--accent-gold); margin-bottom: 5px; }
         .stat-card .label { font-size: 13px; color: var(--text-muted); font-weight: 600; }
 
-        /* مشغل الموسيقى (أغنية واحدة) */
+        /* مشغل الموسيقى */
         #music-player-bar {
             position: fixed; bottom: 20px; width: 92%; max-width: 500px;
             background: var(--burgundy-card); border-radius: 35px; padding: 14px 24px; 
@@ -251,9 +251,6 @@
         .reason-card-10.revealed .text { display: block; animation: fadeIn 0.4s; }
         .reason-card-10.revealed .holder { display: none; }
 
-        /* ==========================================================================
-           5. الصناديق التفاعلية الجديدة (السر اليومي والكابسولة والواتساب)
-           ========================================================================== */
         .daily-quote-box {
             background: rgba(15, 3, 6, 0.5); border: 1px solid var(--glass-border);
             border-radius: 25px; padding: 22px; margin: 25px 0; text-align: center; position: relative;
@@ -317,7 +314,7 @@
         #constellation-canvas { width: 100%; height: 100%; }
 
         /* ==========================================================================
-           6. وضع النوم والاسترخاء الهادئ (Deep Chill Night Overlay)
+           5. وضع النوم والاسترخاء الهادئ (Deep Chill Night Overlay)
            ========================================================================== */
         #chill-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -379,7 +376,6 @@
 
 <!-- أغنية واحدة فقط -->
 <audio id="music" loop><source src="LOVE.mp3" type="audio/mpeg"></audio>
-<audio id="ambient-rain" loop><source src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3" type="audio/mpeg"></audio>
 
 <div class="navbar" id="navbar">
     <div class="nav-logo"><i class="fa-solid fa-crown"></i> Basmala's Realm ✨</div>
@@ -402,8 +398,6 @@
         <button class="player-btn skip-btn" onclick="skipAudio(10)">+10s</button>
     </div>
     <div class="ambient-selector">
-        <span style="font-size: 11px; color: var(--text-muted); align-self: center;">الأجواء:</span>
-        <button class="ambient-btn" id="btn-rain" onclick="toggleAmbient('rain')">🌧️ مطر دافئ</button>
         <button class="ambient-btn" onclick="playPianoTone(440)">🎹 نغمة هادئة</button>
     </div>
 </div>
@@ -429,7 +423,7 @@
         <p style="color: var(--accent-gold); font-weight: bold; font-size: 24px; margin-top: 0; font-family: var(--font-title);">✨ نورتي عالمكِ الخاص يا بسملة ✨</p>
         <p style="color: var(--text-muted); font-weight: bold; font-size: 17px; font-family: var(--font-en); letter-spacing: 1px;">Basmala, You Are My Entire World ❤️</p>
 
-        <!-- ستوريات تفاعلية علوية -->
+        <!-- ستوريات تفاعلية علوية (تم دمج صور من 1 لـ 7) -->
         <div class="stories-wrapper">
             <div class="story-item" onclick="openLightbox('1.jpg')">
                 <div class="story-ring"><img src="1.jpg" alt="Story 1"></div>
@@ -451,6 +445,14 @@
                 <div class="story-ring"><img src="5.jpg" alt="Story 5"></div>
                 <span class="story-label">العوض 🌸</span>
             </div>
+            <div class="story-item" onclick="openLightbox('6.jpg')">
+                <div class="story-ring"><img src="6.jpg" alt="Story 6"></div>
+                <span class="story-label">سعادتي 💖</span>
+            </div>
+            <div class="story-item" onclick="openLightbox('7.jpg')">
+                <div class="story-ring"><img src="7.jpg" alt="Story 7"></div>
+                <span class="story-label">دنيايا ✨</span>
+            </div>
         </div>
 
         <!-- زر إرسال قلب للواتساب مباشرة -->
@@ -468,8 +470,9 @@
             <i class="fa-solid fa-hourglass-start"></i>
             <h3>عداد حب Basmala والوقت الكوني</h3>
         </div>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">الوقت الذي مضى منذ أول لحظة جمعتنا سوا بالثواني والأجزاء:</p>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">الوقت الذي مضى منذ لحظتنا الجميلة سوياً (14 / 10 / 2026):</p>
         
+        <!-- العداد الأبدي (محفوظ كاملاً بحساب كافة السنين والخانة للأبد) -->
         <div class="timer-container">
             <div class="timer-box"><span id="timer-years">0</span><small>سنة</small></div>
             <div class="timer-box"><span id="timer-days">0</span><small>يوم</small></div>
@@ -492,21 +495,6 @@
                 <div class="num" id="breath-count">0</div>
                 <div class="label">تنفسنا العشق سوا 🌬️</div>
             </div>
-        </div>
-
-        <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
-
-        <!-- عداد المناسبة القادمة -->
-        <div class="section-header">
-            <i class="fa-solid fa-calendar-check"></i>
-            <h3>العداد التنازلي للحظتنا المميزة القادمة ✨</h3>
-        </div>
-        <p style="font-size: 13px; color: var(--text-muted);">الأيام المتبقية لمناسبتنا السعيدة القادمة بإذن الله:</p>
-        <div class="timer-container" style="grid-template-columns: repeat(4, 1fr);">
-            <div class="timer-box"><span id="next-days">0</span><small>يوم</small></div>
-            <div class="timer-box"><span id="next-hours">0</span><small>ساعة</small></div>
-            <div class="timer-box"><span id="next-mins">0</span><small>دقيقة</small></div>
-            <div class="timer-box"><span id="next-secs">0</span><small>ثانية</small></div>
         </div>
 
         <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
@@ -605,17 +593,21 @@
 
         <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
 
+        <!-- الألبوم السريع التفاعلي (يحتوي الصور من 8 إلى 15) -->
         <div class="section-header">
             <i class="fa-solid fa-images"></i>
-            <h3>ألبوم ذكريات Basmala السريع</h3>
+            <h3>ألبوم ذكريات Basmala السريع (8 - 15)</h3>
         </div>
         <div class="carousel-container">
             <div class="carousel-track" id="track">
-                <div class="carousel-slide"><img src="1.jpg" onclick="openLightbox(this.src)"></div>
-                <div class="carousel-slide"><img src="2.jpg" onclick="openLightbox(this.src)"></div>
-                <div class="carousel-slide"><img src="3.jpg" onclick="openLightbox(this.src)"></div>
-                <div class="carousel-slide"><img src="4.jpg" onclick="openLightbox(this.src)"></div>
-                <div class="carousel-slide"><img src="5.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="8.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="9.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="10.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="11.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="12.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="13.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="14.jpg" onclick="openLightbox(this.src)"></div>
+                <div class="carousel-slide"><img src="15.jpg" onclick="openLightbox(this.src)"></div>
             </div>
             <div class="carousel-nav">
                 <button class="c-btn" onclick="moveSlide(-1)">❮</button>
@@ -625,9 +617,10 @@
 
         <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
 
+        <!-- بطاقات الرسائل التفصيلية المصورة (يضم كافة الصور من 1 لـ 15) -->
         <div class="section-header">
             <i class="fa-solid fa-book-open-reader"></i>
-            <h3>رسائل تفصيلية مع صورنا</h3>
+            <h3>رسائل تفصيلية مع صورنا المعبرة (1 - 15)</h3>
         </div>
         
         <div class="photo-card">
@@ -645,6 +638,50 @@
         <div class="photo-card">
             <img src="4.jpg" onclick="openLightbox(this.src)">
             <p>وعينيك خمرا بلا كؤووس تسكرو<br>ماكنت أؤمن بلعيون وفعلها<br>حتى دهتني في الهوا عيناكي<br>سود لؤلؤتاها تشع نورا<br>كقمرا فوق ليلي يعتلي♥️♥️♥️♥️❤️❤️❤️🥺🥺</p>
+        </div>
+        <div class="photo-card">
+            <img src="5.jpg" onclick="openLightbox(this.src)">
+            <p>أنتِ الهدية العظيمة والعوض السعيد لكل أيام عمري يا بسملة ✨👑</p>
+        </div>
+        <div class="photo-card">
+            <img src="6.jpg" onclick="openLightbox(this.src)">
+            <p>ضحكتك بتسوى الدنيا وفيها أمان غير طبيعي يسع العالم كله ❤️</p>
+        </div>
+        <div class="photo-card">
+            <img src="7.jpg" onclick="openLightbox(this.src)">
+            <p>كل لحظة جنبك بتخليني أتأكد أنك ملهمتي الأولى والأخيرة يا ملاكي 🌸</p>
+        </div>
+        <div class="photo-card">
+            <img src="8.jpg" onclick="openLightbox(this.src)">
+            <p>في عيونك بشوف دنيتي كلها وبحس أني ملكت الكون بأكمله ✨💎</p>
+        </div>
+        <div class="photo-card">
+            <img src="9.jpg" onclick="openLightbox(this.src)">
+            <p>قلبك الأبيض وحنيتك بيخلوني أعشقك بلا حدود يا أجمل بسملة 💖</p>
+        </div>
+        <div class="photo-card">
+            <img src="10.jpg" onclick="openLightbox(this.src)">
+            <p>وجودك هو السند والأمان اللي بيخليني دايماً قوي وفي أحسن حال 🛡️🤍</p>
+        </div>
+        <div class="photo-card">
+            <img src="11.jpg" onclick="openLightbox(this.src)">
+            <p>صوتك هو نغمتي المفضلة ورسائل حبك بتنور أيامي دائماً 🎶✨</p>
+        </div>
+        <div class="photo-card">
+            <img src="12.jpg" onclick="openLightbox(this.src)">
+            <p>أدعو الله في كل ثانية أن يحفظكِ لي وأن تبقي ملكة قلبي للأبد 👑❤️</p>
+        </div>
+        <div class="photo-card">
+            <img src="13.jpg" onclick="openLightbox(this.src)">
+            <p>كل الأيام معاكِ بتبقى استثنائية وأحلى بمليون مرة يا Basmala 🌟</p>
+        </div>
+        <div class="photo-card">
+            <img src="14.jpg" onclick="openLightbox(this.src)">
+            <p>عهد وحب أبدي يربطنا معاً، أنتِ العوض الجميل ونصف الثواني التي أعيشها 💘</p>
+        </div>
+        <div class="photo-card">
+            <img src="15.jpg" onclick="openLightbox(this.src)">
+            <p>بحبك يا بسملة وهفضل أحبك لآخر نفس في عمري، أنتِ دنيتي كلها! ❤️👑✨</p>
         </div>
 
         <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 35px 0;">
@@ -703,7 +740,7 @@
 
 <!-- وضع الاسترخاء والنوم -->
 <div id="chill-overlay">
-    <div class="chill-title">تصبحي على خير وسعادة يا أجمل بسملة في الدنيا ☁️✨<br>استرخي مع صوت المطر والنجوم الهادئة...</div>
+    <div class="chill-title">تصبحي على خير وسعادة يا أجمل بسملة في الدنيا ☁️✨<br>استرخي مع الأجواء والنجوم الهادئة...</div>
     <button class="welcome-btn" style="padding: 10px 25px; font-size: 14px; margin-top: 20px;" onclick="toggleChillMode()">العودة للموقع 🌸</button>
 </div>
 
@@ -798,12 +835,10 @@
             overlay.style.display = 'none';
         } else {
             overlay.style.display = 'flex';
-            if(ambientRain.paused) toggleAmbient('rain');
         }
     }
 
     const audio = document.getElementById('music');
-    const ambientRain = document.getElementById('ambient-rain');
     const seekBar = document.getElementById('seek-bar');
     const playBtn = document.getElementById('play-pause-btn');
 
@@ -857,8 +892,8 @@
     initParticles();
     animateParticles();
 
-    const startDate = new Date(2026, 2, 14);
-    const nextSpecialDate = new Date(2026, 11, 31); // تاريخ المناسبة السعيدة القادمة
+    // تاريخ بداية العداد الأبدي والمطابق لما طلبته (14 أكتوبر 2026)
+    const startDate = new Date(2026, 9, 14);
 
     function updateTimer() {
         const now = new Date();
@@ -882,13 +917,6 @@
         document.getElementById('heartbeats-count').innerText = (totalDays * 115000 + hours * 4800).toLocaleString();
         document.getElementById('smiles-count').innerText = (totalDays * 45 + hours * 2).toLocaleString();
         document.getElementById('breath-count').innerText = (totalDays * 23000 + hours * 950).toLocaleString();
-
-        // العداد التنازلي القادم
-        const nextDiff = Math.max(0, nextSpecialDate - now);
-        document.getElementById('next-days').innerText = Math.floor(nextDiff / (1000 * 60 * 60 * 24));
-        document.getElementById('next-hours').innerText = Math.floor((nextDiff / (1000 * 60 * 60)) % 24);
-        document.getElementById('next-mins').innerText = Math.floor((nextDiff / (1000 * 60)) % 60);
-        document.getElementById('next-secs').innerText = Math.floor((nextDiff / 1000) % 60);
     }
 
     window.onscroll = function() {
@@ -953,19 +981,6 @@
     function seekAudio() {
         if (audio.duration) {
             audio.currentTime = (seekBar.value / 100) * audio.duration;
-        }
-    }
-
-    function toggleAmbient(type) {
-        const btn = document.getElementById('btn-rain');
-        if(type === 'rain') {
-            if(ambientRain.paused) {
-                ambientRain.play();
-                btn.classList.add('active');
-            } else {
-                ambientRain.pause();
-                btn.classList.remove('active');
-            }
         }
     }
 
