@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -207,9 +208,9 @@
         .stat-card .num { font-size: 20px; font-weight: bold; color: var(--accent-gold); margin-bottom: 5px; }
         .stat-card .label { font-size: 13px; color: var(--text-muted); font-weight: 600; }
 
-        /* مشغل الموسيقى */
+        /* مشغل الموسيقى المزدوج الفاخر */
         #music-player-bar {
-            position: fixed; bottom: 20px; width: 92%; max-width: 500px;
+            position: fixed; bottom: 20px; width: 92%; max-width: 520px;
             background: var(--burgundy-card); border-radius: 35px; padding: 14px 24px; 
             display: none; flex-direction: column; gap: 10px; z-index: 4000; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.8); backdrop-filter: blur(25px); 
@@ -217,7 +218,18 @@
             animation: fadeInUp 0.8s ease;
         }
         .player-info { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: bold; color: var(--accent-gold); }
-        .player-controls { display: flex; align-items: center; justify-content: center; gap: 18px; direction: ltr; }
+        .track-selector-wrapper {
+            display: flex; justify-content: center; gap: 8px; margin: 2px 0;
+        }
+        .track-select-btn {
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: var(--text-muted);
+            padding: 5px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+        .track-select-btn.active {
+            background: linear-gradient(135deg, var(--accent-gold), #b8860b); color: #1a0409; border-color: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+        .player-controls { display: flex; align-items: center; justify-content: center; gap: 14px; direction: ltr; }
         .player-btn {
             background: linear-gradient(135deg, var(--accent-gold), #b8860b); color: #1a0409; border: none; 
             width: 46px; height: 46px; border-radius: 50%; cursor: pointer; font-size: 18px; 
@@ -225,10 +237,11 @@
         }
         .player-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--accent-glow); }
         .player-btn.skip-btn { width: 36px; height: 36px; background: rgba(224, 169, 109, 0.15); color: var(--accent-gold); font-size: 12px; font-weight: bold; }
+        .player-btn.switch-track-btn { width: 38px; height: 38px; background: rgba(224, 169, 109, 0.25); color: var(--accent-gold); font-size: 14px; }
         .seek-slider { width: 100%; height: 5px; border-radius: 10px; background: rgba(255,255,255,0.1); appearance: none; outline: none; cursor: pointer; }
         .seek-slider::-webkit-slider-thumb { appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold); }
 
-        .ambient-selector { display: flex; justify-content: center; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
+        .ambient-selector { display: flex; justify-content: center; gap: 10px; margin-top: 2px; flex-wrap: wrap; }
         .ambient-btn {
             background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); padding: 4px 12px; 
             border-radius: 15px; font-size: 11px; cursor: pointer; color: var(--text-color); font-weight: 600; transition: 0.2s;
@@ -327,7 +340,7 @@
         #constellation-canvas { width: 100%; height: 100%; }
 
         /* ==========================================================================
-           5. وضع النوم والاسترخاء الهادئ (Deep Chill Night Overlay)
+           5. وضع النوم واسترخاء الليالي (Deep Chill Night Overlay)
            ========================================================================== */
         #chill-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -387,8 +400,8 @@
 <canvas id="particle-canvas"></canvas>
 <div id="progress-bar"></div>
 
-<!-- أغنية واحدة فقط -->
-<audio id="music" loop><source src="LOVE.mp3" type="audio/mpeg"></audio>
+<!-- ملف الصوت الرئيسي لتشغيل الأغاني -->
+<audio id="music" loop></audio>
 
 <div class="navbar" id="navbar">
     <div class="nav-logo"><i class="fa-solid fa-crown"></i> Basmala's Realm ✨</div>
@@ -399,17 +412,29 @@
     </div>
 </div>
 
+<!-- مشغل الموسيقى المتطور لـ LOVE1.mp3 و LOVE2.mp3 -->
 <div id="music-player-bar">
     <div class="player-info">
-        <span><i class="fa-solid fa-heart-pulse"></i> أغنية بسملة المفضلة 🎵</span>
+        <span><i class="fa-solid fa-heart-pulse"></i> <span id="current-track-name">أغنية بسملة الأولى 🎵</span></span>
         <span id="music-time">00:00</span>
     </div>
+
+    <!-- أزرار اختيار الأغنية المباشرة -->
+    <div class="track-selector-wrapper">
+        <button class="track-select-btn active" id="btn-track-1" onclick="selectTrack(0)">🎵 الأغنية الأولى (LOVE 1)</button>
+        <button class="track-select-btn" id="btn-track-2" onclick="selectTrack(1)">🎶 الأغنية الثانية (LOVE 2)</button>
+    </div>
+
     <input type="range" id="seek-bar" class="seek-slider" value="0" min="0" max="100" oninput="seekAudio()">
+    
     <div class="player-controls">
+        <button class="player-btn switch-track-btn" onclick="prevTrack()" title="الأغنية السابقة"><i class="fa-solid fa-backward-step"></i></button>
         <button class="player-btn skip-btn" onclick="skipAudio(-10)">-10s</button>
         <button class="player-btn" onclick="toggleMusic()" id="play-pause-btn"><i class="fa-solid fa-pause"></i></button>
         <button class="player-btn skip-btn" onclick="skipAudio(10)">+10s</button>
+        <button class="player-btn switch-track-btn" onclick="nextTrack()" title="الأغنية التالية"><i class="fa-solid fa-forward-step"></i></button>
     </div>
+
     <div class="ambient-selector">
         <button class="ambient-btn" onclick="playPianoTone(440)">🎹 نغمة هادئة</button>
     </div>
@@ -868,9 +893,89 @@
         }
     }
 
+    /* ==========================================================================
+       إدارة مشغل الأغاني المزدوج (LOVE1.mp3 & LOVE2.mp3)
+       ========================================================================== */
+    const playlist = [
+        { name: "أغنية بسملة الأولى 🎵", src: "LOVE1.mp3" },
+        { name: "أغنية بسملة الثانية 🎶", src: "LOVE2.mp3" }
+    ];
+    let currentTrackIndex = 0;
+
     const audio = document.getElementById('music');
     const seekBar = document.getElementById('seek-bar');
     const playBtn = document.getElementById('play-pause-btn');
+
+    function loadTrack(index, autoPlay = true) {
+        currentTrackIndex = index;
+        audio.src = playlist[currentTrackIndex].src;
+        document.getElementById('current-track-name').innerText = playlist[currentTrackIndex].name;
+        
+        // تحديث حالة الأزرار الخاصة بالمسارات
+        document.getElementById('btn-track-1').classList.toggle('active', currentTrackIndex === 0);
+        document.getElementById('btn-track-2').classList.toggle('active', currentTrackIndex === 1);
+        
+        audio.load();
+        if (autoPlay) {
+            audio.play().then(() => {
+                playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            }).catch(e => console.log("Audio play blocked by browser:", e));
+        }
+    }
+
+    function selectTrack(index) {
+        if (currentTrackIndex !== index) {
+            loadTrack(index, true);
+        } else if (audio.paused) {
+            audio.play();
+            playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        }
+    }
+
+    function nextTrack() {
+        let nextIndex = (currentTrackIndex + 1) % playlist.length;
+        loadTrack(nextIndex, true);
+    }
+
+    function prevTrack() {
+        let prevIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+        loadTrack(prevIndex, true);
+    }
+
+    function toggleMusic() {
+        if (audio.paused) {
+            audio.play();
+            playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        } else {
+            audio.pause();
+            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        }
+    }
+
+    function skipAudio(seconds) {
+        audio.currentTime = Math.min(Math.max(audio.currentTime + seconds, 0), audio.duration || 0);
+    }
+
+    audio.ontimeupdate = function() {
+        if (audio.duration) {
+            seekBar.value = (audio.currentTime / audio.duration) * 100;
+            let mins = Math.floor(audio.currentTime / 60);
+            let secs = Math.floor(audio.currentTime % 60);
+            if(secs < 10) secs = '0' + secs;
+            document.getElementById('music-time').innerText = mins + ":" + secs;
+        }
+    };
+
+    function seekAudio() {
+        if (audio.duration) {
+            audio.currentTime = (seekBar.value / 100) * audio.duration;
+        }
+    }
+
+    /* للانتقال التلقائي بين الأغنيتين عند الانتهاء */
+    audio.onended = function() {
+        nextTrack();
+    };
 
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
@@ -964,7 +1069,9 @@
 
     function start() {
         if(document.getElementById('pass').value === P) {
-            audio.play().catch(e => console.log("Audio ready"));
+            // تحميل الأغنية الأولى وتدشين المشغل
+            loadTrack(0, true);
+            
             document.getElementById('music-player-bar').style.display = 'flex';
             document.getElementById('navbar').style.display = 'flex';
             document.getElementById('login-card').style.display = 'none';
@@ -981,36 +1088,6 @@
             }
         } else { 
             alert("الباسورد غير صحيح يا بسملة! 😉 ركزي واكتبي الرقم صح!"); 
-        }
-    }
-
-    function toggleMusic() {
-        if (audio.paused) {
-            audio.play();
-            playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-        } else {
-            audio.pause();
-            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-        }
-    }
-
-    function skipAudio(seconds) {
-        audio.currentTime = Math.min(Math.max(audio.currentTime + seconds, 0), audio.duration || 0);
-    }
-
-    audio.ontimeupdate = function() {
-        if (audio.duration) {
-            seekBar.value = (audio.currentTime / audio.duration) * 100;
-            let mins = Math.floor(audio.currentTime / 60);
-            let secs = Math.floor(audio.currentTime % 60);
-            if(secs < 10) secs = '0' + secs;
-            document.getElementById('music-time').innerText = mins + ":" + secs;
-        }
-    };
-
-    function seekAudio() {
-        if (audio.duration) {
-            audio.currentTime = (seekBar.value / 100) * audio.duration;
         }
     }
 
@@ -1212,3 +1289,4 @@
 </script>
 </body>
 </html>
+```
